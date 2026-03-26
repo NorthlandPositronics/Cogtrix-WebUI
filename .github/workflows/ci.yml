@@ -133,7 +133,7 @@ jobs:
       # ── OSV-scanner — scans pnpm-lock.yaml for known CVEs ──
       - name: OSV-scanner (dependency CVEs)
         id: osv
-        uses: google/osv-scanner-action/osv-scanner-action@v2.3.3
+        uses: google/osv-scanner-action/osv-scanner-action@v2.3.5
         continue-on-error: true          # advisory — don't block PRs yet
         with:
           scan-args: |-
