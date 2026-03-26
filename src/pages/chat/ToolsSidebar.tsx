@@ -54,13 +54,13 @@ function buildAction(
 
 const TRACK_FILL: Record<TriPosition, string> = {
   0: "bg-zinc-200",
-  1: "bg-blue-100",
+  1: "bg-teal-100",
   2: "bg-green-100",
 };
 
 const THUMB_FILL: Record<TriPosition, string> = {
   0: "bg-white border border-zinc-300",
-  1: "bg-blue-600",
+  1: "bg-teal-500",
   2: "bg-green-600",
 };
 
