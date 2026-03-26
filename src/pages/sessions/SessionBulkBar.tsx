@@ -38,7 +38,7 @@ export function SessionBulkBar({
       <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-4 py-3 md:px-6">
         <span className="text-sm font-medium text-zinc-900">{selectedCount} selected</span>
         <button
-          className="focus-visible:ring-ring text-sm text-teal-600 underline hover:no-underline focus-visible:ring-2 focus-visible:outline-none"
+          className="focus-visible:ring-ring text-sm text-teal-600 underline hover:no-underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           onClick={allSelected ? onClear : onSelectAll}
           disabled={isPending}
         >

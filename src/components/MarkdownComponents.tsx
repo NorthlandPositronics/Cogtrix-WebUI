@@ -102,7 +102,7 @@ export const markdownComponents: Components = {
   },
   blockquote({ children }) {
     return (
-      <blockquote className="my-2 rounded-r-sm border-l-2 border-teal-200 bg-teal-50/40 py-1 pl-4 text-zinc-600 italic [blockquote_&]:border-teal-100 [blockquote_&]:pl-3">
+      <blockquote className="my-2 rounded-r-sm border-l-2 border-teal-200 bg-teal-50/40 py-1 pl-4 text-zinc-600 italic [blockquote_&]:border-teal-200 [blockquote_&]:bg-teal-50 [blockquote_&]:pl-3">
         {children}
       </blockquote>
     );

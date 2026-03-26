@@ -54,7 +54,7 @@ export function SemanticSearchBar({ className = "" }: SemanticSearchBarProps) {
                 setQuery("");
                 searchMutation.reset();
               }}
-              className="focus-visible:ring-ring absolute top-1/2 right-3 -translate-y-1/2 rounded text-zinc-400 hover:text-zinc-700 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
+              className="focus-visible:ring-ring absolute top-1/2 right-3 -translate-y-1/2 rounded text-zinc-500 hover:text-zinc-700 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
             >
               <X className="h-4 w-4" aria-hidden="true" />
             </button>

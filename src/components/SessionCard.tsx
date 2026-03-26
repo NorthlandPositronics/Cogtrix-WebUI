@@ -296,8 +296,8 @@ export const SessionRow = memo(function SessionRow({
           />
         )}
       </td>
-      <td className="py-3 pr-2 pl-1">
-        <div className="flex items-center gap-2">
+      <td className="min-w-0 py-3 pr-2 pl-1">
+        <div className="flex min-w-0 items-center gap-2">
           <span className="max-w-48 truncate text-sm font-medium text-zinc-900">
             {session.name}
           </span>

@@ -60,6 +60,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### UI ConsistencyForge — holistic UI audit (2026-03-27)
+
+#### Fixed (UI ConsistencyForge 2026-03-27)
+- `src/components/StreamingMessageBubble.tsx` — P0: added streaming cursor `<span>` with `data-cy="streaming-cursor"` and `motion-reduce:hidden`; the `blink-cursor` keyframe was defined but the cursor element was never rendered (FORGE-001)
+- `src/pages/chat/ToolsSidebar.tsx` — P1: TriSwitch `on_demand` track color `bg-blue-100` → `bg-teal-100`; thumb color `bg-blue-600` → `bg-teal-500` to match DS teal scheme (FORGE-002)
+- `src/pages/settings/ProviderList.tsx` — P1: active model row accent `border-l-4` → `border-l-2`; decorative `CircleCheck` icon changed from `aria-label` to `aria-hidden` (FORGE-003)
+- `src/pages/documents/SemanticSearchBar.tsx` — P1: clear-search button `text-zinc-400` → `text-zinc-500` (WCAG 1.4.11; FORGE-004)
+- `src/components/TypingIndicator.tsx` — P1: mode label `text-zinc-400` → `text-zinc-500` (WCAG 1.4.3); refactored to accept a `mode` prop instead of reading `useStreamingStore` directly; `SessionPage` now passes `currentMode` down (FORGE-005)
+- `src/pages/chat/StatusBar.tsx` — P2: expand/collapse button focus ring `ring-ring` → `ring-zinc-400` per DS §7 spec (FORGE-006)
+- `src/components/MessageBubble.tsx` — P2: mode icon `text-zinc-400` → `text-zinc-500` on `bg-teal-50` surface (WCAG 1.4.11; FORGE-007)
+- `src/pages/layout/AppShell.tsx` — P2: mobile hamburger `text-zinc-600` → `text-zinc-500 hover:bg-zinc-100` (FORGE-008)
+- `src/pages/sessions/SessionBulkBar.tsx` — P2: select-all button missing `focus-visible:ring-offset-2` added (FORGE-009)
+- `src/components/MarkdownComponents.tsx` — P2: nested blockquote missing `[blockquote_&]:bg-teal-50`; corrected `[blockquote_&]:border-teal-100` → `[blockquote_&]:border-teal-200` to match DS spec (FORGE-010)
+- `src/pages/sessions/index.tsx` — P2: `TableHead` cells missing canonical `text-xs font-medium tracking-wide text-zinc-500 uppercase` classes added (FORGE-011)
+- `src/components/SessionCard.tsx` — P2: `SessionRow` name cell `min-w-0` added to prevent layout overflow on narrow mobile widths (FORGE-012)
+
+#### Documentation (UI ConsistencyForge 2026-03-27)
+- `docs/web/design-system.md` — bumped to v3.15; registered WhatsApp/Telegram brand hex fills in `ContactList.tsx` as permanent DS §16 exception (AUD-001)
+
 ### DockerForge — Dockerfile holistic audit (2026-03-26)
 
 #### Fixed (DockerForge 2026-03-26)

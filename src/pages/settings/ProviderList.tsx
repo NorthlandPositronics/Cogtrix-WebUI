@@ -679,7 +679,7 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
                       key={m.alias}
                       className={cn(
                         "hover:bg-zinc-50",
-                        m.is_active && "border-l-4 border-l-teal-600 bg-teal-50",
+                        m.is_active && "border-l-2 border-l-teal-600 bg-teal-50",
                         isClickable && "cursor-pointer",
                         isSwitching && "pointer-events-none cursor-wait opacity-60",
                       )}
@@ -704,7 +704,7 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
                           {m.is_active && (
                             <CircleCheck
                               className="h-4 w-4 shrink-0 text-teal-600"
-                              aria-label="Active model"
+                              aria-hidden="true"
                             />
                           )}
                         </span>
