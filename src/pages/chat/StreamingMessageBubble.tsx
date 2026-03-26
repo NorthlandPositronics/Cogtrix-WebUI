@@ -46,6 +46,11 @@ export function StreamingMessageBubble() {
             >
               {streamingBuffer}
             </ReactMarkdown>
+            <span
+              className="streaming-cursor motion-reduce:hidden inline-block w-0.5 h-4 bg-zinc-900 ml-0.5 align-middle"
+              data-cy="streaming-cursor"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </div>

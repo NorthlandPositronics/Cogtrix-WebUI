@@ -32,6 +32,7 @@ export function SessionPage() {
   const connectionStatus = useStreamingStore((s) => s.connectionStatus);
   const hasStreamingContent = useStreamingStore((s) => s.streamingBuffer.trimStart().length > 0);
   const hasActiveTool = useStreamingStore((s) => s.hasActiveTool);
+  const currentMode = useStreamingStore((s) => s.currentMode);
 
   const memoryPanelOpen = useUIStore((s) => s.memoryPanelOpen);
   const toolsPanelOpen = useUIStore((s) => s.toolsPanelOpen);
@@ -94,7 +95,7 @@ export function SessionPage() {
   // StreamingMessageBubble only appears for the final response phase (no active tools).
   const streamingSlot = isAgentRunning ? (
     hasActiveTool || !hasStreamingContent ? (
-      <TypingIndicator />
+      <TypingIndicator mode={currentMode} />
     ) : (
       <StreamingMessageBubble />
     )

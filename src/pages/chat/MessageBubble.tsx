@@ -63,7 +63,7 @@ function UserBubble({ message }: { message: MessageOut }) {
         <div className="mt-1 flex items-center justify-end gap-1.5">
           {modeInfo && (
             <span
-              className="flex items-center gap-1 text-zinc-400"
+              className="flex items-center gap-1 text-zinc-500"
               title={modeInfo.label}
               aria-label={`Sent in ${modeInfo.label} mode`}
             >
