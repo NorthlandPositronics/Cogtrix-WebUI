@@ -24,7 +24,7 @@ updates:
 
   # Docker
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/docker"
     target-branch: "next"
     schedule:
       interval: "weekly"
