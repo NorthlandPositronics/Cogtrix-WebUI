@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/NorthlandPositronics/Cogtrix-WebUI/security/advisories/new
+    about: Report a security issue privately via GitHub Security Advisories
+  - name: Backend (Cogtrix) issues
+    url: https://github.com/NorthlandPositronics/Cogtrix/issues/new/choose
+    about: Report issues with the Cogtrix backend server

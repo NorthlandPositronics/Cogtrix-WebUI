@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="960"
+  height="420"
+  viewBox="0 0 960 420"
+  font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif"
+  font-size="12"
+>
+  <desc>
+    SUPERSEDED — Pre-teal era, violet accent. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+    Component: StatusBar (collapsed state — three variant comparison: running, done, error)
+    Page: Session chat page — between MessageList and MessageInput
+    Design system version: 2.3 (2026-03-09)
+    Artboards: desktop 1440px (component shown at 804px chat-column width within a 900px mockup frame)
+  </desc>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BACKGROUND + FRAME
+       ═══════════════════════════════════════════════════════════ -->
+  <rect width="960" height="420" fill="#f4f4f5"/>
+
+  <!-- Outer label area background -->
+  <rect x="20" y="16" width="920" height="384" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="40" y="44" font-size="11" font-weight="600" fill="#71717a" letter-spacing="0.08em" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">STATUSBAR — COLLAPSED STATES (VARIANT COMPARISON)</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ARTBOARD: 804px chat column, left-offset at x=80
+       Chat column background simulates message list area above
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- ── Shared artboard frame ── -->
+  <!-- Message list faux area (above the first bar) -->
+  <rect x="80" y="60" width="804" height="32" fill="#ffffff"/>
+  <!-- Faux message content lines -->
+  <rect x="96" y="68" width="260" height="8" rx="2" fill="#e4e4e7"/>
+  <rect x="96" y="80" width="180" height="8" rx="2" fill="#e4e4e7"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ROW A — RUNNING STATE
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- Callout label A -->
+  <text x="40" y="108" font-size="11" font-weight="600" fill="#8b5cf6" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">A</text>
+  <text x="40" y="121" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Running</text>
+
+  <!-- StatusBar surface Row A -->
+  <!-- border-t border-zinc-200 -->
+  <line x1="80" y1="92" x2="884" y2="92" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- bg-zinc-50 surface: px-4 py-1.5 → height = 6+16+6 = 28px (text-xs 12px line-height ~16px) but button is 44px, so bar height = 44px to accommodate min-h-11 -->
+  <rect x="80" y="92" width="804" height="44" fill="#fafafa"/>
+
+  <!-- Row A content — centered vertically at y=92+22=114 -->
+
+  <!-- Status dot slot (w-4 = 16px, centered at x=80+16+8=104, y=114) -->
+  <!-- Violet-500 pulse dot: size-1.5 = 6px -->
+  <circle cx="104" cy="114" r="3" fill="#8b5cf6"/>
+  <!-- Pulse ring to suggest animate-pulse -->
+  <circle cx="104" cy="114" r="5" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.35"/>
+
+  <!-- Tool name: "web_search" — font-sans text-zinc-700, starts after dot slot (gap-2=8px) -->
+  <!-- Layout: px-4(16) + w-4(16) dot slot + gap-2(8) = x=120 -->
+  <text x="120" y="118" font-size="12" fill="#3f3f46" font-weight="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">web_search</text>
+
+  <!-- Trailing status "…" — font-mono tabular-nums text-zinc-500, right of flex-1 zone -->
+  <!-- Positioned right of tool name area, before toggle button -->
+  <!-- Toggle button: 44px wide, right edge at 884-16(px-4)=868 → button right at 868, button left at 868-44=824 -->
+  <!-- Trailing status ends at ~820 -->
+  <text x="790" y="118" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">…</text>
+
+  <!-- Toggle button (ChevronUp) — 44×44px hit zone, right-aligned -->
+  <!-- Center at x=884-16-22=846, y=114 -->
+  <!-- 44px hit zone: x=824 to 868, y=92 to 136 -->
+  <!-- Faint outline for the hit zone indicator -->
+  <rect x="824" y="92" width="44" height="44" rx="4" fill="none" stroke="#a1a1aa" stroke-width="0.75" stroke-dasharray="3 2" opacity="0.6"/>
+
+  <!-- ChevronUp icon 16×16 centered at 846,114 -->
+  <!-- Chevron up: two lines forming ^ shape -->
+  <polyline points="838,118 846,110 854,118" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ─ Hit zone callout annotation ─ -->
+  <text x="870" y="110" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">44×44px</text>
+  <text x="870" y="121" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">hit zone</text>
+  <line x1="868" y1="114" x2="875" y2="114" stroke="#a1a1aa" stroke-width="0.75"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ROW B — COMPLETED STATE
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- Thin separator between rows (faux message list context) -->
+  <rect x="80" y="136" width="804" height="24" fill="#ffffff"/>
+  <rect x="96" y="142" width="320" height="8" rx="2" fill="#e4e4e7"/>
+  <rect x="96" y="152" width="240" height="8" rx="2" fill="#e4e4e7"/>
+
+  <!-- Callout label B -->
+  <text x="40" y="190" font-size="11" font-weight="600" fill="#16a34a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">B</text>
+  <text x="40" y="203" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Done</text>
+
+  <!-- StatusBar surface Row B -->
+  <line x1="80" y1="160" x2="884" y2="160" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="80" y="160" width="804" height="44" fill="#fafafa"/>
+
+  <!-- Row B content — centered at y=160+22=182 -->
+
+  <!-- Check icon (16×16): Lucide Check — two line segments forming a check mark, text-green-600 -->
+  <!-- Icon centered at x=104, y=182; 16×16 box: x=96 to 112 -->
+  <polyline points="97,182 102,187 112,176" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Tool name: "file_read" — font-sans text-zinc-700 -->
+  <text x="120" y="186" font-size="12" fill="#3f3f46" font-weight="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">file_read</text>
+
+  <!-- Trailing status "0.82s" — font-mono tabular-nums text-zinc-500 -->
+  <text x="778" y="186" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">0.82s</text>
+
+  <!-- Toggle button (ChevronUp) — same position -->
+  <rect x="824" y="160" width="44" height="44" rx="4" fill="none" stroke="#a1a1aa" stroke-width="0.75" stroke-dasharray="3 2" opacity="0.6"/>
+  <polyline points="838,186 846,178 854,186" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ROW C — ERROR STATE
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- Faux message list context -->
+  <rect x="80" y="204" width="804" height="24" fill="#ffffff"/>
+  <rect x="96" y="210" width="290" height="8" rx="2" fill="#e4e4e7"/>
+  <rect x="96" y="220" width="200" height="8" rx="2" fill="#e4e4e7"/>
+
+  <!-- Callout label C -->
+  <text x="40" y="258" font-size="11" font-weight="600" fill="#dc2626" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">C</text>
+  <text x="40" y="271" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Error</text>
+
+  <!-- StatusBar surface Row C -->
+  <line x1="80" y1="228" x2="884" y2="228" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="80" y="228" width="804" height="44" fill="#fafafa"/>
+
+  <!-- Row C content — centered at y=228+22=250 -->
+
+  <!-- X icon (16×16): Lucide X — two diagonal lines, text-red-600 -->
+  <!-- Icon box: x=96 to 112, y=242 to 258 -->
+  <line x1="97" y1="243" x2="111" y2="257" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="111" y1="243" x2="97" y2="257" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Tool name: "database_query" — font-sans text-zinc-700 (error: tool name stays zinc-700, not red-600) -->
+  <text x="120" y="254" font-size="12" fill="#3f3f46" font-weight="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">database_query</text>
+
+  <!-- Trailing status "failed" — font-mono tabular-nums text-red-600 -->
+  <text x="773" y="254" font-size="12" fill="#dc2626" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">failed</text>
+
+  <!-- Toggle button (ChevronUp) -->
+  <rect x="824" y="228" width="44" height="44" rx="4" fill="none" stroke="#a1a1aa" stroke-width="0.75" stroke-dasharray="3 2" opacity="0.6"/>
+  <polyline points="838,254 846,246 854,254" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MESSAGE INPUT (top edge visible below)
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- border-t border-zinc-200 bg-white of MessageInput -->
+  <line x1="80" y1="272" x2="884" y2="272" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="80" y="272" width="804" height="80" fill="#ffffff"/>
+
+  <!-- Faux textarea border inside MessageInput -->
+  <rect x="96" y="284" width="708" height="40" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Placeholder text inside textarea -->
+  <text x="112" y="309" font-size="12" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Message Cogtrix…</text>
+
+  <!-- Send button (violet) right of textarea -->
+  <rect x="812" y="284" width="56" height="40" rx="6" fill="#7c3aed"/>
+  <!-- Send arrow icon (simplified) -->
+  <line x1="828" y1="304" x2="852" y2="304" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="844,298 852,304 844,310" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- MessageInput label -->
+  <text x="80" y="365" font-size="9" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">▲ MessageInput (bg-white, border-t border-zinc-200) — tonal separation from StatusBar (bg-zinc-50)</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ANNOTATION CALLOUTS — bottom area
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- Divider above annotations -->
+  <line x1="40" y1="375" x2="920" y2="375" stroke="#e4e4e7" stroke-width="0.75"/>
+
+  <!-- Annotation: font rules -->
+  <text x="40" y="392" font-size="10" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif" font-weight="500">Typography:</text>
+  <text x="120" y="392" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Tool name → font-sans text-zinc-700    |    Duration / ellipsis → font-mono tabular-nums text-zinc-500    |    "failed" → font-mono tabular-nums text-red-600 (#dc2626)</text>
+
+  <text x="40" y="408" font-size="10" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif" font-weight="500">Surface:</text>
+  <text x="120" y="408" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">bg-zinc-50 (#fafafa)    border-t border-zinc-200 (#e4e4e7)    px-4 (16px) py-1.5 (6px)    Toggle: min-h-11 min-w-11 (44px) — dashed outline marks hit zone</text>
+</svg>

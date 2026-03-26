@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="960"
+  height="560"
+  viewBox="0 0 960 560"
+  font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif"
+  font-size="12"
+>
+  <desc>
+    SUPERSEDED — Pre-teal era, violet accent. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+    Component: StatusBar (expanded state — history panel open with 6 entries)
+    Page: Session chat page — between MessageList and MessageInput
+    Design system version: 2.3 (2026-03-09)
+    Artboards: desktop 1440px (component shown at 804px chat-column width within a 960px mockup frame)
+  </desc>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BACKGROUND + FRAME
+       ═══════════════════════════════════════════════════════════ -->
+  <rect width="960" height="560" fill="#f4f4f5"/>
+  <rect x="20" y="16" width="920" height="524" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="40" y="44" font-size="11" font-weight="600" fill="#71717a" letter-spacing="0.08em" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">STATUSBAR — EXPANDED STATE (HISTORY PANEL OPEN)</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FAUX MESSAGE LIST AREA (above the StatusBar)
+       ═══════════════════════════════════════════════════════════ -->
+  <rect x="80" y="58" width="804" height="60" fill="#ffffff"/>
+
+  <!-- Faux user message bubble (right-aligned, bg-violet-50, border-violet-200) -->
+  <rect x="540" y="64" width="320" height="38" rx="14" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="556" y="83" font-size="12" fill="#18181b" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">What were the results of the database query?</text>
+
+  <!-- Faux assistant bubble (left, bg-white, border-zinc-200) -->
+  <rect x="96" y="64" width="360" height="38" rx="14" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="112" y="79" font-size="12" fill="#18181b" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">I ran several tools to look that up. Here's what I</text>
+  <text x="112" y="94" font-size="12" fill="#18181b" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">found so far — I'm still searching the web now.</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       STATUSBAR COMPONENT — border-t border-zinc-200 bg-zinc-50
+       Top of StatusBar at y=118
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- border-t -->
+  <line x1="80" y1="118" x2="884" y2="118" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ──────────────────────────────────────────────
+       EXPANDED HISTORY PANEL
+       bg-zinc-50, px-4 py-1.5, max-h-48 (192px)
+       6 entries × ~24px each = 144px + padding = 156px
+       Panel: y=118 to y=282 (164px — fits within max-h-48)
+       ────────────────────────────────────────────── -->
+  <rect x="80" y="118" width="804" height="164" fill="#fafafa"/>
+
+  <!-- Panel top padding: py-1.5 = 6px → first entry baseline at y=118+6+16=140 -->
+
+  <!-- Column header labels (for annotation purposes, rendered very lightly — not in real component) -->
+  <!-- These are SVG annotations, not real component content -->
+
+  <!-- ── Entry 1: 14:02:11 | check (green-600) | web_search | 1.24s ── -->
+  <!-- Row y-center = 118+6+8 = 132; py-0.5 per row = 4px above+below, row height = 24px -->
+  <!-- Entry 1 center y = 118+6+12 = 136 -->
+
+  <!-- Entry 1: y=130 baseline for text (text-xs 12px) -->
+  <!-- px-4 = 16px left margin → content starts at x=96 -->
+
+  <!-- Timestamp: w-[4.5rem]=72px, font-mono tabular-nums text-zinc-500 -->
+  <text x="96" y="142" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">14:02:11</text>
+
+  <!-- Status dot slot: w-4=16px, starts after timestamp+gap-2: x=96+72+8=176 -->
+  <!-- Check (green-600), 16×16 icon centered at x=176+8=184 -->
+  <polyline points="177,142 182,147 193,136" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Tool name: font-sans text-zinc-700, starts at x=176+16+8=200 -->
+  <text x="200" y="142" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">web_search</text>
+
+  <!-- Duration: font-mono tabular-nums text-zinc-500, right-aligned before toggle button area -->
+  <!-- Toggle button right edge at x=884-16=868, button width=44 → button left at 824 → trailing at ~810 -->
+  <text x="780" y="142" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">1.24s</text>
+
+  <!-- ── Entry 2: 14:02:14 | check (green-600) | file_read | 0.38s ── -->
+  <!-- Entry 2 center y = 136+24 = 160 -->
+  <text x="96" y="166" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">14:02:14</text>
+  <polyline points="177,166 182,171 193,160" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="166" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">file_read</text>
+  <text x="780" y="166" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">0.38s</text>
+
+  <!-- ── Entry 3: 14:02:14 | check (green-600) | file_read | 0.41s ── -->
+  <!-- Entry 3 center y = 160+24 = 184 -->
+  <text x="96" y="190" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">14:02:14</text>
+  <polyline points="177,190 182,195 193,184" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="190" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">file_read</text>
+  <text x="780" y="190" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">0.41s</text>
+
+  <!-- ── Entry 4: 14:02:17 | X (red-600) | database_query | failed ── -->
+  <!-- Entry 4 center y = 184+24 = 208 -->
+  <text x="96" y="214" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">14:02:17</text>
+  <!-- X icon (16×16) centered at x=184, y=206 → box: 176–192, 198–214 -->
+  <line x1="177" y1="199" x2="191" y2="213" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="191" y1="199" x2="177" y2="213" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- tool name stays zinc-700 (not red) -->
+  <text x="200" y="214" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">database_query</text>
+  <!-- "failed" in red-600 -->
+  <text x="773" y="214" font-size="12" fill="#dc2626" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">failed</text>
+
+  <!-- ── Entry 5: 14:02:19 | check (green-600) | file_write | 2.01s ── -->
+  <!-- Entry 5 center y = 208+24 = 232 -->
+  <text x="96" y="238" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">14:02:19</text>
+  <polyline points="177,238 182,243 193,232" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="238" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">file_write</text>
+  <text x="780" y="238" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">2.01s</text>
+
+  <!-- ── Entry 6: 14:02:22 | violet pulse dot | web_search | … (RUNNING) ── -->
+  <!-- Entry 6 center y = 232+24 = 256 -->
+  <text x="96" y="262" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">14:02:22</text>
+  <!-- Violet-500 pulse dot: size-1.5 = 3px radius, centered at 184,255 -->
+  <circle cx="184" cy="256" r="3" fill="#8b5cf6"/>
+  <circle cx="184" cy="256" r="5" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.35"/>
+  <text x="200" y="262" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">web_search</text>
+  <text x="790" y="262" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">…</text>
+
+  <!-- Bottom panel padding: py-1.5 = 6px → panel ends at y=256+12+6=274 → panel bottom = 282 -->
+
+  <!-- ──────────────────────────────────────────────
+       BORDER-B DIVIDER between history panel and summary row
+       border-b border-zinc-200
+       ────────────────────────────────────────────── -->
+  <line x1="80" y1="282" x2="884" y2="282" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ──────────────────────────────────────────────
+       SUMMARY ROW (collapsed row — bottom of component)
+       bg-zinc-50, px-4 py-1.5, height=44px
+       y=282 to y=326
+       ────────────────────────────────────────────── -->
+  <rect x="80" y="282" width="804" height="44" fill="#fafafa"/>
+
+  <!-- Summary row: same content as Entry 6 — currently running tool -->
+  <!-- Violet-500 pulse dot, centered at y=282+22=304 -->
+  <!-- Status dot slot starts at x=80+16=96, centered at x=96+8=104 -->
+  <circle cx="104" cy="304" r="3" fill="#8b5cf6"/>
+  <circle cx="104" cy="304" r="5" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.35"/>
+
+  <!-- Tool name: "web_search" -->
+  <text x="120" y="308" font-size="12" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">web_search</text>
+
+  <!-- Trailing "…" -->
+  <text x="790" y="308" font-size="12" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace" font-variant-numeric="tabular-nums">…</text>
+
+  <!-- ChevronDown button — zinc-700 (active/hover state — user just interacted) -->
+  <!-- 44×44px hit zone: x=824 to 868, y=282 to 326 -->
+  <rect x="824" y="282" width="44" height="44" rx="4" fill="none" stroke="#a1a1aa" stroke-width="0.75" stroke-dasharray="3 2" opacity="0.6"/>
+  <!-- ChevronDown icon 16×16 centered at 846,304 -->
+  <polyline points="838,300 846,308 854,300" fill="none" stroke="#3f3f46" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MESSAGE INPUT (top edge)
+       border-t border-zinc-200 bg-white
+       y=326 to y=400
+       ═══════════════════════════════════════════════════════════ -->
+  <line x1="80" y1="326" x2="884" y2="326" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="80" y="326" width="804" height="72" fill="#ffffff"/>
+
+  <!-- Textarea border -->
+  <rect x="96" y="338" width="708" height="40" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="112" y="363" font-size="12" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Message Cogtrix…</text>
+
+  <!-- Send button -->
+  <rect x="812" y="338" width="56" height="40" rx="6" fill="#7c3aed"/>
+  <line x1="828" y1="358" x2="852" y2="358" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="844,352 852,358 844,364" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ANNOTATION CALLOUTS (right-side and bottom)
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- ── Annotation 1: border-b border-zinc-200 divider ── -->
+  <!-- Pointer from right side to the divider line at y=282 -->
+  <line x1="884" y1="282" x2="920" y2="282" stroke="#a1a1aa" stroke-width="0.75"/>
+  <text x="893" y="279" font-size="9" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">border-b border-zinc-200</text>
+  <text x="893" y="290" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">(#e4e4e7) — separates</text>
+  <text x="893" y="301" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">panel from summary row</text>
+
+  <!-- ── Annotation 2: timestamp column width ── -->
+  <!-- Bracket over timestamp column header area -->
+  <!-- Timestamps span x=96 to x=168 (72px = 4.5rem) -->
+  <line x1="96" y1="124" x2="168" y2="124" stroke="#8b5cf6" stroke-width="1"/>
+  <line x1="96" y1="121" x2="96" y2="127" stroke="#8b5cf6" stroke-width="1"/>
+  <line x1="168" y1="121" x2="168" y2="127" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="97" y="121" font-size="9" fill="#8b5cf6" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">w-[4.5rem] = 72px</text>
+
+  <!-- ── Annotation 3: text-zinc-500 color + contrast on timestamps ── -->
+  <!-- Pointer from Entry 1 timestamp to right annotation -->
+  <line x1="168" y1="137" x2="190" y2="137" stroke="#a1a1aa" stroke-width="0.75" stroke-dasharray="2 2"/>
+  <line x1="190" y1="137" x2="190" y2="148" stroke="#a1a1aa" stroke-width="0.75"/>
+
+  <!-- Inline annotation between entries for timestamp color -->
+  <!-- Placing annotation text to the right of the entry rows, within the unused space between tool name and duration -->
+  <!-- (enough room between ~330px and ~770px) -->
+  <rect x="358" y="124" width="220" height="22" rx="3" fill="#fafafa" stroke="#e4e4e7" stroke-width="0.75"/>
+  <text x="366" y="135" font-size="9" font-weight="500" fill="#71717a" font-family="ui-monospace, 'Geist Mono', monospace">text-zinc-500 (#71717a)</text>
+  <text x="366" y="144" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Timestamps + durations — 4.7:1 on bg-zinc-50 ✓ WCAG AA</text>
+
+  <!-- ── Annotation 4: font-mono on timestamps/durations, font-sans on tool names ── -->
+  <rect x="358" y="150" width="220" height="22" rx="3" fill="#fafafa" stroke="#e4e4e7" stroke-width="0.75"/>
+  <text x="366" y="161" font-size="9" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Typography split:</text>
+  <text x="366" y="170" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">timestamps + durations → font-mono tabular-nums</text>
+
+  <rect x="358" y="176" width="220" height="14" rx="3" fill="#fafafa" stroke="#e4e4e7" stroke-width="0.75"/>
+  <text x="366" y="187" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">tool names → font-sans (not font-mono)</text>
+
+  <!-- ── Annotation 5: 44px hit zone on ChevronDown ── -->
+  <line x1="868" y1="304" x2="896" y2="304" stroke="#a1a1aa" stroke-width="0.75"/>
+  <text x="893" y="314" font-size="9" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">44×44px hit zone</text>
+  <text x="893" y="325" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">min-h-11 min-w-11</text>
+  <text x="893" y="336" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">ChevronDown zinc-700</text>
+  <text x="893" y="347" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">(hover/active state)</text>
+
+  <!-- ── Annotation 6: running state entry highlight (entry 6) ── -->
+  <!-- Light violet left-border accent on entry 6 row to highlight "currently running" -->
+  <rect x="80" y="244" width="3" height="38" fill="#8b5cf6" opacity="0.4"/>
+  <text x="42" y="262" font-size="9" fill="#8b5cf6" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">running</text>
+  <text x="42" y="272" font-size="9" fill="#8b5cf6" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">entry</text>
+
+  <!-- ── Annotation 7: panel height annotation ── -->
+  <!-- Brace on left side marking history panel height -->
+  <line x1="66" y1="118" x2="66" y2="282" stroke="#a1a1aa" stroke-width="0.75"/>
+  <line x1="63" y1="118" x2="69" y2="118" stroke="#a1a1aa" stroke-width="0.75"/>
+  <line x1="63" y1="282" x2="69" y2="282" stroke="#a1a1aa" stroke-width="0.75"/>
+  <text x="26" y="196" font-size="9" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif" transform="rotate(-90 26 196)">max-h-48 (192px cap)</text>
+
+  <!-- ── Annotation 8: error row highlight ── -->
+  <rect x="80" y="196" width="3" height="38" fill="#dc2626" opacity="0.4"/>
+  <text x="42" y="214" font-size="9" fill="#dc2626" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">error</text>
+  <text x="42" y="224" font-size="9" fill="#dc2626" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">entry</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BOTTOM ANNOTATION BAR
+       ═══════════════════════════════════════════════════════════ -->
+  <line x1="40" y1="412" x2="920" y2="412" stroke="#e4e4e7" stroke-width="0.75"/>
+
+  <text x="40" y="428" font-size="10" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Surface:</text>
+  <text x="98" y="428" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">bg-zinc-50 (#fafafa) throughout — no color change between history panel and summary row    |    border-b border-zinc-200 (#e4e4e7) divides the two regions</text>
+
+  <text x="40" y="444" font-size="10" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Spacing:</text>
+  <text x="98" y="444" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">History panel: px-4 (16px) py-1.5 (6px)    |    Each entry: py-0.5 (2px top + 2px bottom)    |    gap-2 (8px) between icon and tool name</text>
+
+  <text x="40" y="460" font-size="10" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Running dot:</text>
+  <text x="110" y="460" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">bg-violet-500 (#8b5cf6) — secondary activity signal; subordinate to header AgentStateBadge dot (bg-violet-600)</text>
+
+  <text x="40" y="476" font-size="10" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Error:</text>
+  <text x="78" y="476" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">X icon text-red-600 (#dc2626, 5.9:1 on zinc-50 ✓)    |    "failed" label text-red-600 font-mono    |    Tool name stays text-zinc-700 (not red)</text>
+
+  <text x="40" y="492" font-size="10" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Animation:</text>
+  <text x="105" y="492" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Panel expand/collapse: transition-all duration-200 ease-in-out (max-height 0 → max-h-48, overflow-hidden)    |    Running dot: animate-pulse</text>
+
+  <text x="40" y="508" font-size="10" font-weight="500" fill="#3f3f46" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Accessibility:</text>
+  <text x="112" y="508" font-size="10" fill="#71717a" font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif">Panel: role="log" aria-label="Tool activity history" aria-live="off"    |    Toggle: aria-expanded="true" aria-label="Collapse tool history"    |    Focus: ring-2 ring-offset-2 ring-zinc-400</text>
+</svg>

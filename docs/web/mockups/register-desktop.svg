@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900"
+  font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Register page — teal-era (DS v3.10, 2026-03-25). Replaces superseded sprint-1-register.svg.
+  Page: /register
+  Design system version: 3.10 (2026-03-25)
+  Artboards: desktop 1440×900px
+  </desc>
+
+  <!-- Page background: bg-zinc-50 -->
+  <rect width="1440" height="900" fill="#fafafa"/>
+
+  <!-- ===================== CARD ===================== -->
+  <!-- max-w-sm (384px wide), centered: x = (1440-384)/2 = 528, taller for 3 fields -->
+  <!-- Card height ~460px, y = (900-460)/2 = 220 -->
+  <!-- Shadow approximation -->
+  <rect x="529" y="221" width="384" height="460" rx="12" fill="#000000" fill-opacity="0.04"/>
+  <!-- Card surface -->
+  <rect x="528" y="220" width="384" height="460" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <g id="layer-content">
+
+    <!-- C-mark logomark: centered at x=720, y=252 -->
+    <circle cx="720" cy="260" r="22" fill="#f0fdfa"/>
+    <g transform="translate(708, 248)">
+      <path d="M 16.071 3.929 A 8 8 0 1 0 16.071 16.071"
+            fill="none" stroke="#0d9488" stroke-width="2.8" stroke-linecap="round"/>
+      <circle cx="16.071" cy="3.929" r="1.8" fill="#0d9488"/>
+      <circle cx="16.071" cy="16.071" r="1.3" fill="#0d9488"/>
+    </g>
+
+    <!-- "Cogtrix" wordmark -->
+    <text x="720" y="312" font-size="28" font-weight="700" fill="#18181b" text-anchor="middle" letter-spacing="-0.5">Cogtrix</text>
+    <!-- Subtitle -->
+    <text x="720" y="334" font-size="14" font-weight="400" fill="#71717a" text-anchor="middle">Create your account</text>
+
+    <!-- FIELD: Username -->
+    <g id="zone-field-username">
+      <text x="552" y="368" font-size="14" font-weight="500" fill="#3f3f46">Username</text>
+      <rect x="552" y="375" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="564" y="398" font-size="14" font-weight="400" fill="#a1a1aa">Enter your username</text>
+    </g>
+
+    <!-- FIELD: Email — shows error state as demo -->
+    <g id="zone-field-email">
+      <text x="552" y="432" font-size="14" font-weight="500" fill="#3f3f46">Email</text>
+      <!-- Error border: border-red-500 -->
+      <rect x="552" y="439" width="336" height="36" rx="6" fill="#ffffff" stroke="#ef4444" stroke-width="1.5"/>
+      <!-- User-entered value (realistic) -->
+      <text x="564" y="462" font-size="14" font-weight="400" fill="#18181b">alice@example.com</text>
+      <!-- Field error message -->
+      <text x="552" y="489" font-size="13" font-weight="400" fill="#dc2626">This email is already in use.</text>
+    </g>
+
+    <!-- FIELD: Password — y shifted down 16px for error message -->
+    <g id="zone-field-password">
+      <text x="552" y="508" font-size="14" font-weight="500" fill="#3f3f46">Password</text>
+      <rect x="552" y="515" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="564" y="538" font-size="14" font-weight="400" fill="#a1a1aa">Create a password</text>
+    </g>
+
+    <!-- Create Account button: bg-teal-600 #0d9488 -->
+    <g id="zone-submit">
+      <rect x="552" y="569" width="336" height="40" rx="6" fill="#0d9488"/>
+      <text x="720" y="594" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Create Account</text>
+    </g>
+
+    <!-- Footer link -->
+    <g id="zone-footer">
+      <text x="720" y="634" font-size="14" font-weight="400" text-anchor="middle">
+        <tspan fill="#71717a">Already have an account?</tspan>
+        <tspan fill="#0d9488" text-decoration="underline">&#160;Sign in</tspan>
+      </text>
+    </g>
+
+  </g>
+
+  <!-- ===================== INTERACTION STATE CALLOUTS ===================== -->
+
+  <!-- Hover state: button -->
+  <g id="state-hover" transform="translate(528, 700)">
+    <text x="0" y="16" font-size="11" font-weight="500" fill="#52525b">Hover — button</text>
+    <rect x="0" y="24" width="200" height="36" rx="6" fill="#0f766e"/>
+    <text x="100" y="47" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Create Account</text>
+    <text x="210" y="46" font-size="10" fill="#71717a">bg-teal-700 #0f766e</text>
+  </g>
+
+  <!-- Loading state: button -->
+  <g id="state-loading" transform="translate(528, 756)">
+    <text x="0" y="16" font-size="11" font-weight="500" fill="#52525b">Loading — submitting</text>
+    <rect x="0" y="24" width="200" height="36" rx="6" fill="#0d9488" opacity="0.75"/>
+    <g transform="translate(78, 42)">
+      <circle r="7" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <path d="M 0 -7 A 7 7 0 0 1 4.95 -4.95" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </g>
+    <text x="210" y="46" font-size="10" fill="#71717a">disabled + Loader2 spinner</text>
+  </g>
+
+  <!-- General API error -->
+  <g id="state-error" transform="translate(528, 812)">
+    <text x="0" y="16" font-size="11" font-weight="500" fill="#52525b">Error — API conflict (409)</text>
+    <rect x="0" y="24" width="336" height="48" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+    <circle cx="20" cy="48" r="7" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+    <line x1="20" y1="44" x2="20" y2="48" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="20" cy="51" r="1" fill="#dc2626"/>
+    <text x="36" y="45" font-size="13" font-weight="500" fill="#dc2626">Username or email is already taken</text>
+    <text x="36" y="61" font-size="12" fill="#b91c1c">API error 409 — variant=destructive Alert</text>
+  </g>
+
+  <!-- ===================== ANNOTATIONS ===================== -->
+  <g id="annotations" font-family="'Geist Mono', 'Courier New', monospace">
+    <!-- Card annotation -->
+    <line x1="528" y1="220" x2="496" y2="200" stroke="#71717a" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="490" y="196" font-size="10" fill="#71717a" text-anchor="end">Card: max-w-sm (384px) 3-field layout</text>
+    <text x="490" y="208" font-size="10" fill="#a1a1aa" text-anchor="end">bg-white border-zinc-200 rounded-xl shadow-sm p-6</text>
+
+    <!-- Error field annotation -->
+    <line x1="528" y1="462" x2="496" y2="462" stroke="#dc2626" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="490" y="458" font-size="10" fill="#dc2626" text-anchor="end">field (error state)</text>
+    <text x="490" y="470" font-size="10" fill="#f87171" text-anchor="end">border-red-500 #ef4444</text>
+    <text x="490" y="489" font-size="10" fill="#dc2626" text-anchor="end">error text-red-600 #dc2626</text>
+
+    <!-- Button annotation -->
+    <line x1="912" y1="589" x2="950" y2="589" stroke="#71717a" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="953" y="585" font-size="10" fill="#71717a">bg-teal-600 #0d9488</text>
+    <text x="953" y="597" font-size="10" fill="#a1a1aa">w-full h-10 rounded-md</text>
+
+    <!-- Page background annotation -->
+    <text x="36" y="36" font-size="11" fill="#71717a">page: min-h-screen flex items-center justify-center bg-zinc-50 #fafafa</text>
+    <text x="36" y="50" font-size="10" fill="#a1a1aa">Register variant — isRegister=true — email field shown in error state</text>
+  </g>
+
+</svg>

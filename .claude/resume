@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+claude --resume e09d34ef-09ec-4457-a3ce-b7824ebdec12 --allow-dangerously-skip-permissions --permission-mode bypassPermissions $@

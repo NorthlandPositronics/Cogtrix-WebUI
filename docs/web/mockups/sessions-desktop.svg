@@ -1,0 +1,341 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1700" viewBox="0 0 1440 1700" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Sessions Dashboard (SessionsPage)
+  Page: /sessions
+  Design system version: 3.6 (2026-03-23)
+  Artboards: desktop 1440px (primary frame y=0), secondary frames below (empty state y=900, dialog y=1100)
+  </desc>
+
+  <!-- ===================== FRAME 1: DESKTOP 1440px ===================== -->
+  <rect width="1440" height="900" fill="#ffffff"/>
+  <text x="240" y="18" font-size="11" font-weight="500" fill="#71717a">Frame 1 — Desktop 1440px — 3-column grid, 6 sessions populated</text>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <g id="layer-sidebar">
+    <rect x="0" y="0" width="220" height="900" fill="#fafafa"/>
+    <line x1="220" y1="0" x2="220" y2="900" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Logo: C-mark + Cogtrix wordmark -->
+    <g transform="translate(16, 16)">
+      <!-- C-mark arc (28×28 viewBox scaled to 22×22) -->
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Sessions — ACTIVE -->
+    <g id="nav-sessions-active">
+      <rect x="8" y="64" width="204" height="36" rx="6" fill="#f0fdfa"/>
+      <rect x="8" y="64" width="2" height="36" rx="1" fill="#0d9488"/>
+      <g transform="translate(18, 72)" fill="none" stroke="#0d9488" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="0" width="16" height="13" rx="2"/>
+        <polyline points="0,13 0,16 4,13"/>
+        <line x1="4" y1="4" x2="12" y2="4"/>
+        <line x1="4" y1="7" x2="10" y2="7"/>
+      </g>
+      <text x="42" y="87" font-size="14" font-weight="500" fill="#0d9488">Sessions</text>
+    </g>
+
+    <!-- Documents -->
+    <g id="nav-documents">
+      <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 116)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 0 L10 0 L14 4 L14 16 L2 16 Z"/>
+        <polyline points="10,0 10,4 14,4"/>
+        <line x1="5" y1="8" x2="11" y2="8"/>
+        <line x1="5" y1="11" x2="11" y2="11"/>
+      </g>
+      <text x="42" y="131" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    </g>
+
+    <!-- Assistant -->
+    <g id="nav-assistant">
+      <rect x="8" y="152" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 160)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="12" height="10" rx="2"/>
+        <circle cx="6" cy="9" r="1.5"/>
+        <circle cx="10" cy="9" r="1.5"/>
+        <line x1="8" y1="0" x2="8" y2="4"/>
+        <line x1="0" y1="9" x2="2" y2="9"/>
+        <line x1="14" y1="9" x2="16" y2="9"/>
+      </g>
+      <text x="42" y="175" font-size="14" font-weight="500" fill="#52525b">Assistant</text>
+    </g>
+
+    <!-- Settings -->
+    <g id="nav-settings">
+      <rect x="8" y="196" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 204)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="8" r="3"/>
+        <path d="M8 0 L8 2 M8 14 L8 16 M0 8 L2 8 M14 8 L16 8 M2.3 2.3 L3.8 3.8 M12.2 12.2 L13.7 13.7 M13.7 2.3 L12.2 3.8 M3.8 12.2 L2.3 13.7"/>
+      </g>
+      <text x="42" y="219" font-size="14" font-weight="500" fill="#52525b">Settings</text>
+    </g>
+  </g>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <g id="layer-content">
+    <!-- Page header -->
+    <g id="layer-header">
+      <text x="248" y="54" font-size="24" font-weight="600" fill="#18181b">Sessions</text>
+      <!-- New Session button -->
+      <g id="btn-new-session">
+        <rect x="1140" y="30" width="136" height="40" rx="6" fill="#0d9488"/>
+        <g transform="translate(1152, 44)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+          <line x1="8" y1="0" x2="8" y2="16"/>
+          <line x1="0" y1="8" x2="16" y2="8"/>
+        </g>
+        <text x="1174" y="54" font-size="14" font-weight="500" fill="#ffffff">New Session</text>
+      </g>
+      <line x1="240" y1="82" x2="1300" y2="82" stroke="#e4e4e7" stroke-width="1"/>
+    </g>
+
+    <!-- ===== SESSION CARDS: 3-column grid ===== -->
+    <!-- Card 1: Research on climate models — Ready (green) -->
+    <g id="card-1" transform="translate(248, 102)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- hover border would be zinc-300 -->
+      <text x="16" y="28" font-size="16" font-weight="500" fill="#18181b">Research on climate models</text>
+      <!-- AgentStateBadge: Ready (green dot) -->
+      <circle cx="16" cy="48" r="4" fill="#16a34a"/>
+      <text x="26" y="52" font-size="14" font-weight="500" fill="#15803d">Ready</text>
+      <text x="16" y="70" font-size="14" font-weight="400" fill="#71717a">claude-3-5-sonnet</text>
+      <text x="16" y="90" font-size="12" font-weight="400" fill="#71717a">2 hours ago</text>
+      <!-- Trash icon (hover reveal) — shown faded to indicate hover state -->
+      <g transform="translate(288, 10)" opacity="0.3" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+        <path d="M6 3 L6 1 L10 1 L10 3"/>
+        <line x1="6" y1="7" x2="6" y2="12"/>
+        <line x1="10" y1="7" x2="10" y2="12"/>
+      </g>
+    </g>
+
+    <!-- Card 2: Code review sprint — Thinking (teal pulsing) — HOVER STATE showing trash -->
+    <g id="card-2" transform="translate(594, 102)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1"/>
+      <text x="16" y="28" font-size="16" font-weight="500" fill="#18181b">Code review sprint</text>
+      <!-- AgentStateBadge: Thinking (teal dot) -->
+      <circle cx="16" cy="48" r="4" fill="#0d9488"/>
+      <text x="26" y="52" font-size="14" font-weight="500" fill="#0f766e">Thinking...</text>
+      <text x="16" y="70" font-size="14" font-weight="400" fill="#71717a">gpt-4o</text>
+      <text x="16" y="90" font-size="12" font-weight="400" fill="#71717a">5 minutes ago</text>
+      <!-- Trash icon (HOVER — fully visible) -->
+      <g transform="translate(288, 10)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+        <path d="M6 3 L6 1 L10 1 L10 3"/>
+        <line x1="6" y1="7" x2="6" y2="12"/>
+        <line x1="10" y1="7" x2="10" y2="12"/>
+      </g>
+      <!-- Hover annotation -->
+      <text x="16" y="104" font-size="10" fill="#a1a1aa" font-style="italic">hover state — archive button visible</text>
+    </g>
+
+    <!-- Card 3: Marketing copy draft — Ready (green) -->
+    <g id="card-3" transform="translate(940, 102)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="16" y="28" font-size="16" font-weight="500" fill="#18181b">Marketing copy draft</text>
+      <circle cx="16" cy="48" r="4" fill="#16a34a"/>
+      <text x="26" y="52" font-size="14" font-weight="500" fill="#15803d">Ready</text>
+      <text x="16" y="70" font-size="14" font-weight="400" fill="#71717a">Default</text>
+      <text x="16" y="90" font-size="12" font-weight="400" fill="#71717a">yesterday</text>
+      <g transform="translate(288, 10)" opacity="0.3" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+        <path d="M6 3 L6 1 L10 1 L10 3"/>
+        <line x1="6" y1="7" x2="6" y2="12"/>
+        <line x1="10" y1="7" x2="10" y2="12"/>
+      </g>
+    </g>
+
+    <!-- Card 4: Competitor analysis — Done (green) -->
+    <g id="card-4" transform="translate(248, 234)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="16" y="28" font-size="16" font-weight="500" fill="#18181b">Competitor analysis</text>
+      <circle cx="16" cy="48" r="4" fill="#16a34a"/>
+      <text x="26" y="52" font-size="14" font-weight="500" fill="#15803d">Done</text>
+      <text x="16" y="70" font-size="14" font-weight="400" fill="#71717a">claude-3-5-sonnet</text>
+      <text x="16" y="90" font-size="12" font-weight="400" fill="#71717a">Mar 5</text>
+      <g transform="translate(288, 10)" opacity="0.3" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+        <path d="M6 3 L6 1 L10 1 L10 3"/>
+        <line x1="6" y1="7" x2="6" y2="12"/>
+        <line x1="10" y1="7" x2="10" y2="12"/>
+      </g>
+    </g>
+
+    <!-- Card 5: Database migration plan — Ready (green) -->
+    <g id="card-5" transform="translate(594, 234)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="16" y="28" font-size="16" font-weight="500" fill="#18181b">Database migration plan</text>
+      <circle cx="16" cy="48" r="4" fill="#16a34a"/>
+      <text x="26" y="52" font-size="14" font-weight="500" fill="#15803d">Ready</text>
+      <text x="16" y="70" font-size="14" font-weight="400" fill="#71717a">gpt-4o-mini</text>
+      <text x="16" y="90" font-size="12" font-weight="400" fill="#71717a">3 days ago</text>
+      <g transform="translate(288, 10)" opacity="0.3" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+        <path d="M6 3 L6 1 L10 1 L10 3"/>
+        <line x1="6" y1="7" x2="6" y2="12"/>
+        <line x1="10" y1="7" x2="10" y2="12"/>
+      </g>
+    </g>
+
+    <!-- Card 6: API integration help — Error (red) -->
+    <g id="card-6" transform="translate(940, 234)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="16" y="28" font-size="16" font-weight="500" fill="#18181b">API integration help</text>
+      <circle cx="16" cy="48" r="4" fill="#dc2626"/>
+      <text x="26" y="52" font-size="14" font-weight="500" fill="#dc2626">Error</text>
+      <text x="16" y="70" font-size="14" font-weight="400" fill="#71717a">Default</text>
+      <text x="16" y="90" font-size="12" font-weight="400" fill="#71717a">Mar 3</text>
+      <g transform="translate(288, 10)" opacity="0.3" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+        <path d="M6 3 L6 1 L10 1 L10 3"/>
+        <line x1="6" y1="7" x2="6" y2="12"/>
+        <line x1="10" y1="7" x2="10" y2="12"/>
+      </g>
+    </g>
+
+    <!-- InfiniteScrollSentinel annotation -->
+    <text x="248" y="372" font-size="11" fill="#a1a1aa" font-style="italic">↓ InfiniteScrollSentinel (invisible) — triggers fetchNextPage when scrolled into view</text>
+  </g>
+
+  <!-- ===================== FRAME 2: EMPTY STATE ===================== -->
+  <rect x="0" y="900" width="1440" height="200" fill="#fafafa"/>
+  <text x="240" y="920" font-size="11" font-weight="500" fill="#71717a">Frame 2 — Empty State</text>
+  <rect x="0" y="900" width="1440" height="200" fill="#ffffff"/>
+  <!-- Sidebar strip -->
+  <rect x="0" y="900" width="220" height="200" fill="#fafafa"/>
+  <line x1="220" y1="900" x2="220" y2="1100" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Empty state content -->
+  <g transform="translate(720, 1000)">
+    <!-- MessageSquare icon 48×48 text-zinc-400 strokeWidth=1.5 -->
+    <g transform="translate(-24, -66)" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="0" y="0" width="48" height="40" rx="6"/>
+      <polyline points="0,40 0,48 12,40"/>
+      <line x1="10" y1="12" x2="38" y2="12"/>
+      <line x1="10" y1="20" x2="30" y2="20"/>
+    </g>
+    <text x="0" y="-4" font-size="16" font-weight="500" fill="#18181b" text-anchor="middle">No sessions yet.</text>
+    <text x="0" y="18" font-size="14" font-weight="400" fill="#71717a" text-anchor="middle">Create one to get started.</text>
+    <g transform="translate(-68, 34)">
+      <rect width="136" height="40" rx="6" fill="#0d9488"/>
+      <g transform="translate(16, 12)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+        <line x1="8" y1="0" x2="8" y2="16"/>
+        <line x1="0" y1="8" x2="16" y2="8"/>
+      </g>
+      <text x="40" y="24" font-size="14" font-weight="500" fill="#ffffff" dominant-baseline="middle">New Session</text>
+    </g>
+  </g>
+
+  <!-- ===================== FRAME 3: LOADING SKELETONS ===================== -->
+  <rect x="0" y="1100" width="1440" height="200" fill="#ffffff"/>
+  <rect x="0" y="1100" width="220" height="200" fill="#fafafa"/>
+  <line x1="220" y1="1100" x2="220" y2="1300" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="240" y="1120" font-size="11" font-weight="500" fill="#71717a">Frame 3 — Loading Skeletons (6 skeleton cards)</text>
+  <!-- Skeleton cards x3 in one row -->
+  <g id="skeleton-cards">
+    <!-- Skeleton card 1 -->
+    <g transform="translate(248, 1136)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="16" y="16" width="160" height="14" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="40" width="80" height="12" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="62" width="128" height="12" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="82" width="64" height="12" rx="3" fill="#f4f4f5"/>
+    </g>
+    <!-- Skeleton card 2 -->
+    <g transform="translate(594, 1136)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="16" y="16" width="140" height="14" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="40" width="80" height="12" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="62" width="128" height="12" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="82" width="64" height="12" rx="3" fill="#f4f4f5"/>
+    </g>
+    <!-- Skeleton card 3 -->
+    <g transform="translate(940, 1136)">
+      <rect width="322" height="108" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="16" y="16" width="180" height="14" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="40" width="80" height="12" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="62" width="128" height="12" rx="3" fill="#f4f4f5"/>
+      <rect x="16" y="82" width="64" height="12" rx="3" fill="#f4f4f5"/>
+    </g>
+  </g>
+
+  <!-- ===================== FRAME 4: NEW SESSION DIALOG ===================== -->
+  <rect x="0" y="1300" width="1440" height="400" fill="#ffffff"/>
+  <rect x="0" y="1300" width="220" height="400" fill="#fafafa"/>
+  <line x1="220" y1="1300" x2="220" y2="1700" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="240" y="1320" font-size="11" font-weight="500" fill="#71717a">Frame 4 — NewSessionDialog open state (Name="Climate research", Model="claude-3-5-sonnet")</text>
+
+  <!-- Backdrop -->
+  <rect x="220" y="1300" width="1220" height="400" fill="rgba(0,0,0,0.5)" opacity="0.5"/>
+
+  <!-- Dialog panel: max-w-lg centered -->
+  <g id="dialog-new-session" transform="translate(470, 1330)">
+    <rect width="500" height="340" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Dialog header -->
+    <text x="24" y="42" font-size="18" font-weight="600" fill="#18181b">New Session</text>
+    <!-- Close X -->
+    <g transform="translate(462, 20)" fill="none" stroke="#71717a" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="0" x2="12" y2="12"/>
+      <line x1="12" y1="0" x2="0" y2="12"/>
+    </g>
+    <line x1="0" y1="60" x2="500" y2="60" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Field 1: Name -->
+    <text x="24" y="88" font-size="14" font-weight="500" fill="#18181b">Name</text>
+    <rect x="24" y="96" width="452" height="40" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="36" y="120" font-size="14" fill="#18181b" dominant-baseline="middle">Climate research</text>
+
+    <!-- Field 2: Model -->
+    <text x="24" y="158" font-size="14" font-weight="500" fill="#18181b">Model</text>
+    <rect x="24" y="166" width="452" height="40" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="36" y="190" font-size="14" fill="#18181b" dominant-baseline="middle">claude-3-5-sonnet</text>
+    <g transform="translate(460, 182)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,0 6,8 12,0"/>
+    </g>
+
+    <!-- Field 3: Memory mode -->
+    <text x="24" y="228" font-size="14" font-weight="500" fill="#18181b">Memory mode</text>
+    <rect x="24" y="236" width="452" height="40" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="36" y="260" font-size="14" fill="#71717a" dominant-baseline="middle">Default</text>
+    <g transform="translate(460, 252)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,0 6,8 12,0"/>
+    </g>
+
+    <!-- Footer -->
+    <line x1="0" y1="292" x2="500" y2="292" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Cancel button -->
+    <rect x="24" y="304" width="80" height="28" rx="6" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="64" y="322" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle" dominant-baseline="middle">Cancel</text>
+    <!-- Create button -->
+    <rect x="392" y="304" width="84" height="28" rx="6" fill="#0d9488"/>
+    <text x="434" y="322" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">Create</text>
+  </g>
+
+  <!-- ===== ANNOTATION: ConfirmDialog callout ===== -->
+  <g transform="translate(996, 1430)">
+    <rect width="200" height="110" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="12" y="20" font-size="11" font-weight="600" fill="#18181b">ConfirmDialog (Archive)</text>
+    <text x="12" y="36" font-size="11" fill="#71717a">Title: Archive session</text>
+    <text x="12" y="50" font-size="11" fill="#71717a">Desc: This session will be</text>
+    <text x="12" y="62" font-size="11" fill="#71717a">archived and removed...</text>
+    <g transform="translate(12, 75)">
+      <rect width="56" height="24" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="28" y="16" font-size="12" fill="#18181b" text-anchor="middle">Cancel</text>
+    </g>
+    <g transform="translate(80, 75)">
+      <rect width="56" height="24" rx="4" fill="#dc2626"/>
+      <text x="28" y="16" font-size="12" fill="#ffffff" text-anchor="middle">Archive</text>
+    </g>
+  </g>
+</svg>

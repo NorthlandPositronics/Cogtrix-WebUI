@@ -1,0 +1,23 @@
+name: Request DevOps review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request-review:
+    name: Request DevOps team review
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Add DevOps as reviewer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --add-reviewer NorthlandPositronics/devops

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300"
+  font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Blockquote — teal-era (DS v3.10). Corrects violet-200 border from blockquote-corrected.svg.
+  Page: /sessions/:id (chat page, assistant message bubble)
+  Design system version: 3.10 (2026-03-25)
+  Artboards: desktop 800px (component-level artboard)
+  </desc>
+
+  <!-- Canvas background -->
+  <rect width="800" height="300" fill="#fafafa"/>
+
+  <!-- White card area -->
+  <rect x="40" y="24" width="720" height="252" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Card content: px-6 py-5 -->
+
+  <!-- Paragraph before blockquote -->
+  <text x="64" y="62" font-size="14" font-weight="400" fill="#18181b">Here is the relevant passage from the source document:</text>
+
+  <!-- Blockquote: border-l-2 teal-200, bg-teal-50 (f0fdfa at ~40% opacity approximated solid), italic text-zinc-600 -->
+  <!-- Blockquote container: x=64, y=76, pl-4, py-1 -->
+  <rect x="64" y="80" width="672" height="68" rx="0" fill="#f0fdfa"/>
+  <!-- Left border: 2px teal-200 #99f6e4 -->
+  <rect x="64" y="80" width="2" height="68" fill="#99f6e4"/>
+  <!-- Quoted text: italic, text-zinc-600 #52525b, pl-4 (16px from left border) -->
+  <text x="88" y="104" font-size="14" font-weight="400" font-style="italic" fill="#52525b">The key insight is that transformer-based architectures achieve state-of-the-art</text>
+  <text x="88" y="124" font-size="14" font-weight="400" font-style="italic" fill="#52525b">performance across a wide range of natural language understanding benchmarks.</text>
+
+  <!-- Paragraph after blockquote -->
+  <text x="64" y="178" font-size="14" font-weight="400" fill="#18181b">This aligns with the findings described earlier in section 3.2 of the paper.</text>
+
+  <!-- Annotation callouts -->
+  <g font-family="'Geist Mono', 'Courier New', monospace">
+
+    <!-- Left border callout -->
+    <line x1="64" y1="114" x2="32" y2="114" stroke="#0d9488" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="28" y="110" font-size="10" fill="#0d9488" text-anchor="end">border-l-2</text>
+    <text x="28" y="122" font-size="10" fill="#0f766e" text-anchor="end">teal-200 #99f6e4</text>
+
+    <!-- Background callout -->
+    <line x1="400" y1="80" x2="400" y2="56" stroke="#0d9488" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="400" y="50" font-size="10" fill="#0d9488" text-anchor="middle">bg-teal-50 #f0fdfa</text>
+
+    <!-- Text style callout -->
+    <line x1="736" y1="104" x2="760" y2="104" stroke="#71717a" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="763" y="100" font-size="10" fill="#71717a">italic text-zinc-600</text>
+    <text x="763" y="112" font-size="10" fill="#a1a1aa">#52525b</text>
+
+    <!-- pl-4 callout -->
+    <line x1="64" y1="148" x2="88" y2="148" stroke="#0d9488" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <line x1="76" y1="148" x2="76" y2="162" stroke="#0d9488" stroke-width="0.75"/>
+    <text x="76" y="172" font-size="10" fill="#0d9488" text-anchor="middle">pl-4 (16px)</text>
+
+  </g>
+
+  <!-- DS token reference strip at bottom -->
+  <text x="64" y="230" font-size="11" font-weight="500" fill="#a1a1aa" letter-spacing="0.06em">DESIGN TOKENS</text>
+  <text x="64" y="248" font-size="11" fill="#71717a">border: teal-200 #99f6e4   bg: teal-50 #f0fdfa   text: zinc-600 #52525b   border-width: 2px   pl: 4 (16px)   py: 1 (4px)</text>
+  <text x="64" y="264" font-size="11" fill="#71717a">Nested blockquote: [blockquote_&amp;]:border-violet-100 [blockquote_&amp;]:pl-3   (Tailwind descendant selector — DS §7)</text>
+
+</svg>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900"
+  font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Login page — teal-era (DS v3.10, 2026-03-25). Replaces superseded sprint-1-login.svg.
+  Page: /login
+  Design system version: 3.10 (2026-03-25)
+  Artboards: desktop 1440×900px
+  </desc>
+
+  <!-- Page background: bg-zinc-50 -->
+  <rect width="1440" height="900" fill="#fafafa"/>
+
+  <!-- ===================== CARD ===================== -->
+  <!-- max-w-sm (384px wide), centered: x = (1440-384)/2 = 528, y = (900-420)/2 ≈ 240 -->
+  <!-- Shadow approximation -->
+  <rect x="529" y="241" width="384" height="420" rx="12" fill="#000000" fill-opacity="0.04"/>
+  <!-- Card surface -->
+  <rect x="528" y="240" width="384" height="420" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <g id="layer-content">
+
+    <!-- C-mark logomark: centered at x=720, y=270 -->
+    <!-- Logo circle bg hint: teal circle 40×40 -->
+    <circle cx="720" cy="280" r="22" fill="#f0fdfa"/>
+    <!-- C-mark arc path centered in circle -->
+    <g transform="translate(708, 268)">
+      <path d="M 16.071 3.929 A 8 8 0 1 0 16.071 16.071"
+            fill="none" stroke="#0d9488" stroke-width="2.8" stroke-linecap="round"/>
+      <circle cx="16.071" cy="3.929" r="1.8" fill="#0d9488"/>
+      <circle cx="16.071" cy="16.071" r="1.3" fill="#0d9488"/>
+    </g>
+
+    <!-- "Cogtrix" wordmark -->
+    <text x="720" y="332" font-size="28" font-weight="700" fill="#18181b" text-anchor="middle" letter-spacing="-0.5">Cogtrix</text>
+    <!-- Subtitle -->
+    <text x="720" y="354" font-size="14" font-weight="400" fill="#71717a" text-anchor="middle">Sign in to your account</text>
+
+    <!-- FIELD: Username -->
+    <g id="zone-field-username">
+      <text x="552" y="388" font-size="14" font-weight="500" fill="#3f3f46">Username</text>
+      <rect x="552" y="395" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="564" y="418" font-size="14" font-weight="400" fill="#a1a1aa">Enter your username</text>
+    </g>
+
+    <!-- FIELD: Password -->
+    <g id="zone-field-password">
+      <text x="552" y="451" font-size="14" font-weight="500" fill="#3f3f46">Password</text>
+      <rect x="552" y="458" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Password dots -->
+      <circle cx="564" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="576" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="588" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="600" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="612" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="624" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="636" cy="477" r="3" fill="#a1a1aa"/>
+      <circle cx="648" cy="477" r="3" fill="#a1a1aa"/>
+    </g>
+
+    <!-- Sign In button: bg-teal-600 #0d9488, h-10, w-full, rounded-md -->
+    <g id="zone-submit">
+      <rect x="552" y="512" width="336" height="40" rx="6" fill="#0d9488"/>
+      <text x="720" y="537" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Sign In</text>
+    </g>
+
+    <!-- Footer link -->
+    <g id="zone-footer">
+      <text x="720" y="578" font-size="14" font-weight="400" text-anchor="middle">
+        <tspan fill="#71717a">Don't have an account?</tspan>
+        <tspan fill="#0d9488" text-decoration="underline">&#160;Register</tspan>
+      </text>
+    </g>
+
+  </g>
+
+  <!-- ===================== INTERACTION STATE CALLOUTS ===================== -->
+
+  <!-- Default state label -->
+  <text x="528" y="680" font-size="11" font-weight="500" fill="#52525b">Default state (above)</text>
+
+  <!-- Hover state: button -->
+  <g id="state-hover" transform="translate(528, 695)">
+    <text x="0" y="16" font-size="11" font-weight="500" fill="#52525b">Hover — button</text>
+    <rect x="0" y="24" width="180" height="36" rx="6" fill="#0f766e"/>
+    <text x="90" y="47" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Sign In</text>
+    <text x="190" y="46" font-size="10" fill="#71717a">bg-teal-700 #0f766e on hover</text>
+  </g>
+
+  <!-- Loading state: button -->
+  <g id="state-loading" transform="translate(528, 750)">
+    <text x="0" y="16" font-size="11" font-weight="500" fill="#52525b">Loading — submitting</text>
+    <rect x="0" y="24" width="180" height="36" rx="6" fill="#0d9488" opacity="0.75"/>
+    <!-- Spinner -->
+    <g transform="translate(68, 42)">
+      <circle r="7" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <path d="M 0 -7 A 7 7 0 0 1 4.95 -4.95" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </g>
+    <text x="190" y="46" font-size="10" fill="#71717a">disabled + Loader2 spinner</text>
+  </g>
+
+  <!-- Error state: field -->
+  <g id="state-error" transform="translate(528, 808)">
+    <text x="0" y="16" font-size="11" font-weight="500" fill="#52525b">Error — invalid credentials</text>
+    <!-- Error alert -->
+    <rect x="0" y="24" width="336" height="48" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+    <circle cx="20" cy="48" r="7" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+    <line x1="20" y1="44" x2="20" y2="48" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="20" cy="51" r="1" fill="#dc2626"/>
+    <text x="36" y="45" font-size="13" font-weight="500" fill="#dc2626">Invalid username or password</text>
+    <text x="36" y="61" font-size="12" fill="#b91c1c">Please check your credentials and try again</text>
+  </g>
+
+  <!-- ===================== ANNOTATIONS ===================== -->
+  <g id="annotations" font-family="'Geist Mono', 'Courier New', monospace">
+    <!-- Card annotation -->
+    <line x1="528" y1="240" x2="496" y2="220" stroke="#71717a" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="490" y="216" font-size="10" fill="#71717a" text-anchor="end">Card: max-w-sm (384px)</text>
+    <text x="490" y="228" font-size="10" fill="#a1a1aa" text-anchor="end">bg-white border-zinc-200 rounded-xl shadow-sm p-6</text>
+
+    <!-- Logo annotation -->
+    <line x1="742" y1="280" x2="780" y2="260" stroke="#71717a" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="783" y="256" font-size="10" fill="#71717a">C-mark logo 40px teal-50 circle</text>
+    <text x="783" y="268" font-size="10" fill="#a1a1aa">SidebarLogo component</text>
+
+    <!-- Button annotation -->
+    <line x1="912" y1="532" x2="950" y2="532" stroke="#71717a" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="953" y="528" font-size="10" fill="#71717a">bg-teal-600 #0d9488</text>
+    <text x="953" y="540" font-size="10" fill="#a1a1aa">hover: bg-teal-700  w-full  h-10</text>
+
+    <!-- Page background annotation -->
+    <text x="36" y="36" font-size="11" fill="#71717a">page: min-h-screen flex items-center justify-center bg-zinc-50 #fafafa</text>
+  </g>
+
+</svg>

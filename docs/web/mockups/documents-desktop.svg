@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <desc>
+    Component: Documents Page — Desktop Layout
+    Page: /documents
+    Design system version: 3.6 (2026-03-23)
+    Artboards: desktop 1440px
+    Closes: D-002
+    Components: SemanticSearchBar, DocumentCard (4 states), DocumentUploadDialog (open)
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: Geist, Inter, system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1440" height="900" fill="#ffffff"/>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- LAYER: SIDEBAR (220px, bg-zinc-50, border-r) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-sidebar">
+    <rect x="0" y="0" width="220" height="900" fill="#fafafa"/>
+    <line x1="220" y1="0" x2="220" y2="900" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Header: C-mark + "Cogtrix" -->
+    <g transform="translate(16, 14)">
+      <path d="M 18.071 5.929 A 10 10 0 1 0 18.071 18.071"
+            fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="18.071" cy="5.929" r="2.2" fill="#0d9488"/>
+      <circle cx="18.071" cy="18.071" r="1.6" fill="#0d9488"/>
+    </g>
+    <text x="46" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+
+    <line x1="0" y1="58" x2="220" y2="58" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Sessions — inactive -->
+    <rect x="8" y="66" width="204" height="36" rx="6" fill="none"/>
+    <g transform="translate(19, 78)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 0 10 L 4 10 L 4 14 L 8 10 L 14 10 L 14 0 Z"/>
+    </g>
+    <text x="40" y="88" font-size="14" font-weight="400" fill="#71717a">Sessions</text>
+
+    <!-- Assistant — inactive -->
+    <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+    <g transform="translate(19, 120)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="3" width="12" height="10" rx="2"/>
+      <path d="M 5 3 L 5 1 M 9 3 L 9 1"/>
+      <circle cx="5" cy="8" r="1" fill="#71717a" stroke="none"/>
+      <circle cx="9" cy="8" r="1" fill="#71717a" stroke="none"/>
+      <path d="M 0 13 L 2 13 M 12 13 L 14 13"/>
+    </g>
+    <text x="40" y="130" font-size="14" font-weight="400" fill="#71717a">Assistant</text>
+
+    <!-- Documents — ACTIVE: bg-teal-50 text-teal-600 -->
+    <rect x="8" y="150" width="204" height="36" rx="6" fill="#f0fdfa"/>
+    <g transform="translate(19, 162)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 2 0 L 9 0 L 14 5 L 14 14 L 2 14 Z"/>
+      <path d="M 9 0 L 9 5 L 14 5"/>
+      <line x1="4" y1="8" x2="10" y2="8"/>
+      <line x1="4" y1="11" x2="8" y2="11"/>
+    </g>
+    <text x="40" y="172" font-size="14" font-weight="500" fill="#0d9488">Documents</text>
+
+    <!-- Settings — inactive -->
+    <rect x="8" y="192" width="204" height="36" rx="6" fill="none"/>
+    <g transform="translate(19, 204)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="7" cy="7" r="2.5"/>
+      <path d="M 7 0 L 7 2 M 7 12 L 7 14 M 0 7 L 2 7 M 12 7 L 14 7 M 2.05 2.05 L 3.46 3.46 M 10.54 10.54 L 11.95 11.95 M 2.05 11.95 L 3.46 10.54 M 10.54 3.46 L 11.95 2.05"/>
+    </g>
+    <text x="40" y="214" font-size="14" font-weight="400" fill="#71717a">Settings</text>
+
+    <!-- Bottom user info -->
+    <line x1="0" y1="840" x2="220" y2="840" stroke="#e4e4e7" stroke-width="1"/>
+    <circle cx="24" cy="866" r="14" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="24" y="870" font-size="10" font-weight="600" fill="#71717a" text-anchor="middle">U</text>
+    <text x="46" y="862" font-size="12" font-weight="400" fill="#71717a">user@cogtrix.io</text>
+    <g transform="translate(194, 858)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 9 3 L 14 3 L 14 13 L 9 13"/>
+      <path d="M 0 8 L 10 8 M 7 5 L 10 8 L 7 11"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- LAYER: PAGE HEADER (px-6 py-4, border-b) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-header">
+    <rect x="220" y="0" width="1220" height="56" fill="#ffffff"/>
+    <line x1="220" y1="56" x2="1440" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- "Documents" heading: text-2xl font-semibold text-zinc-900 -->
+    <text x="244" y="40" font-size="24" font-weight="600" fill="#18181b">Documents</text>
+
+    <!-- Upload button: primary teal bg, Upload icon + "Upload" -->
+    <rect x="1332" y="14" width="90" height="40" rx="8" fill="#0d9488"/>
+    <!-- Upload icon (white, 16px) -->
+    <g transform="translate(1344, 24)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 12 L 0 14 L 16 14 L 16 12"/>
+      <line x1="8" y1="0" x2="8" y2="10"/>
+      <polyline points="3,5 8,0 13,5"/>
+    </g>
+    <text x="1366" y="38" font-size="14" font-weight="500" fill="#ffffff">Upload</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- LAYER: CONTENT (px-6 py-6 space-y-6) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-content">
+    <rect x="220" y="56" width="1220" height="844" fill="#ffffff"/>
+
+    <!-- ── SemanticSearchBar (max-w-xl = ~576px) ── -->
+    <g id="search-bar">
+      <!-- Input with Search icon inside -->
+      <rect x="244" y="80" width="484" height="40" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Search icon inside input (16px, text-zinc-400) -->
+      <g transform="translate(258, 91)" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="6"/>
+        <line x1="12" y1="12" x2="18" y2="18"/>
+      </g>
+      <text x="282" y="104" font-size="14" font-weight="400" fill="#a1a1aa">Search documents semantically...</text>
+
+      <!-- Search button: primary teal -->
+      <rect x="736" y="80" width="88" height="40" rx="8" fill="#0d9488"/>
+      <g transform="translate(748, 91)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="6"/>
+        <line x1="12" y1="12" x2="18" y2="18"/>
+      </g>
+      <text x="770" y="104" font-size="14" font-weight="500" fill="#ffffff">Search</text>
+    </g>
+
+    <!-- ── DocumentCard list (space-y-3, full width area) ── -->
+    <text x="244" y="150" font-size="12" font-weight="500" fill="#71717a">4 documents</text>
+
+    <!-- Card 1: indexed, large file -->
+    <g id="doc-card-1">
+      <rect x="244" y="160" width="1168" height="68" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- FileText icon h-4 w-4 text-zinc-500 -->
+      <g transform="translate(260, 182)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 2 0 L 9 0 L 14 5 L 14 18 L 2 18 Z"/>
+        <path d="M 9 0 L 9 5 L 14 5"/>
+        <line x1="4" y1="10" x2="10" y2="10"/>
+        <line x1="4" y1="14" x2="8" y2="14"/>
+      </g>
+
+      <!-- File name: text-sm font-semibold text-zinc-900 -->
+      <text x="284" y="188" font-size="14" font-weight="600" fill="#18181b">machine-learning-survey.pdf</text>
+
+      <!-- Badge: indexed — bg-green-50 text-green-700 border-green-200 -->
+      <rect x="470" y="174" width="60" height="20" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <text x="500" y="188" font-size="11" font-weight="500" fill="#15803d" text-anchor="middle">indexed</text>
+
+      <!-- Metadata row: text-sm text-zinc-500 -->
+      <text x="284" y="210" font-size="13" font-weight="400" fill="#71717a">2.4 MB  ·  application/pdf  ·  142 chunks  ·  Mar 20, 2026</text>
+
+      <!-- Delete button: ghost h-11 w-11 text-zinc-500 (isAdmin=true) -->
+      <rect x="1360" y="174" width="44" height="44" rx="6" fill="none"/>
+      <g transform="translate(1374, 194)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M 5 3 L 5 0 L 11 0 L 11 3"/>
+        <path d="M 2 3 L 3 14 L 13 14 L 14 3"/>
+      </g>
+    </g>
+
+    <!-- Card 2: indexed, small file -->
+    <g id="doc-card-2">
+      <rect x="244" y="236" width="1168" height="68" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <g transform="translate(260, 258)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 2 0 L 9 0 L 14 5 L 14 18 L 2 18 Z"/>
+        <path d="M 9 0 L 9 5 L 14 5"/>
+        <line x1="4" y1="10" x2="10" y2="10"/>
+        <line x1="4" y1="14" x2="8" y2="14"/>
+      </g>
+
+      <text x="284" y="264" font-size="14" font-weight="600" fill="#18181b">notes.md</text>
+
+      <rect x="348" y="250" width="60" height="20" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <text x="378" y="264" font-size="11" font-weight="500" fill="#15803d" text-anchor="middle">indexed</text>
+
+      <text x="284" y="286" font-size="13" font-weight="400" fill="#71717a">48.2 KB  ·  text/markdown  ·  12 chunks  ·  Mar 21, 2026</text>
+
+      <rect x="1360" y="250" width="44" height="44" rx="6" fill="none"/>
+      <g transform="translate(1374, 270)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M 5 3 L 5 0 L 11 0 L 11 3"/>
+        <path d="M 2 3 L 3 14 L 13 14 L 14 3"/>
+      </g>
+    </g>
+
+    <!-- Card 3: processing (animate-pulse text-amber-700) -->
+    <g id="doc-card-3">
+      <rect x="244" y="312" width="1168" height="68" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- FileText icon -->
+      <g transform="translate(260, 334)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 2 0 L 9 0 L 14 5 L 14 18 L 2 18 Z"/>
+        <path d="M 9 0 L 9 5 L 14 5"/>
+        <line x1="4" y1="10" x2="10" y2="10"/>
+        <line x1="4" y1="14" x2="8" y2="14"/>
+      </g>
+
+      <text x="284" y="340" font-size="14" font-weight="600" fill="#18181b">research-paper-draft.pdf</text>
+
+      <!-- processing badge: amber -->
+      <rect x="462" y="326" width="82" height="20" rx="10" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+      <text x="503" y="340" font-size="11" font-weight="500" fill="#b45309" text-anchor="middle">processing</text>
+
+      <!-- Status text: text-amber-700 animate-pulse (shown at reduced opacity to suggest pulse) -->
+      <text x="284" y="362" font-size="13" font-weight="400" fill="#b45309" opacity="0.85">1.1 MB  ·  application/pdf  ·  Processing...</text>
+
+      <!-- Delete button grayed out (disabled state opacity-50) -->
+      <rect x="1360" y="326" width="44" height="44" rx="6" fill="none"/>
+      <g transform="translate(1374, 346)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
+        <polyline points="0,3 16,3"/>
+        <path d="M 5 3 L 5 0 L 11 0 L 11 3"/>
+        <path d="M 2 3 L 3 14 L 13 14 L 14 3"/>
+      </g>
+    </g>
+
+    <!-- Card 4: failed -->
+    <g id="doc-card-4">
+      <rect x="244" y="388" width="1168" height="68" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- AlertCircle icon in red for failed -->
+      <g transform="translate(260, 410)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="9" r="8"/>
+        <line x1="8" y1="5" x2="8" y2="9"/>
+        <circle cx="8" cy="13" r="1" fill="#dc2626" stroke="none"/>
+      </g>
+
+      <text x="284" y="416" font-size="14" font-weight="600" fill="#18181b">corrupted-doc.txt</text>
+
+      <!-- failed badge: red -->
+      <rect x="394" y="402" width="50" height="20" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+      <text x="419" y="416" font-size="11" font-weight="500" fill="#dc2626" text-anchor="middle">failed</text>
+
+      <text x="284" y="438" font-size="13" font-weight="400" fill="#71717a">12.0 KB  ·  text/plain  ·  <tspan fill="#dc2626">Failed — unable to extract text content</tspan></text>
+
+      <rect x="1360" y="402" width="44" height="44" rx="6" fill="none"/>
+      <g transform="translate(1374, 422)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 16,3"/>
+        <path d="M 5 3 L 5 0 L 11 0 L 11 3"/>
+        <path d="M 2 3 L 3 14 L 13 14 L 14 3"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- DOCUMENT UPLOAD DIALOG (open state, modal overlay) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-dialog">
+    <!-- Semi-transparent overlay: bg-black/50 -->
+    <rect x="220" y="0" width="1220" height="900" fill="#000000" opacity="0.5"/>
+
+    <!-- Dialog panel: max-w-md (448px), centered -->
+    <!-- Center: x = 220 + 1220/2 = 830. Dialog width 448 → x_left = 830 - 224 = 606 -->
+    <!-- Vertical center: 900/2 = 450. Dialog height ~380 → y_top = 450 - 190 = 260 -->
+    <rect x="606" y="240" width="448" height="390" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Dialog header -->
+    <!-- Title: "Upload Document" -->
+    <text x="630" y="278" font-size="18" font-weight="600" fill="#18181b">Upload Document</text>
+    <!-- Description -->
+    <text x="630" y="302" font-size="13" font-weight="400" fill="#71717a">Upload a PDF, text, or markdown file for RAG ingestion.</text>
+
+    <!-- X close button top-right -->
+    <rect x="998" y="248" width="44" height="44" rx="6" fill="none"/>
+    <g transform="translate(1012, 262)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round">
+      <line x1="0" y1="0" x2="16" y2="16"/>
+      <line x1="16" y1="0" x2="0" y2="16"/>
+    </g>
+
+    <!-- Separator -->
+    <line x1="606" y1="316" x2="1054" y2="316" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Drop zone: border-dashed border-zinc-200 rounded-md, centered -->
+    <rect x="630" y="332" width="400" height="200" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="6 4"/>
+
+    <!-- Upload icon 48px text-zinc-400 strokeWidth=1.5 -->
+    <g transform="translate(806, 370)" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Cloud upload -->
+      <path d="M 18 24 C 18 24 6 24 2 18 C -2 12 2 6 8 6 C 8 2 12 -2 18 2 C 22 -2 28 2 28 6 C 34 6 38 12 34 18 C 30 24 18 24 18 24 Z"/>
+      <line x1="18" y1="36" x2="18" y2="10"/>
+      <polyline points="11,17 18,10 25,17"/>
+    </g>
+    <!-- Drop zone text -->
+    <text x="830" y="432" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle">Click or drag a file here</text>
+    <text x="830" y="452" font-size="12" font-weight="400" fill="#71717a" text-anchor="middle">PDF, TXT, or Markdown — max 50 MB</text>
+
+    <!-- Separator above footer -->
+    <line x1="606" y1="544" x2="1054" y2="544" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Dialog footer: Cancel + Upload (disabled) -->
+    <!-- Cancel button: outline -->
+    <rect x="630" y="558" width="90" height="40" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="675" y="582" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle">Cancel</text>
+
+    <!-- Upload button: primary teal, disabled (opacity-50 — no file selected) -->
+    <rect x="930" y="558" width="90" height="40" rx="8" fill="#0d9488" opacity="0.5"/>
+    <g transform="translate(944, 568)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 12 L 0 14 L 14 14 L 14 12"/>
+      <line x1="7" y1="0" x2="7" y2="10"/>
+      <polyline points="2,5 7,0 12,5"/>
+    </g>
+    <text x="968" y="582" font-size="14" font-weight="500" fill="#ffffff">Upload</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- INTERACTION STATES (DocumentCard hover, delete hover) -->
+  <!-- Shown as an annotated strip below the main content -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- Note: states shown in the "layer-panel" area off to the right at x>1220 would exceed artboard;
+       Instead we document them as inline annotations in a non-overlapping region. -->
+
+  <!-- ARTBOARD LABEL -->
+  <text x="228" y="882" font-size="10" fill="#a1a1aa">documents-desktop · 1440×900 · DS v3.6</text>
+
+  <!-- State annotations below cards area -->
+  <g id="state-annotations">
+    <!-- Card hover state example (doc card with hover bg) -->
+    <text x="244" y="500" font-size="10" font-weight="500" fill="#a1a1aa">hover state</text>
+    <rect x="244" y="510" width="900" height="68" rx="10" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+    <g transform="translate(260, 524)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 2 0 L 9 0 L 14 5 L 14 18 L 2 18 Z"/>
+      <path d="M 9 0 L 9 5 L 14 5"/>
+      <line x1="4" y1="10" x2="10" y2="10"/>
+    </g>
+    <text x="284" y="538" font-size="14" font-weight="600" fill="#18181b">example-document.pdf</text>
+    <text x="284" y="560" font-size="13" font-weight="400" fill="#71717a">1.2 MB  ·  application/pdf  ·  88 chunks  ·  Mar 22, 2026</text>
+    <!-- Delete button hover state: hover:bg-red-50 hover:text-red-700 -->
+    <rect x="1100" y="524" width="44" height="44" rx="6" fill="#fef2f2"/>
+    <g transform="translate(1114, 536)" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,3 16,3"/>
+      <path d="M 5 3 L 5 0 L 11 0 L 11 3"/>
+      <path d="M 2 3 L 3 14 L 13 14 L 14 3"/>
+    </g>
+
+    <!-- Empty state -->
+    <text x="244" y="614" font-size="10" font-weight="500" fill="#a1a1aa">empty state</text>
+    <rect x="244" y="624" width="900" height="160" rx="10" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- FileText empty state icon 48px text-zinc-400 strokeWidth=1.5 -->
+    <g transform="translate(668, 654)" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 4 0 L 20 0 L 32 12 L 32 44 L 4 44 Z"/>
+      <path d="M 20 0 L 20 12 L 32 12"/>
+      <line x1="10" y1="24" x2="26" y2="24"/>
+      <line x1="10" y1="32" x2="20" y2="32"/>
+    </g>
+    <text x="694" y="720" font-size="15" font-weight="600" fill="#18181b" text-anchor="middle">No documents yet.</text>
+    <text x="694" y="744" font-size="14" font-weight="400" fill="#71717a" text-anchor="middle">Upload a file to get started.</text>
+    <!-- Upload trigger button -->
+    <rect x="634" y="756" width="120" height="36" rx="8" fill="#0d9488"/>
+    <text x="694" y="778" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Upload</text>
+  </g>
+</svg>

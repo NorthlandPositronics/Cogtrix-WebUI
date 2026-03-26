@@ -1,0 +1,717 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="2020" viewBox="0 0 1000 2020">
+  <desc>
+    SUPERSEDED — Violet-200 blockquote border color. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+    Component: MarkdownContent — Markdown typography inside assistant chat bubbles
+    Page: /sessions/:id (chat page, assistant message bubble)
+    Design system version: 2.2 (2026-03-09)
+    Artboards: desktop 1000px canvas (chat bubble focus, no sidebar/header context)
+  </desc>
+
+  <defs>
+    <style>
+      .font-sans { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .font-mono { font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace; }
+    </style>
+    <!-- Streaming cursor blink marker -->
+    <rect id="cursor" width="2" height="16" fill="#18181b"/>
+  </defs>
+
+  <!-- ─── Canvas background ─── -->
+  <rect width="1000" height="2020" fill="#f4f4f5"/>
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 1 — Complete Message Bubble
+       ══════════════════════════════════════════════════════ -->
+
+  <!-- Bubble shadow (simulated as slightly offset lighter rect) -->
+  <rect x="32" y="42" width="750" height="1020" rx="16" fill="#e4e4e7" opacity="0.5"/>
+
+  <!-- Bubble shell -->
+  <rect id="panel1-bubble" x="30" y="40" width="750" height="1020"
+        fill="#ffffff" stroke="#e4e4e7" stroke-width="1"
+        rx="16" ry="16"/>
+  <!-- Bottom-left tail corner override: re-draw bottom-left with 4px radius -->
+  <!-- We achieve the asymmetric corner by masking the BL area -->
+  <rect x="30" y="1032" width="30" height="28" fill="#ffffff"/>
+  <rect x="30" y="1032" width="30" height="28" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Redraw bottom-left corner as sharp (4px) -->
+  <path d="M30,1056 Q30,1060 34,1060 L60,1060 L60,1032 L30,1032 Z"
+        fill="#ffffff" stroke="none"/>
+  <path d="M30,1032 L30,1056 Q30,1060 34,1060" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ─── Bubble content group ─── -->
+  <g id="layer-content" transform="translate(46, 56)">
+
+    <!-- ── h1: "Understanding Markdown Rendering" ── -->
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="20" font-weight="600" fill="#18181b" dominant-baseline="hanging">
+      Understanding Markdown Rendering
+    </text>
+
+    <!-- ── Paragraph 1 (y=32): bold + italic inline ── -->
+    <text y="36" font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">
+      <tspan x="0">Markdown is a </tspan><tspan font-weight="700">lightweight markup</tspan>
+      <tspan> format that converts plain text into </tspan><tspan font-style="italic">structured content</tspan><tspan>.</tspan>
+    </text>
+    <text x="0" y="62" font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">
+      It's widely used in technical documentation and chat interfaces.
+    </text>
+
+    <!-- ── h2: "Core Concepts" (mt-4=16px above → y=96) ── -->
+    <text x="0" y="98"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="18" font-weight="600" fill="#18181b" dominant-baseline="hanging">
+      Core Concepts
+    </text>
+
+    <!-- ── Paragraph 2 (y=124): inline code + link ── -->
+    <!-- line of text -->
+    <text y="126" font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">
+      <tspan x="0">Use </tspan>
+    </text>
+    <!-- inline code pill -->
+    <rect x="39" y="124" width="82" height="22" rx="3" fill="#f4f4f5"/>
+    <text x="43" y="126"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">inline code</text>
+    <text y="126" font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">
+      <tspan x="127"> for variable names and see the </tspan>
+    </text>
+    <!-- violet underline link -->
+    <text x="332" y="126"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#7c3aed" text-decoration="underline" dominant-baseline="hanging">
+      documentation
+    </text>
+    <text x="449" y="126"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging"> for details.</text>
+
+    <!-- ── h3: "Lists" (mt-3=12px above → y=162) ── -->
+    <text x="0" y="162"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" font-weight="600" fill="#18181b" dominant-baseline="hanging">
+      Lists
+    </text>
+
+    <!-- ── Unordered list (y=184) ── -->
+    <!-- Item 1 -->
+    <circle cx="30" cy="195" r="3" fill="#18181b"/>
+    <text x="40" y="187"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">First item with standard content</text>
+    <!-- Item 2 -->
+    <circle cx="30" cy="219" r="3" fill="#18181b"/>
+    <text x="40" y="211"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Second item explaining a concept</text>
+    <!-- Item 3 -->
+    <circle cx="30" cy="243" r="3" fill="#18181b"/>
+    <text x="40" y="235"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Third item with nested content</text>
+    <!-- Nested sub-list (pl-4 additional = 56px total) -->
+    <circle cx="66" cy="263" r="2.5" fill="#18181b"/>
+    <text x="76" y="255"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Nested sub-item one</text>
+    <circle cx="66" cy="283" r="2.5" fill="#18181b"/>
+    <text x="76" y="275"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Nested sub-item two</text>
+
+    <!-- ── h3: "Sequence" (mt-3=12px above → y=307) ── -->
+    <text x="0" y="299"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" font-weight="600" fill="#18181b" dominant-baseline="hanging">
+      Sequence
+    </text>
+
+    <!-- ── Ordered list (y=319) ── -->
+    <text x="20" y="319"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">1.</text>
+    <text x="40" y="319"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Initialize the configuration</text>
+    <text x="20" y="343"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">2.</text>
+    <text x="40" y="343"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Run the build process</text>
+    <text x="20" y="367"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">3.</text>
+    <text x="40" y="367"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Deploy to production</text>
+
+    <!-- ── Blockquote (my-2=8px above → y=395) ── -->
+    <!-- BG tint: violet-50 at 40% opacity -->
+    <rect x="0" y="391" width="688" height="72" rx="0" ry="0" fill="rgba(245,243,255,0.4)"/>
+    <rect x="0" y="391" width="688" height="72" rx="2" ry="2"
+          fill="none" stroke="none"/>
+    <!-- rounded-r-sm on right -->
+    <rect x="686" y="391" width="2" height="72" rx="1" fill="rgba(245,243,255,0.4)"/>
+    <!-- Left accent border 2px violet-200 -->
+    <rect x="0" y="391" width="2" height="72" fill="#ddd6fe"/>
+    <!-- Blockquote text (pl-4=16px, py-1=4px) -->
+    <text x="18" y="399"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#52525b" font-style="italic" dominant-baseline="hanging">
+      Important: Always verify the
+    </text>
+    <!-- inline code within blockquote -->
+    <rect x="220" y="397" width="95" height="22" rx="3" fill="#f4f4f5"/>
+    <text x="224" y="399"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#52525b" font-style="normal" dominant-baseline="hanging">config.yaml</text>
+    <text x="319" y="399"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#52525b" font-style="italic" dominant-baseline="hanging"> file before deploying.</text>
+    <text x="18" y="427"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#52525b" font-style="italic" dominant-baseline="hanging">
+      Missing entries will cause silent failures.
+    </text>
+
+    <!-- ── Fenced code block (y=479) ── -->
+    <!-- Code block wrapper -->
+    <rect x="0" y="479" width="688" height="218" rx="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Header row: language label + copy button -->
+    <text x="12" y="492"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="12" fill="#a1a1aa" dominant-baseline="hanging">python</text>
+    <!-- Copy button (ghost, top-right) -->
+    <rect x="656" y="488" width="24" height="24" rx="4" fill="none"/>
+    <!-- Clipboard icon (simplified, 14px) -->
+    <rect x="661" y="491" width="12" height="15" rx="2" fill="none" stroke="#71717a" stroke-width="1.5"/>
+    <rect x="664" y="488" width="8" height="5" rx="1" fill="none" stroke="#71717a" stroke-width="1.5"/>
+    <!-- Divider line below header -->
+    <line x1="0" y1="514" x2="688" y2="514" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Code lines (px-3 pb-3, 14px mono) -->
+    <text x="12" y="520"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">def process_data(items: list[str]) -&gt; dict:</text>
+    <text x="12" y="540"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">    results = {}</text>
+    <text x="12" y="560"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">    for item in items:</text>
+    <text x="12" y="580"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">        key = item.strip().lower()</text>
+    <text x="12" y="600"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">        if key not in results:</text>
+    <text x="12" y="620"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">            results[key] = 0</text>
+    <text x="12" y="640"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">        results[key] += 1</text>
+    <text x="12" y="660"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">    return results</text>
+
+    <!-- ── Horizontal rule (my-4=16px above, y=713) ── -->
+    <line x1="0" y1="713" x2="688" y2="713" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Table (y=745) ── -->
+    <g id="table">
+      <!-- Table wrapper -->
+      <rect x="0" y="745" width="688" height="136" rx="2" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Header row bg -->
+      <rect x="0" y="745" width="688" height="32" rx="2" fill="#fafafa"/>
+      <rect x="0" y="761" width="688" height="16" fill="#fafafa"/>
+      <!-- Header bottom border -->
+      <line x1="0" y1="777" x2="688" y2="777" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Column headers -->
+      <text x="12" y="756"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="12" font-weight="500" fill="#71717a" letter-spacing="0.05em"
+            text-transform="uppercase" dominant-baseline="middle">FEATURE</text>
+      <text x="280" y="756"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="12" font-weight="500" fill="#71717a" letter-spacing="0.05em"
+            dominant-baseline="middle">STATUS</text>
+      <text x="480" y="756"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="12" font-weight="500" fill="#71717a" letter-spacing="0.05em"
+            dominant-baseline="middle">PRIORITY</text>
+      <!-- Row 1 -->
+      <line x1="0" y1="813" x2="688" y2="813" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="12" y="793"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Markdown rendering</text>
+      <text x="280" y="793"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Complete</text>
+      <text x="480" y="793"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">High</text>
+      <!-- Row 2 -->
+      <line x1="0" y1="845" x2="688" y2="845" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="12" y="817"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Syntax highlighting</text>
+      <text x="280" y="817"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Planned</text>
+      <text x="480" y="817"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Medium</text>
+      <!-- Row 3 -->
+      <text x="12" y="849"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Dark mode</text>
+      <text x="280" y="849"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Deferred</text>
+      <text x="480" y="849"
+            font-family="system-ui, -apple-system, sans-serif"
+            font-size="14" fill="#18181b" dominant-baseline="hanging">Low</text>
+    </g>
+
+    <!-- ── h2: "Summary" (mt-4=16px above → y=897) ── -->
+    <text x="0" y="897"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="18" font-weight="600" fill="#18181b" dominant-baseline="hanging">
+      Summary
+    </text>
+
+    <!-- ── Paragraph closing ── -->
+    <text x="0" y="923"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">
+      This example demonstrates every markdown element that can appear in an assistant response bubble.
+    </text>
+
+  </g><!-- /layer-content -->
+
+  <!-- Timestamp below bubble -->
+  <text x="44" y="1076"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="12" fill="#71717a">2:34 PM</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       TYPOGRAPHY ANNOTATIONS (right of Panel 1)
+       ══════════════════════════════════════════════════════ -->
+
+  <g id="annotations" fill="none" stroke="#a1a1aa" stroke-width="1">
+    <!-- Annotation: h1 = 20px -->
+    <line x1="782" y1="56" x2="830" y2="56" stroke-dasharray="4,3"/>
+    <line x1="782" y1="76" x2="830" y2="76" stroke-dasharray="4,3"/>
+    <line x1="830" y1="56" x2="830" y2="76"/>
+    <line x1="830" y1="66" x2="840" y2="66"/>
+    <text x="843" y="62" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="middle">h1 — 20px / 600</text>
+
+    <!-- Annotation: h2 = 18px -->
+    <line x1="782" y1="154" x2="830" y2="154" stroke-dasharray="4,3"/>
+    <line x1="782" y1="172" x2="830" y2="172" stroke-dasharray="4,3"/>
+    <line x1="830" y1="154" x2="830" y2="172"/>
+    <line x1="830" y1="163" x2="840" y2="163"/>
+    <text x="843" y="163" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="middle">h2 — 18px / 600</text>
+
+    <!-- Annotation: h3 = 16px -->
+    <line x1="782" y1="218" x2="830" y2="218" stroke-dasharray="4,3"/>
+    <line x1="782" y1="234" x2="830" y2="234" stroke-dasharray="4,3"/>
+    <line x1="830" y1="218" x2="830" y2="234"/>
+    <line x1="830" y1="226" x2="840" y2="226"/>
+    <text x="843" y="226" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="middle">h3 — 16px / 600</text>
+
+    <!-- Annotation: space-y-3 gap between h1 and paragraph -->
+    <line x1="782" y1="92" x2="816" y2="92" stroke-dasharray="4,3"/>
+    <line x1="782" y1="104" x2="816" y2="104" stroke-dasharray="4,3"/>
+    <line x1="816" y1="92" x2="816" y2="104"/>
+    <text x="820" y="98" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="middle">12px gap</text>
+    <text x="820" y="109" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="middle">space-y-3</text>
+
+    <!-- Annotation: blockquote border 2px + pl-4=16px -->
+    <line x1="782" y1="431" x2="830" y2="431" stroke-dasharray="4,3"/>
+    <line x1="782" y1="463" x2="830" y2="463" stroke-dasharray="4,3"/>
+    <line x1="830" y1="431" x2="830" y2="463"/>
+    <line x1="830" y1="447" x2="840" y2="447"/>
+    <text x="843" y="443" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="middle">border-l-2 / pl-4</text>
+    <text x="843" y="456" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="middle">2px / 16px</text>
+
+    <!-- Annotation: code block padding 12px (p-3) -->
+    <line x1="782" y1="514" x2="830" y2="514" stroke-dasharray="4,3"/>
+    <line x1="782" y1="526" x2="830" y2="526" stroke-dasharray="4,3"/>
+    <line x1="830" y1="514" x2="830" y2="526"/>
+    <line x1="830" y1="520" x2="840" y2="520"/>
+    <text x="843" y="516" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="middle">p-3 = 12px</text>
+
+    <!-- Annotation: list indent pl-5=20px -->
+    <line x1="46" y1="1010" x2="46" y2="1030" stroke-dasharray="4,3"/>
+    <line x1="66" y1="1010" x2="66" y2="1030" stroke-dasharray="4,3"/>
+    <line x1="46" y1="1020" x2="66" y2="1020"/>
+    <line x1="56" y1="1020" x2="56" y2="1030"/>
+    <text x="38" y="1038" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" text-anchor="middle">pl-5 = 20px</text>
+  </g>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 2 — Streaming State Bubble
+       ══════════════════════════════════════════════════════ -->
+
+  <!-- Bubble shadow -->
+  <rect x="32" y="1130" width="600" height="200" rx="16" fill="#e4e4e7" opacity="0.5"/>
+
+  <!-- Bubble shell -->
+  <rect id="panel2-bubble" x="30" y="1128" width="600" height="200"
+        fill="#ffffff" stroke="#e4e4e7" stroke-width="1" rx="16"/>
+  <!-- Bottom-left tail -->
+  <path d="M30,1308 L30,1324 Q30,1328 34,1328 L60,1328 L60,1308 Z"
+        fill="#ffffff" stroke="none"/>
+  <path d="M30,1308 L30,1324 Q30,1328 34,1328" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+
+  <g id="layer-content-streaming" transform="translate(46, 1144)">
+
+    <!-- Completed paragraph -->
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">
+      The analysis shows several key patterns in the data.
+    </text>
+
+    <!-- h2 mid-stream with cursor -->
+    <text x="0" y="28"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="18" font-weight="600" fill="#18181b" dominant-baseline="hanging">
+      Key Consider
+    </text>
+    <!-- Streaming cursor: 2×16px black rectangle immediately after heading text -->
+    <!-- "Key Consider" at 18px ≈ 143px wide estimate -->
+    <rect x="148" y="28" width="2" height="18" fill="#18181b"/>
+
+    <!-- Partial fenced code block (no closing fence) -->
+    <rect x="0" y="58" width="548" height="92" rx="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- partial lang label -->
+    <text x="12" y="70"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="12" fill="#a1a1aa" dominant-baseline="hanging">typescript</text>
+    <line x1="0" y1="86" x2="548" y2="86" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- 3 lines of partial code, still open -->
+    <text x="12" y="90"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">function analyzePatterns(data: DataPoint[]) {</text>
+    <text x="12" y="110"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">    const results = data.filter(d =&gt; d.value &gt; 0);</text>
+    <text x="12" y="130"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">    return results.map(d =&gt; d.key);</text>
+    <!-- No closing fence — trailing fade indicator -->
+    <rect x="0" y="142" width="548" height="8" rx="0"
+          fill="url(#fadeBottom)" opacity="0.6"/>
+    <defs>
+      <linearGradient id="fadeBottom" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fafafa" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#fafafa" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+  </g>
+
+  <!-- Panel 2 label -->
+  <text x="644" y="1148"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="12" fill="#a1a1aa" dominant-baseline="hanging">Streaming state</text>
+  <text x="644" y="1163"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="12" fill="#a1a1aa" dominant-baseline="hanging">mid-response</text>
+  <!-- Cursor annotation -->
+  <line x1="196" y1="1162" x2="640" y2="1170" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="644" y="1178"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="hanging">streaming cursor</text>
+  <text x="644" y="1191"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="hanging">2px × 18px rect</text>
+  <text x="644" y="1204"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="hanging">inline after last char</text>
+
+  <!-- Panel 2 partial fence annotation -->
+  <line x1="630" y1="1290" x2="640" y2="1290" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="644" y="1287"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="middle">no closing ``` fence</text>
+  <text x="644" y="1300"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="middle">still open / streaming</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 3 — Blockquote Variant Comparison
+       ══════════════════════════════════════════════════════ -->
+
+  <!-- Section label -->
+  <text x="30" y="1368"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="13" font-weight="600" fill="#71717a" dominant-baseline="hanging">
+    Blockquote variant comparison — web_designer selects one
+  </text>
+
+  <!-- Left variant: violet-50/40 tint -->
+  <g id="bq-variant-violet" transform="translate(30, 1392)">
+    <!-- Label -->
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="hanging">A: bg-violet-50/40 (current spec)</text>
+    <!-- BQ box -->
+    <rect x="0" y="18" width="368" height="84" rx="0" fill="rgba(245,243,255,0.4)"/>
+    <rect x="366" y="18" width="2" height="84" rx="1" fill="rgba(245,243,255,0.4)"/>
+    <rect x="0" y="18" width="2" height="84" fill="#ddd6fe"/>
+    <text x="16" y="26"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging">
+      Important: Always verify the
+    </text>
+    <rect x="204" y="24" width="91" height="21" rx="3" fill="#f4f4f5"/>
+    <text x="208" y="26"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="13" fill="#52525b" font-style="normal" dominant-baseline="hanging">config.yaml</text>
+    <text x="299" y="26"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging"> file</text>
+    <text x="16" y="54"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging">before deploying. Missing entries</text>
+    <text x="16" y="76"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging">will cause silent failures.</text>
+  </g>
+
+  <!-- Right variant: zinc-50 tint -->
+  <g id="bq-variant-zinc" transform="translate(430, 1392)">
+    <!-- Label -->
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="hanging">B: bg-zinc-50 (alternative)</text>
+    <!-- BQ box -->
+    <rect x="0" y="18" width="368" height="84" rx="0" fill="#fafafa"/>
+    <rect x="0" y="18" width="2" height="84" fill="#ddd6fe"/>
+    <text x="16" y="26"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging">
+      Important: Always verify the
+    </text>
+    <rect x="204" y="24" width="91" height="21" rx="3" fill="#f4f4f5"/>
+    <text x="208" y="26"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="13" fill="#52525b" font-style="normal" dominant-baseline="hanging">config.yaml</text>
+    <text x="299" y="26"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging"> file</text>
+    <text x="16" y="54"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging">before deploying. Missing entries</text>
+    <text x="16" y="76"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="15" fill="#52525b" font-style="italic" dominant-baseline="hanging">will cause silent failures.</text>
+  </g>
+
+  <!-- Variant comparison divider -->
+  <line x1="422" y1="1392" x2="422" y2="1496" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Diff annotation: subtle violet vs neutral -->
+  <text x="30" y="1516"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="hanging">
+    A uses rgba(245,243,255,0.4) — faint violet hue in the background. B uses #fafafa — fully neutral.
+  </text>
+  <text x="30" y="1531"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="11" fill="#a1a1aa" dominant-baseline="hanging">
+    Both share the same border-l-2 #ddd6fe (violet-200) left accent. web_designer chooses A or B.
+  </text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       VERTICAL RHYTHM REFERENCE STRIP
+       ══════════════════════════════════════════════════════ -->
+
+  <g id="rhythm-strip" transform="translate(30, 1570)">
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="13" font-weight="600" fill="#71717a" dominant-baseline="hanging">
+      Vertical rhythm reference
+    </text>
+
+    <!-- Strip: show space-y-3 = 12px between three representative blocks -->
+    <!-- Block A -->
+    <rect x="0" y="20" width="400" height="32" rx="4" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="12" y="28"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Paragraph block A</text>
+
+    <!-- Gap indicator -->
+    <line x1="404" y1="52" x2="440" y2="52" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="404" y1="64" x2="440" y2="64" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="440" y1="52" x2="440" y2="64"/>
+    <text x="444" y="55"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="hanging">12px / space-y-3</text>
+
+    <!-- Block B -->
+    <rect x="0" y="64" width="400" height="32" rx="4" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="12" y="72"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Paragraph block B</text>
+
+    <!-- Gap indicator -->
+    <line x1="404" y1="96" x2="440" y2="96" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="404" y1="108" x2="440" y2="108" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="440" y1="96" x2="440" y2="108"/>
+    <text x="444" y="99"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#a1a1aa" dominant-baseline="hanging">12px / space-y-3</text>
+
+    <!-- Block C -->
+    <rect x="0" y="108" width="400" height="32" rx="4" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="12" y="116"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#18181b" dominant-baseline="hanging">Paragraph block C</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════
+       INLINE ELEMENT REFERENCE STRIP
+       ══════════════════════════════════════════════════════ -->
+
+  <g id="inline-strip" transform="translate(30, 1764)">
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="13" font-weight="600" fill="#71717a" dominant-baseline="hanging">
+      Inline element reference
+    </text>
+
+    <!-- Row of inline elements side by side -->
+    <text x="0" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="14" fill="#71717a" dominant-baseline="hanging">body text /</text>
+    <text x="72" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" font-weight="700" fill="#18181b" dominant-baseline="hanging">bold phrase</text>
+    <text x="180" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="14" fill="#71717a" dominant-baseline="hanging">/</text>
+    <text x="190" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" font-style="italic" fill="#18181b" dominant-baseline="hanging">italic phrase</text>
+    <text x="310" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="14" fill="#71717a" dominant-baseline="hanging">/</text>
+    <!-- inline code swatch -->
+    <rect x="320" y="20" width="88" height="22" rx="3" fill="#f4f4f5"/>
+    <text x="324" y="22"
+          font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+          font-size="14" fill="#18181b" dominant-baseline="hanging">inline_var</text>
+    <text x="412" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="14" fill="#71717a" dominant-baseline="hanging">/</text>
+    <!-- safe link -->
+    <text x="422" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#7c3aed" text-decoration="underline" dominant-baseline="hanging">safe link</text>
+    <text x="506" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="14" fill="#71717a" dominant-baseline="hanging">/</text>
+    <!-- unsafe URL fallback: muted span, no underline -->
+    <text x="516" y="22"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="16" fill="#71717a" dominant-baseline="hanging">unsafe-url-muted</text>
+
+    <!-- Labels -->
+    <text x="72" y="48" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="hanging" text-anchor="middle">font-bold 700</text>
+    <text x="240" y="48" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="hanging" text-anchor="middle">font-italic</text>
+    <text x="364" y="48" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="hanging" text-anchor="middle">bg-zinc-100 mono 14px</text>
+    <text x="460" y="48" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="hanging" text-anchor="middle">violet-600 underline</text>
+    <text x="590" y="48" font-family="system-ui, -apple-system, sans-serif"
+          font-size="10" fill="#a1a1aa" dominant-baseline="hanging" text-anchor="middle">zinc-500 no-underline</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════
+       COLOR SWATCH REFERENCE
+       ══════════════════════════════════════════════════════ -->
+
+  <g id="color-swatches" transform="translate(30, 1860)">
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, sans-serif"
+          font-size="13" font-weight="600" fill="#71717a" dominant-baseline="hanging">
+      Color tokens used in this component
+    </text>
+
+    <!-- Swatch 1: #18181b zinc-900 -->
+    <rect x="0" y="20" width="24" height="24" rx="4" fill="#18181b"/>
+    <text x="30" y="22" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#18181b — zinc-900 — body / headings</text>
+
+    <!-- Swatch 2: #71717a zinc-500 -->
+    <rect x="0" y="52" width="24" height="24" rx="4" fill="#71717a"/>
+    <text x="30" y="54" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#71717a — zinc-500 — timestamps, labels</text>
+
+    <!-- Swatch 3: #52525b zinc-600 -->
+    <rect x="0" y="84" width="24" height="24" rx="4" fill="#52525b"/>
+    <text x="30" y="86" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#52525b — zinc-600 — blockquote text</text>
+
+    <!-- Swatch 4: #f4f4f5 zinc-100 -->
+    <rect x="0" y="116" width="24" height="24" rx="4" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="30" y="118" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#f4f4f5 — zinc-100 — inline code bg / canvas bg</text>
+
+    <!-- Swatch 5: #fafafa zinc-50 -->
+    <rect x="0" y="148" width="24" height="24" rx="4" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="30" y="150" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#fafafa — zinc-50 — code block bg, table header</text>
+
+    <!-- Swatch 6: #e4e4e7 zinc-200 -->
+    <rect x="0" y="180" width="24" height="24" rx="4" fill="#e4e4e7"/>
+    <text x="30" y="182" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#e4e4e7 — zinc-200 — borders, dividers, hr</text>
+
+    <!-- Swatch 7: #7c3aed violet-600 -->
+    <rect x="300" y="20" width="24" height="24" rx="4" fill="#7c3aed"/>
+    <text x="330" y="22" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#7c3aed — violet-600 — links</text>
+
+    <!-- Swatch 8: #ddd6fe violet-200 -->
+    <rect x="300" y="52" width="24" height="24" rx="4" fill="#ddd6fe" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="330" y="54" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#ddd6fe — violet-200 — blockquote left border</text>
+
+    <!-- Swatch 9: rgba(245,243,255,0.4) violet-50/40 -->
+    <rect x="300" y="84" width="24" height="24" rx="4" fill="rgba(245,243,255,0.4)" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="330" y="86" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">rgba(245,243,255,0.4) — violet-50/40 — blockquote bg (variant A)</text>
+
+    <!-- Swatch 10: #a1a1aa zinc-400 -->
+    <rect x="300" y="116" width="24" height="24" rx="4" fill="#a1a1aa"/>
+    <text x="330" y="118" font-family="system-ui, -apple-system, sans-serif"
+          font-size="11" fill="#71717a" dominant-baseline="hanging">#a1a1aa — zinc-400 — annotation lines, copy icon</text>
+  </g>
+
+</svg>

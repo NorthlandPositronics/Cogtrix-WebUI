@@ -1,0 +1,36 @@
+name: Question / Help
+description: Ask a question about configuration, usage, or behaviour
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before asking, please check:
+        - [README](../blob/main/README.md)
+        - [Existing questions](../issues?q=is%3Aissue+label%3Aquestion)
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: Be as specific as possible — include config snippets, error messages, or screenshots where relevant.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Topic
+      options:
+        - Installation / setup
+        - Backend connection (REST / WebSocket)
+        - Authentication
+        - Chat / session behaviour
+        - Settings / configuration
+        - Assistant features
+        - Admin panel
+        - Documents
+        - Build / deployment
+        - Other
+    validations:
+      required: true

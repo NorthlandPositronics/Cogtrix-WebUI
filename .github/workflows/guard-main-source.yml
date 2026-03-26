@@ -1,0 +1,28 @@
+name: Guard – main source branch
+
+on:
+  pull_request:
+    branches: [main]
+  # pull_request events are NOT fired for PRs opened by GITHUB_TOKEN (e.g. Release Please).
+  # pull_request_target fires in that case. Safe here: we only read github.head_ref — no
+  # untrusted code is checked out or executed.
+  pull_request_target:
+    branches: [main]
+
+jobs:
+  check-source:
+    name: Source branch must be next
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Verify PR source is next or release-please
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          src="$HEAD_REF"
+          if [ "$src" != "next" ] && [[ "$src" != release-please--* ]]; then
+            echo "::error::PRs to main are only allowed from the 'next' branch (or release-please branches)."
+            echo "::error::This PR is from '$src'. Merge your branch into 'next' first."
+            exit 1
+          fi
+          echo "Source branch '$src' — OK"

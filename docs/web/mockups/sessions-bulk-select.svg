@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 860" width="1280" height="860">
+  <desc>
+  Component: Sessions page — bulk selection with action bar
+  Page: Sessions (/sessions)
+  Design system version: 3.14 (2026-03-25)
+  Artboards: desktop 1280px (grid view + list view), mobile 390px
+  Bug: BUG-05 — Bulk session selection and group operations
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Page background -->
+  <rect width="1280" height="860" fill="#f4f4f5"/>
+
+  <!-- ── Annotation banner ── -->
+  <rect x="0" y="0" width="1280" height="32" fill="#fafafa" rx="0"/>
+  <line x1="0" y1="32" x2="1280" y2="32" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="16" y="21" font-size="11" fill="#71717a" font-weight="500">BUG-05 — Bulk session selection — Left: grid view (1 selected + bulk bar). Center: list view (2 selected). Right: mobile (390px) grid view.</text>
+
+  <!-- ════════════════════════════════════════════
+       FRAME 1 — GRID VIEW, 1 session selected
+       ════════════════════════════════════════════ -->
+
+  <rect x="8" y="40" width="540" height="780" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="24" y="62" font-size="11" font-weight="600" fill="#0d9488">Frame 1 — Grid view, 1 session selected</text>
+
+  <!-- Page header -->
+  <text x="28" y="98" font-size="22" font-weight="600" fill="#18181b">Sessions</text>
+
+  <!-- Header controls: show archived | toggle | new session -->
+  <rect x="250" y="80" width="36" height="20" rx="10" fill="#e4e4e7"/>
+  <circle cx="261" cy="90" r="8" fill="#ffffff"/>
+  <text x="292" y="95" font-size="12" fill="#71717a">Show archived</text>
+
+  <!-- Toggle group -->
+  <rect x="370" y="78" width="60" height="24" rx="5" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- LayoutGrid active -->
+  <rect x="372" y="80" width="26" height="20" rx="4" fill="#f4f4f5"/>
+  <g transform="translate(378, 86)">
+    <rect x="0" y="0" width="4" height="4" rx="0.7" fill="#18181b"/>
+    <rect x="6" y="0" width="4" height="4" rx="0.7" fill="#18181b"/>
+    <rect x="0" y="6" width="4" height="4" rx="0.7" fill="#18181b"/>
+    <rect x="6" y="6" width="4" height="4" rx="0.7" fill="#18181b"/>
+  </g>
+  <!-- LayoutList inactive -->
+  <g transform="translate(403, 86)">
+    <line x1="0" y1="2" x2="10" y2="2" stroke="#71717a" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="5" x2="10" y2="5" stroke="#71717a" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="8" x2="10" y2="8" stroke="#71717a" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- New session -->
+  <rect x="440" y="74" width="88" height="32" rx="6" fill="#0d9488"/>
+  <text x="459" y="95" font-size="12" font-weight="500" fill="#ffffff">+ New</text>
+
+  <line x1="28" y1="116" x2="532" y2="116" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Grid cards area -->
+  <!-- Card 1: SELECTED — ring-2 ring-teal-600 ring-offset-2, checkbox checked -->
+  <rect x="28" y="130" width="152" height="140" rx="12" fill="#ffffff" stroke="#0d9488" stroke-width="2"/>
+  <!-- ring-offset-2 (simulated as gap between card and ring) -->
+
+  <!-- Checkbox: top-2 left-2, checked state, teal fill -->
+  <rect x="36" y="136" width="16" height="16" rx="3" fill="#0d9488" stroke="#0d9488" stroke-width="1"/>
+  <!-- Checkmark -->
+  <polyline points="39,144 43,148 50,140" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="44" y="172" font-size="13" font-weight="500" fill="#18181b">Research sprint</text>
+  <!-- AgentStateBadge idle -->
+  <rect x="44" y="180" width="30" height="16" rx="8" fill="#f4f4f5"/>
+  <text x="49" y="192" font-size="10" fill="#52525b">idle</text>
+  <text x="44" y="210" font-size="11" fill="#71717a">claude-sonnet-4-6</text>
+  <text x="44" y="228" font-size="10" fill="#71717a">2h ago</text>
+  <!-- Trash icon (ghost) -->
+  <g transform="translate(148, 128)" opacity="0.25">
+    <line x1="5" y1="6" x2="19" y2="6" stroke="#71717a" stroke-width="1.3" stroke-linecap="round"/>
+    <rect x="3" y="7" width="16" height="12" rx="1.5" fill="none" stroke="#71717a" stroke-width="1.3"/>
+  </g>
+
+  <!-- "ring-2 ring-teal-600" annotation -->
+  <rect x="28" y="278" width="152" height="20" rx="4" fill="#f0fdfa"/>
+  <text x="35" y="291" font-size="9" fill="#0d9488">ring-2 ring-teal-600 ring-offset-2</text>
+
+  <!-- Card 2: UNSELECTED — checkbox opacity-0 on no-hover, shown semi-transparent here -->
+  <rect x="194" y="130" width="152" height="140" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Checkbox: shown at reduced opacity (hover would show it) -->
+  <rect x="202" y="136" width="16" height="16" rx="3" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5" opacity="0.5"/>
+
+  <text x="210" y="172" font-size="13" font-weight="500" fill="#18181b">Code refactor</text>
+  <rect x="210" y="180" width="56" height="16" rx="8" fill="#f0fdfa"/>
+  <circle cx="219" cy="188" r="3" fill="#0d9488" opacity="0.7"/>
+  <text x="224" y="192" font-size="10" fill="#0f766e">thinking</text>
+  <text x="210" y="210" font-size="11" fill="#71717a">ollama/qwen3:8b</text>
+  <text x="210" y="228" font-size="10" fill="#71717a">just now</text>
+
+  <!-- "checkbox opacity-0 group-hover:opacity-100" annotation -->
+  <rect x="194" y="278" width="152" height="20" rx="4" fill="#fafafa" stroke="#e4e4e7" stroke-width="0.5"/>
+  <text x="200" y="291" font-size="9" fill="#71717a">checkbox opacity-0 (hover reveals)</text>
+
+  <!-- Card 3: UNSELECTED with hover state (checkbox appears) -->
+  <rect x="360" y="130" width="152" height="140" rx="12" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Checkbox visible on hover -->
+  <rect x="368" y="136" width="16" height="16" rx="3" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5"/>
+
+  <text x="376" y="172" font-size="13" font-weight="500" fill="#18181b">Old experiment</text>
+  <rect x="376" y="180" width="30" height="16" rx="8" fill="#f4f4f5"/>
+  <text x="381" y="192" font-size="10" fill="#52525b">idle</text>
+  <rect x="412" y="180" width="46" height="16" rx="8" fill="#f4f4f5"/>
+  <text x="416" y="192" font-size="10" fill="#71717a">Archived</text>
+  <text x="376" y="210" font-size="11" fill="#71717a" opacity="0.6">gpt-4.1-mini</text>
+  <text x="376" y="228" font-size="10" fill="#71717a" opacity="0.6">yesterday</text>
+
+  <rect x="360" y="278" width="152" height="20" rx="4" fill="#fafafa" stroke="#0d9488" stroke-width="0.5" opacity="0.5"/>
+  <text x="366" y="291" font-size="9" fill="#0d9488">checkbox visible on hover</text>
+
+  <!-- ── Bulk action bar (fixed bottom) ── -->
+  <!-- fixed bottom-0 left-0 right-0 lg:left-[220px] h-16 bg-white border-t border-zinc-200 shadow-md -->
+  <rect x="8" y="696" width="540" height="64" rx="0" fill="#ffffff" stroke-top="#e4e4e7"/>
+  <line x1="8" y1="696" x2="548" y2="696" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- shadow hint -->
+  <rect x="8" y="696" width="540" height="4" fill="url(#shadowGrad)" opacity="0.15"/>
+
+  <!-- Left: count + select-all + clear -->
+  <!-- "1 selected" text-sm font-medium text-zinc-900 -->
+  <text x="28" y="732" font-size="13" font-weight="500" fill="#18181b">1 selected</text>
+  <!-- Select all link button: text-teal-600 -->
+  <text x="110" y="732" font-size="13" fill="#0d9488" text-decoration="underline">Select all</text>
+  <!-- Clear button: ghost sm, text-zinc-500 -->
+  <text x="188" y="732" font-size="13" fill="#71717a">Clear</text>
+
+  <!-- Right: Archive + Delete permanently -->
+  <!-- Archive button: variant="outline" size="sm" min-h-9 gap-1.5 -->
+  <rect x="328" y="720" width="78" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Archive icon h-3.5 w-3.5 -->
+  <g transform="translate(334, 731)">
+    <rect x="0" y="4" width="12" height="9" rx="1.3" fill="none" stroke="#18181b" stroke-width="1.2"/>
+    <line x1="-1.5" y1="4" x2="13.5" y2="4" stroke="#18181b" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="3" y1="6.5" x2="9" y2="6.5" stroke="#18181b" stroke-width="1.1" stroke-linecap="round"/>
+  </g>
+  <text x="350" y="742" font-size="12" font-weight="500" fill="#18181b">Archive</text>
+
+  <!-- Delete permanently button: variant="destructive" size="sm" min-h-9 -->
+  <rect x="414" y="720" width="118" height="36" rx="6" fill="#dc2626"/>
+  <!-- Trash2 icon h-3.5 w-3.5 -->
+  <g transform="translate(420, 731)">
+    <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="0" y="4.5" width="14" height="10" rx="1.3" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  </g>
+  <text x="438" y="742" font-size="12" font-weight="500" fill="#ffffff">Delete perm.</text>
+
+  <!-- Bulk bar annotation -->
+  <text x="28" y="770" font-size="10" fill="#71717a">fixed bottom-0 lg:left-[220px] — bg-white border-t border-zinc-200 shadow-md — px-6 py-3 h-16</text>
+
+  <!-- ════════════════════════════════════════════
+       FRAME 2 — LIST VIEW, 2 rows selected
+       ════════════════════════════════════════════ -->
+
+  <rect x="564" y="40" width="540" height="780" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="580" y="62" font-size="11" font-weight="600" fill="#0d9488">Frame 2 — List view, 2 rows selected</text>
+
+  <!-- Page header list view -->
+  <text x="584" y="98" font-size="22" font-weight="600" fill="#18181b">Sessions</text>
+  <rect x="806" y="78" width="60" height="24" rx="5" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- LayoutList active -->
+  <rect x="830" y="80" width="26" height="20" rx="4" fill="#f4f4f5"/>
+  <g transform="translate(836, 86)">
+    <line x1="0" y1="2" x2="10" y2="2" stroke="#18181b" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="5" x2="10" y2="5" stroke="#18181b" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="8" x2="10" y2="8" stroke="#18181b" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+  <rect x="996" y="74" width="88" height="32" rx="6" fill="#0d9488"/>
+  <text x="1015" y="95" font-size="12" font-weight="500" fill="#ffffff">+ New</text>
+
+  <line x1="584" y1="116" x2="1088" y2="116" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Table container -->
+  <rect x="584" y="130" width="500" height="296" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Table header -->
+  <rect x="584" y="130" width="500" height="40" rx="12" fill="#fafafa"/>
+  <rect x="584" y="150" width="500" height="20" fill="#fafafa"/>
+  <line x1="584" y1="170" x2="1084" y2="170" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- "Select all" checkbox in header -->
+  <!-- Indeterminate state (some selected) — dash in box -->
+  <rect x="598" y="152" width="16" height="16" rx="3" fill="#0d9488" stroke="#0d9488" stroke-width="1"/>
+  <line x1="602" y1="160" x2="610" y2="160" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+
+  <text x="626" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">NAME</text>
+  <text x="760" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">MODEL</text>
+  <text x="876" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">STATE</text>
+  <text x="962" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">UPDATED</text>
+
+  <!-- Row 1: SELECTED (bg-zinc-50 + checked checkbox) -->
+  <rect x="584" y="170" width="500" height="52" fill="#fafafa"/>
+  <!-- Checkbox checked -->
+  <rect x="598" y="182" width="16" height="16" rx="3" fill="#0d9488" stroke="#0d9488" stroke-width="1"/>
+  <polyline points="601,190 605,194 612,186" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="626" y="200" font-size="13" font-weight="500" fill="#18181b">Research sprint</text>
+  <text x="760" y="200" font-size="12" fill="#52525b">claude-sonnet-4-6</text>
+  <rect x="876" y="188" width="30" height="16" rx="8" fill="#f4f4f5"/>
+  <text x="881" y="200" font-size="10" fill="#52525b">idle</text>
+  <text x="962" y="200" font-size="11" fill="#71717a">2h ago</text>
+  <g transform="translate(1048, 182)">
+    <line x1="5" y1="6" x2="19" y2="6" stroke="#71717a" stroke-width="1.3" stroke-linecap="round"/>
+    <rect x="3" y="7" width="16" height="12" rx="1.5" fill="none" stroke="#71717a" stroke-width="1.3"/>
+  </g>
+  <line x1="585" y1="222" x2="1083" y2="222" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Row 2: SELECTED -->
+  <rect x="584" y="222" width="500" height="52" fill="#fafafa"/>
+  <rect x="598" y="234" width="16" height="16" rx="3" fill="#0d9488" stroke="#0d9488" stroke-width="1"/>
+  <polyline points="601,242 605,246 612,238" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="626" y="252" font-size="13" font-weight="500" fill="#18181b">Code refactor</text>
+  <text x="760" y="252" font-size="12" fill="#52525b">ollama/qwen3:8b</text>
+  <rect x="876" y="240" width="56" height="16" rx="8" fill="#f0fdfa"/>
+  <circle cx="885" cy="248" r="3" fill="#0d9488" opacity="0.7"/>
+  <text x="890" y="252" font-size="10" fill="#0f766e">thinking</text>
+  <text x="962" y="252" font-size="11" fill="#71717a">just now</text>
+  <line x1="585" y1="274" x2="1083" y2="274" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Row 3: UNSELECTED -->
+  <rect x="584" y="274" width="500" height="52" fill="#ffffff"/>
+  <rect x="598" y="286" width="16" height="16" rx="3" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5"/>
+  <text x="626" y="304" font-size="13" font-weight="500" fill="#18181b" opacity="0.6">Old experiment</text>
+  <text x="760" y="304" font-size="12" fill="#52525b" opacity="0.6">gpt-4.1-mini</text>
+  <rect x="876" y="292" width="30" height="16" rx="8" fill="#f4f4f5" opacity="0.6"/>
+  <text x="881" y="304" font-size="10" fill="#52525b" opacity="0.6">idle</text>
+  <text x="962" y="304" font-size="11" fill="#71717a" opacity="0.6">yesterday</text>
+  <line x1="585" y1="326" x2="1083" y2="326" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Count badge annotation -->
+  <rect x="584" y="434" width="180" height="20" rx="4" fill="#f0fdfa"/>
+  <text x="590" y="447" font-size="10" fill="#0d9488">2 of 3 rows selected — indeterminate checkbox in header</text>
+
+  <!-- Bulk action bar for list view -->
+  <rect x="564" y="696" width="540" height="64" rx="0" fill="#ffffff"/>
+  <line x1="564" y1="696" x2="1104" y2="696" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="584" y="732" font-size="13" font-weight="500" fill="#18181b">2 selected</text>
+  <text x="660" y="732" font-size="13" fill="#0d9488" text-decoration="underline">Select all</text>
+  <text x="730" y="732" font-size="13" fill="#71717a">Clear</text>
+  <rect x="840" y="720" width="72" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="856" y="742" font-size="12" font-weight="500" fill="#18181b">Archive</text>
+  <rect x="920" y="720" width="118" height="36" rx="6" fill="#dc2626"/>
+  <text x="938" y="742" font-size="12" font-weight="500" fill="#ffffff">Delete perm.</text>
+
+  <!-- ════════════════════════════════════════════
+       FRAME 3 — MOBILE 390px grid, 1 selected
+       ════════════════════════════════════════════ -->
+
+  <!-- Mobile frame -->
+  <rect x="1120" y="40" width="152" height="780" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="1124" y="60" font-size="9" font-weight="600" fill="#0d9488">Mobile 390px</text>
+
+  <!-- Mobile header (compact) -->
+  <text x="1132" y="86" font-size="14" font-weight="600" fill="#18181b">Sessions</text>
+  <rect x="1132" y="94" width="130" height="28" rx="5" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- compact header controls row -->
+  <rect x="1134" y="96" width="32" height="24" rx="4" fill="#e4e4e7"/>
+  <text x="1171" y="112" font-size="9" fill="#71717a">archived</text>
+  <rect x="1222" y="96" width="36" height="24" rx="4" fill="#0d9488"/>
+  <text x="1225" y="112" font-size="9" fill="#ffffff">+ New</text>
+
+  <line x1="1124" y1="126" x2="1268" y2="126" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Mobile card 1: SELECTED -->
+  <rect x="1132" y="136" width="120" height="110" rx="10" fill="#ffffff" stroke="#0d9488" stroke-width="2"/>
+  <!-- Checkbox always visible on mobile when any selected -->
+  <rect x="1138" y="142" width="14" height="14" rx="2.5" fill="#0d9488" stroke="#0d9488" stroke-width="1"/>
+  <polyline points="1141,149 1144,152 1150,145" fill="none" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1142" y="168" font-size="10" font-weight="500" fill="#18181b">Research</text>
+  <rect x="1142" y="174" width="28" height="14" rx="7" fill="#f4f4f5"/>
+  <text x="1146" y="185" font-size="8" fill="#52525b">idle</text>
+  <text x="1142" y="200" font-size="9" fill="#71717a">claude-sonnet</text>
+  <text x="1142" y="214" font-size="8" fill="#71717a">2h ago</text>
+
+  <!-- Mobile card 2: unselected, checkbox always visible -->
+  <rect x="1132" y="256" width="120" height="110" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="1138" y="262" width="14" height="14" rx="2.5" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.3"/>
+  <text x="1142" y="288" font-size="10" font-weight="500" fill="#18181b">Code refactor</text>
+  <rect x="1142" y="294" width="46" height="14" rx="7" fill="#f0fdfa"/>
+  <text x="1152" y="305" font-size="8" fill="#0f766e">thinking</text>
+  <text x="1142" y="320" font-size="9" fill="#71717a">ollama/qwen3</text>
+  <text x="1142" y="334" font-size="8" fill="#71717a">just now</text>
+
+  <!-- Mobile bulk bar: stacked layout -->
+  <rect x="1120" y="696" width="152" height="84" rx="0" fill="#ffffff"/>
+  <line x1="1120" y1="696" x2="1272" y2="696" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Row 1: count + clear -->
+  <text x="1132" y="714" font-size="11" font-weight="500" fill="#18181b">1 selected</text>
+  <text x="1210" y="714" font-size="11" fill="#71717a">Clear</text>
+  <!-- Row 2: Archive + Delete -->
+  <rect x="1132" y="720" width="56" height="32" rx="5" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="1142" y="740" font-size="10" font-weight="500" fill="#18181b">Archive</text>
+  <rect x="1196" y="720" width="64" height="32" rx="5" fill="#dc2626"/>
+  <text x="1203" y="740" font-size="10" font-weight="500" fill="#ffffff">Delete</text>
+
+  <!-- Mobile stacked annotation -->
+  <text x="1124" y="790" font-size="8" fill="#71717a">Mobile bulk bar:</text>
+  <text x="1124" y="800" font-size="8" fill="#71717a">stacked layout</text>
+
+  <!-- ── DS Tokens strip ── -->
+  <rect x="8" y="800" width="1264" height="52" rx="8" fill="#18181b" opacity="0.85"/>
+  <text x="24" y="820" font-size="11" font-weight="600" fill="#ffffff">DS Tokens — Bulk selection</text>
+  <text x="24" y="836" font-size="10" fill="#a1a1aa">Checkbox checked: data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600</text>
+  <text x="340" y="836" font-size="10" fill="#a1a1aa">Card ring: ring-2 ring-teal-600 ring-offset-2</text>
+  <text x="570" y="836" font-size="10" fill="#a1a1aa">Bulk bar: fixed bottom-0 lg:left-[220px] bg-white border-t border-zinc-200 shadow-md h-16</text>
+  <text x="900" y="836" font-size="10" fill="#a1a1aa">Archive: variant="outline" size="sm" min-h-9 — Delete: variant="destructive" size="sm"</text>
+  <text x="24" y="848" font-size="10" fill="#71717a">Grid checkbox: absolute top-2 left-2 z-10 — opacity-0 group-hover:opacity-100 — always visible when any selected</text>
+</svg>

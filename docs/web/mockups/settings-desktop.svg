@@ -1,0 +1,447 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2640" viewBox="0 0 1440 2640" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Settings Page (General + Providers and Models + MCP Servers tabs)
+  Page: /settings
+  Design system version: 3.6 (2026-03-23)
+  Artboards: desktop 1440px — Frame 1 (General) y=0, Frame 2 (Providers and Models) y=900, Frame 3 (MCP Servers) y=1780
+  </desc>
+
+  <!-- ==================== SHARED SIDEBAR HELPER ==================== -->
+  <!-- Reused across all 3 frames via absolute positioning per frame -->
+
+  <!-- ==================== FRAME 1: GENERAL TAB ==================== -->
+  <rect x="0" y="0" width="1440" height="900" fill="#ffffff"/>
+  <text x="240" y="14" font-size="11" font-weight="500" fill="#71717a">Frame 1 — Settings / General tab (ConfigFlagsForm)</text>
+
+  <!-- Sidebar F1 -->
+  <g id="layer-sidebar-f1">
+    <rect x="0" y="0" width="220" height="900" fill="#fafafa"/>
+    <line x1="220" y1="0" x2="220" y2="900" stroke="#e4e4e7" stroke-width="1"/>
+    <g transform="translate(16, 16)">
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Sessions -->
+    <rect x="8" y="64" width="204" height="36" rx="6" fill="none"/>
+    <text x="42" y="87" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    <!-- Documents -->
+    <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+    <text x="42" y="131" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    <!-- Assistant -->
+    <rect x="8" y="152" width="204" height="36" rx="6" fill="none"/>
+    <text x="42" y="175" font-size="14" font-weight="500" fill="#52525b">Assistant</text>
+    <!-- Settings ACTIVE -->
+    <rect x="8" y="196" width="204" height="36" rx="6" fill="#f0fdfa"/>
+    <rect x="8" y="196" width="2" height="36" rx="1" fill="#0d9488"/>
+    <g transform="translate(18, 204)" fill="none" stroke="#0d9488" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="8" r="3"/>
+      <path d="M8 0 L8 2 M8 14 L8 16 M0 8 L2 8 M14 8 L16 8 M2.3 2.3 L3.8 3.8 M12.2 12.2 L13.7 13.7 M13.7 2.3 L12.2 3.8 M3.8 12.2 L2.3 13.7"/>
+    </g>
+    <text x="42" y="219" font-size="14" font-weight="500" fill="#0d9488">Settings</text>
+  </g>
+
+  <!-- Main content F1 -->
+  <g id="layer-content-f1">
+    <!-- Page header -->
+    <text x="248" y="50" font-size="24" font-weight="600" fill="#18181b">Settings</text>
+
+    <!-- Tab bar -->
+    <g id="tab-bar-f1" transform="translate(248, 70)">
+      <!-- Tab container underline -->
+      <line x1="0" y1="36" x2="1152" y2="36" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- General (active) -->
+      <text x="0" y="22" font-size="14" font-weight="500" fill="#18181b">General</text>
+      <line x1="0" y1="36" x2="58" y2="36" stroke="#18181b" stroke-width="2"/>
+      <!-- Providers and Models -->
+      <text x="80" y="22" font-size="14" fill="#71717a">Providers &amp; Models</text>
+      <!-- MCP Servers -->
+      <text x="236" y="22" font-size="14" fill="#71717a">MCP Servers</text>
+      <!-- API Keys -->
+      <text x="338" y="22" font-size="14" fill="#71717a">API Keys</text>
+      <!-- Setup Wizard -->
+      <text x="402" y="22" font-size="14" fill="#71717a">Setup Wizard</text>
+    </g>
+
+    <!-- Config summary block -->
+    <g transform="translate(248, 124)">
+      <rect width="1152" height="80" rx="10" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Active model -->
+      <text x="20" y="28" font-size="14" fill="#71717a">Active model</text>
+      <text x="20" y="48" font-size="14" font-weight="500" fill="#18181b">claude-3-5-sonnet</text>
+      <!-- Memory mode -->
+      <text x="596" y="28" font-size="14" fill="#71717a">Memory mode</text>
+      <text x="596" y="48" font-size="14" font-weight="500" fill="#18181b">conversation</text>
+      <!-- Config file (full width) -->
+      <text x="20" y="68" font-size="12" font-weight="500" fill="#71717a">Config file</text>
+      <text x="100" y="68" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#18181b">/etc/cogtrix/config.yaml</text>
+    </g>
+
+    <!-- Feature flag rows: divide-y divide-zinc-200 -->
+    <g id="feature-flags" transform="translate(248, 220)">
+
+      <!-- Flag 1: Debug mode — Off -->
+      <line x1="0" y1="0" x2="1152" y2="0" stroke="#e4e4e7" stroke-width="1"/>
+      <g transform="translate(0, 12)">
+        <text x="0" y="16" font-size="14" font-weight="500" fill="#18181b">Debug mode</text>
+        <text x="0" y="34" font-size="14" fill="#71717a">Enable verbose debug output in server logs. Use only in development.</text>
+        <!-- Switch OFF -->
+        <g transform="translate(1108, 4)">
+          <rect width="44" height="24" rx="12" fill="#e4e4e7"/>
+          <circle cx="14" cy="12" r="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1"/>
+        </g>
+      </g>
+      <line x1="0" y1="56" x2="1152" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Flag 2: Verbose logging — Off -->
+      <g transform="translate(0, 68)">
+        <text x="0" y="16" font-size="14" font-weight="500" fill="#18181b">Verbose logging</text>
+        <text x="0" y="34" font-size="14" fill="#71717a">Log additional detail for every agent step and API call.</text>
+        <!-- Switch OFF -->
+        <g transform="translate(1108, 4)">
+          <rect width="44" height="24" rx="12" fill="#e4e4e7"/>
+          <circle cx="14" cy="12" r="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1"/>
+        </g>
+      </g>
+      <line x1="0" y1="124" x2="1152" y2="124" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Flag 3: Prompt optimizer — On -->
+      <g transform="translate(0, 136)">
+        <text x="0" y="16" font-size="14" font-weight="500" fill="#18181b">Prompt optimizer</text>
+        <text x="0" y="34" font-size="14" fill="#71717a">Automatically rewrite user prompts to improve agent reasoning quality.</text>
+        <!-- Switch ON (teal) -->
+        <g transform="translate(1108, 4)">
+          <rect width="44" height="24" rx="12" fill="#0d9488"/>
+          <circle cx="30" cy="12" r="10" fill="#ffffff"/>
+        </g>
+      </g>
+      <line x1="0" y1="192" x2="1152" y2="192" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Flag 4: Parallel tool execution — On -->
+      <g transform="translate(0, 204)">
+        <text x="0" y="16" font-size="14" font-weight="500" fill="#18181b">Parallel tool execution</text>
+        <text x="0" y="34" font-size="14" fill="#71717a">Run independent tool calls concurrently to reduce latency.</text>
+        <!-- Switch ON -->
+        <g transform="translate(1108, 4)">
+          <rect width="44" height="24" rx="12" fill="#0d9488"/>
+          <circle cx="30" cy="12" r="10" fill="#ffffff"/>
+        </g>
+      </g>
+      <line x1="0" y1="260" x2="1152" y2="260" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Flag 5: Context compression — On -->
+      <g transform="translate(0, 272)">
+        <text x="0" y="16" font-size="14" font-weight="500" fill="#18181b">Context compression</text>
+        <text x="0" y="34" font-size="14" fill="#71717a">Compress older context to stay within the model's context window.</text>
+        <!-- Switch ON -->
+        <g transform="translate(1108, 4)">
+          <rect width="44" height="24" rx="12" fill="#0d9488"/>
+          <circle cx="30" cy="12" r="10" fill="#ffffff"/>
+        </g>
+      </g>
+      <line x1="0" y1="328" x2="1152" y2="328" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Reload config button (admin-only, bottom-right) -->
+      <g transform="translate(0, 340)">
+        <line x1="0" y1="0" x2="1152" y2="0" stroke="#e4e4e7" stroke-width="1"/>
+        <g transform="translate(1016, 8)">
+          <rect width="136" height="36" rx="6" fill="none" stroke="#e4e4e7" stroke-width="1.5"/>
+          <g transform="translate(14, 10)" fill="none" stroke="#18181b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2 A10 10 0 0 0 2 12"/>
+            <polyline points="0,8 2,12 6,10"/>
+          </g>
+          <text x="38" y="22" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="middle">Reload config from disk</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== FRAME 2: PROVIDERS AND MODELS TAB ==================== -->
+  <rect x="0" y="900" width="1440" height="880" fill="#ffffff"/>
+  <text x="240" y="914" font-size="11" font-weight="500" fill="#71717a">Frame 2 — Settings / Providers &amp; Models tab</text>
+
+  <!-- Sidebar F2 -->
+  <g id="layer-sidebar-f2">
+    <rect x="0" y="900" width="220" height="880" fill="#fafafa"/>
+    <line x1="220" y1="900" x2="220" y2="1780" stroke="#e4e4e7" stroke-width="1"/>
+    <g transform="translate(16, 916)">
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="930" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="956" x2="220" y2="956" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="42" y="987" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    <text x="42" y="1031" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    <text x="42" y="1075" font-size="14" font-weight="500" fill="#52525b">Assistant</text>
+    <!-- Settings ACTIVE -->
+    <rect x="8" y="1096" width="204" height="36" rx="6" fill="#f0fdfa"/>
+    <rect x="8" y="1096" width="2" height="36" rx="1" fill="#0d9488"/>
+    <text x="42" y="1119" font-size="14" font-weight="500" fill="#0d9488">Settings</text>
+  </g>
+
+  <!-- Main content F2 -->
+  <g id="layer-content-f2">
+    <text x="248" y="950" font-size="24" font-weight="600" fill="#18181b">Settings</text>
+
+    <!-- Tab bar -->
+    <g transform="translate(248, 970)">
+      <line x1="0" y1="36" x2="1152" y2="36" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="0" y="22" font-size="14" fill="#71717a">General</text>
+      <!-- Providers and Models (active) -->
+      <text x="80" y="22" font-size="14" font-weight="500" fill="#18181b">Providers &amp; Models</text>
+      <line x1="80" y1="36" x2="222" y2="36" stroke="#18181b" stroke-width="2"/>
+      <text x="236" y="22" font-size="14" fill="#71717a">MCP Servers</text>
+      <text x="338" y="22" font-size="14" fill="#71717a">API Keys</text>
+      <text x="402" y="22" font-size="14" fill="#71717a">Setup Wizard</text>
+    </g>
+
+    <!-- PROVIDERS SECTION -->
+    <g transform="translate(248, 1024)">
+      <text x="0" y="20" font-size="18" font-weight="600" fill="#18181b">Providers</text>
+
+      <!-- Providers table wrapper: rounded-xl border border-zinc-200 -->
+      <g transform="translate(0, 32)">
+        <rect width="1152" height="162" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+        <!-- Table header -->
+        <g transform="translate(0, 0)">
+          <rect width="1152" height="40" rx="10" fill="#fafafa"/>
+          <rect x="0" y="28" width="1152" height="12" fill="#fafafa"/>
+          <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="20" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">NAME</text>
+          <text x="200" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TYPE</text>
+          <text x="320" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">BASE URL</text>
+          <text x="600" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">API KEY</text>
+          <text x="800" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">HEALTH</text>
+        </g>
+
+        <!-- Row 1: openai — Check button (default) -->
+        <g transform="translate(0, 40)">
+          <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">openai</text>
+          <text x="200" y="24" font-size="14" fill="#18181b">openai</text>
+          <text x="320" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">https://api.openai.com/v1</text>
+          <!-- API Key: Configured (green dot) -->
+          <circle cx="604" cy="20" r="4" fill="#16a34a"/>
+          <text x="616" y="24" font-size="12" fill="#71717a">Configured</text>
+          <!-- Health: Check button -->
+          <rect x="800" y="8" width="80" height="28" rx="6" fill="none"/>
+          <g transform="translate(808, 14)" fill="none" stroke="#18181b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M0 8 Q2 0 8 2 Q12 4 12 8 Q12 12 8 14 Q4 14 2 12"/>
+            <polyline points="4,6 8,10 14,4"/>
+          </g>
+          <text x="828" y="26" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="middle">Check</text>
+        </g>
+
+        <!-- Row 2: anthropic — Health check success (98ms) -->
+        <g transform="translate(0, 80)">
+          <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">anthropic</text>
+          <text x="200" y="24" font-size="14" fill="#18181b">anthropic</text>
+          <text x="320" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">https://api.anthropic.com</text>
+          <circle cx="604" cy="20" r="4" fill="#16a34a"/>
+          <text x="616" y="24" font-size="12" fill="#71717a">Configured</text>
+          <!-- Health: success CheckCircle2 + latency -->
+          <g transform="translate(800, 10)" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="8"/>
+            <polyline points="5,9 8,12 14,6"/>
+          </g>
+          <text x="822" y="24" font-size="12" fill="#15803d">98ms</text>
+        </g>
+
+        <!-- Row 3: local-ollama — Health fail (Unreachable) -->
+        <g transform="translate(0, 120)">
+          <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">local-ollama</text>
+          <text x="200" y="24" font-size="14" fill="#18181b">ollama</text>
+          <text x="320" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">http://localhost:11434</text>
+          <!-- API Key: None (zinc dot) -->
+          <circle cx="604" cy="20" r="4" fill="#a1a1aa"/>
+          <text x="616" y="24" font-size="12" fill="#71717a">None</text>
+          <!-- Health: fail XCircle + Unreachable -->
+          <g transform="translate(800, 10)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="8"/>
+            <line x1="5.5" y1="5.5" x2="12.5" y2="12.5"/>
+            <line x1="12.5" y1="5.5" x2="5.5" y2="12.5"/>
+          </g>
+          <text x="822" y="24" font-size="12" fill="#dc2626">Unreachable</text>
+        </g>
+      </g>
+
+      <!-- MODELS SECTION -->
+      <g transform="translate(0, 218)">
+        <text x="0" y="20" font-size="18" font-weight="600" fill="#18181b">Models</text>
+
+        <g transform="translate(0, 32)">
+          <rect width="1152" height="162" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+          <!-- Table header -->
+          <rect width="1152" height="40" rx="10" fill="#fafafa"/>
+          <rect x="0" y="28" width="1152" height="12" fill="#fafafa"/>
+          <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="20" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">ALIAS</text>
+          <text x="200" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">PROVIDER</text>
+          <text x="380" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">MODEL NAME</text>
+          <text x="700" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">STATUS</text>
+          <text x="900" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">ACTION</text>
+
+          <!-- Row 1: claude-3-5-sonnet — Active, no action button -->
+          <g transform="translate(0, 40)">
+            <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+            <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">claude-3-5-sonnet</text>
+            <text x="200" y="24" font-size="14" fill="#18181b">anthropic</text>
+            <text x="380" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">claude-3-5-sonnet-20241022</text>
+            <circle cx="704" cy="20" r="4" fill="#16a34a"/>
+            <text x="716" y="24" font-size="12" fill="#71717a">Active</text>
+            <!-- No action button -->
+          </g>
+
+          <!-- Row 2: gpt-4o — Inactive, Switch to button -->
+          <g transform="translate(0, 80)">
+            <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+            <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">gpt-4o</text>
+            <text x="200" y="24" font-size="14" fill="#18181b">openai</text>
+            <text x="380" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">gpt-4o-2024-11-20</text>
+            <circle cx="704" cy="20" r="4" fill="#a1a1aa"/>
+            <text x="716" y="24" font-size="12" fill="#71717a">Inactive</text>
+            <!-- Switch to button -->
+            <rect x="900" y="6" width="80" height="28" rx="6" fill="none" stroke="#e4e4e7" stroke-width="1.5"/>
+            <text x="940" y="24" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle" dominant-baseline="middle">Switch to</text>
+          </g>
+
+          <!-- Row 3: gpt-4o-mini — Inactive, Switch to button -->
+          <g transform="translate(0, 120)">
+            <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">gpt-4o-mini</text>
+            <text x="200" y="24" font-size="14" fill="#18181b">openai</text>
+            <text x="380" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">gpt-4o-mini</text>
+            <circle cx="704" cy="20" r="4" fill="#a1a1aa"/>
+            <text x="716" y="24" font-size="12" fill="#71717a">Inactive</text>
+            <rect x="900" y="6" width="80" height="28" rx="6" fill="none" stroke="#e4e4e7" stroke-width="1.5"/>
+            <text x="940" y="24" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle" dominant-baseline="middle">Switch to</text>
+          </g>
+        </g>
+
+        <!-- Non-admin view annotation callout -->
+        <g transform="translate(0, 210)">
+          <rect width="480" height="60" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="12" y="20" font-size="11" font-weight="600" fill="#71717a">Non-admin view annotation:</text>
+          <text x="12" y="36" font-size="11" fill="#71717a">Action column header and all "Switch to" buttons are hidden.</text>
+          <text x="12" y="52" font-size="11" fill="#71717a">Health "Check" button on Providers table also hidden for non-admins.</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== FRAME 3: MCP SERVERS TAB ==================== -->
+  <rect x="0" y="1780" width="1440" height="860" fill="#ffffff"/>
+  <text x="240" y="1794" font-size="11" font-weight="500" fill="#71717a">Frame 3 — Settings / MCP Servers tab</text>
+
+  <!-- Sidebar F3 -->
+  <g id="layer-sidebar-f3">
+    <rect x="0" y="1780" width="220" height="860" fill="#fafafa"/>
+    <line x1="220" y1="1780" x2="220" y2="2640" stroke="#e4e4e7" stroke-width="1"/>
+    <g transform="translate(16, 1796)">
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="1810" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="1836" x2="220" y2="1836" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="42" y="1867" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    <text x="42" y="1911" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    <text x="42" y="1955" font-size="14" font-weight="500" fill="#52525b">Assistant</text>
+    <!-- Settings ACTIVE -->
+    <rect x="8" y="1976" width="204" height="36" rx="6" fill="#f0fdfa"/>
+    <rect x="8" y="1976" width="2" height="36" rx="1" fill="#0d9488"/>
+    <text x="42" y="1999" font-size="14" font-weight="500" fill="#0d9488">Settings</text>
+  </g>
+
+  <!-- Main content F3 -->
+  <g id="layer-content-f3">
+    <text x="248" y="1830" font-size="24" font-weight="600" fill="#18181b">Settings</text>
+
+    <!-- Tab bar -->
+    <g transform="translate(248, 1850)">
+      <line x1="0" y1="36" x2="1152" y2="36" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="0" y="22" font-size="14" fill="#71717a">General</text>
+      <text x="80" y="22" font-size="14" fill="#71717a">Providers &amp; Models</text>
+      <!-- MCP Servers (active) -->
+      <text x="236" y="22" font-size="14" font-weight="500" fill="#18181b">MCP Servers</text>
+      <line x1="236" y1="36" x2="326" y2="36" stroke="#18181b" stroke-width="2"/>
+      <text x="338" y="22" font-size="14" fill="#71717a">API Keys</text>
+      <text x="402" y="22" font-size="14" fill="#71717a">Setup Wizard</text>
+    </g>
+
+    <g transform="translate(248, 1904)">
+      <!-- Add MCP Server button (right-aligned) -->
+      <g transform="translate(1040, 0)">
+        <rect width="112" height="36" rx="6" fill="#0d9488"/>
+        <g transform="translate(14, 10)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+          <line x1="8" y1="0" x2="8" y2="16"/>
+          <line x1="0" y1="8" x2="16" y2="8"/>
+        </g>
+        <text x="36" y="22" font-size="13" font-weight="500" fill="#ffffff" dominant-baseline="middle">Add MCP Server</text>
+      </g>
+
+      <!-- MCP table -->
+      <g transform="translate(0, 48)">
+        <rect width="1152" height="126" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+        <!-- Header row -->
+        <rect width="1152" height="40" rx="10" fill="#fafafa"/>
+        <rect x="0" y="28" width="1152" height="12" fill="#fafafa"/>
+        <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">NAME</text>
+        <text x="200" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">URL</text>
+        <text x="600" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">STATUS</text>
+        <text x="900" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">ACTION</text>
+
+        <!-- Row 1: filesystem — connected -->
+        <g transform="translate(0, 40)">
+          <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">filesystem</text>
+          <text x="200" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">http://localhost:8001</text>
+          <!-- Status: Connected (green outline) -->
+          <rect x="600" y="6" width="80" height="22" rx="11" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+          <text x="640" y="20" font-size="12" font-weight="500" fill="#15803d" text-anchor="middle" dominant-baseline="middle">Connected</text>
+          <!-- Remove button (ghost, red) -->
+          <g transform="translate(900, 6)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="0,3 16,3"/>
+            <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+            <path d="M6 3 L6 1 L10 1 L10 3"/>
+          </g>
+        </g>
+
+        <!-- Row 2: brave-search — disconnected -->
+        <g transform="translate(0, 80)">
+          <text x="20" y="24" font-size="14" font-weight="500" fill="#18181b">brave-search</text>
+          <text x="200" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">http://localhost:8002</text>
+          <!-- Status: Disconnected (zinc outline) -->
+          <rect x="600" y="6" width="88" height="22" rx="11" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+          <text x="644" y="20" font-size="12" font-weight="500" fill="#52525b" text-anchor="middle" dominant-baseline="middle">Disconnected</text>
+          <!-- Remove button -->
+          <g transform="translate(900, 6)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="0,3 16,3"/>
+            <path d="M2 3 L2 14 Q2 16 4 16 L12 16 Q14 16 14 14 L14 3"/>
+            <path d="M6 3 L6 1 L10 1 L10 3"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- Empty state annotation -->
+      <g transform="translate(0, 190)">
+        <rect width="320" height="44" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="12" y="16" font-size="11" font-weight="600" fill="#71717a">Empty state:</text>
+        <text x="12" y="32" font-size="11" fill="#71717a">"No MCP servers configured." — text-sm text-zinc-500</text>
+      </g>
+    </g>
+  </g>
+</svg>
