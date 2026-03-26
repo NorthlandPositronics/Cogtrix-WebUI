@@ -1,5 +1,4 @@
 import { Brain, Users, MessageSquare } from "lucide-react";
-import { useStreamingStore } from "@/lib/stores/streaming-store";
 import type { MessageMode } from "@/lib/api/types/message";
 
 const MODE_LABELS: Record<MessageMode, { icon: React.ReactNode; label: string }> = {
@@ -8,9 +7,12 @@ const MODE_LABELS: Record<MessageMode, { icon: React.ReactNode; label: string }>
   delegate: { icon: <Users className="size-3.5" />, label: "Delegate" },
 };
 
-export function TypingIndicator() {
-  const currentMode = useStreamingStore((s) => s.currentMode);
-  const modeInfo = currentMode ? MODE_LABELS[currentMode] : null;
+interface TypingIndicatorProps {
+  mode?: MessageMode | null;
+}
+
+export function TypingIndicator({ mode = null }: TypingIndicatorProps) {
+  const modeInfo = mode ? MODE_LABELS[mode] : null;
 
   return (
     <div
@@ -37,7 +39,7 @@ export function TypingIndicator() {
             className="size-2 rounded-full bg-zinc-400 motion-safe:animate-[typing-bounce_0.9s_ease-in-out_0.30s_infinite]"
           />
           {modeInfo && (
-            <span className="ml-1 flex items-center gap-1 text-xs text-zinc-400" aria-hidden="true">
+            <span className="ml-1 flex items-center gap-1 text-xs text-zinc-500" aria-hidden="true">
               {modeInfo.icon}
               {modeInfo.label}
             </span>

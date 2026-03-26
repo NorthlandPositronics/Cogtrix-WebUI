@@ -293,10 +293,18 @@ export function SessionsPage() {
                       className="border-zinc-400 data-[state=checked]:border-teal-600 data-[state=checked]:bg-teal-600 data-[state=indeterminate]:border-teal-600 data-[state=indeterminate]:bg-teal-600"
                     />
                   </TableHead>
-                  <TableHead className="pl-1">Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">Model</TableHead>
-                  <TableHead>State</TableHead>
-                  <TableHead className="hidden sm:table-cell">Updated</TableHead>
+                  <TableHead className="pl-1 text-xs font-medium tracking-wide text-zinc-500 uppercase">
+                    Name
+                  </TableHead>
+                  <TableHead className="hidden text-xs font-medium tracking-wide text-zinc-500 uppercase sm:table-cell">
+                    Model
+                  </TableHead>
+                  <TableHead className="text-xs font-medium tracking-wide text-zinc-500 uppercase">
+                    State
+                  </TableHead>
+                  <TableHead className="hidden text-xs font-medium tracking-wide text-zinc-500 uppercase sm:table-cell">
+                    Updated
+                  </TableHead>
                   <TableHead className="w-10"></TableHead>
                 </TableRow>
               </TableHeader>

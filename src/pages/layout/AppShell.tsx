@@ -28,7 +28,7 @@ function MobileHeader({ usernameInitial, onMenuClick }: MobileHeaderProps) {
         size="icon"
         onClick={onMenuClick}
         aria-label="Open navigation"
-        className="h-11 w-11 text-zinc-600"
+        className="h-11 w-11 text-zinc-500 hover:bg-zinc-100"
       >
         <Menu className="h-5 w-5" />
       </Button>
