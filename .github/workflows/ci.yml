@@ -1,0 +1,300 @@
+name: CI – Quality & Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  # pull_request events are NOT fired for PRs opened by GITHUB_TOKEN (e.g. Release Please).
+  # pull_request_target fires in that case. Jobs below fast-pass for release-please branches
+  # (no code checkout) since those PRs only bump CHANGELOG/version and the underlying code
+  # was already validated on the 'next' branch before merge.
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Validation jobs — run on PRs and manual triggers only.
+  # By the time code reaches main it has already passed these
+  # checks on the PR, so re-running them is redundant.
+  # ─────────────────────────────────────────────────────────────
+
+  # 1. Code quality – formatting, linting, types, build
+  quality:
+    name: Code quality
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      # Release Please PRs only bump CHANGELOG/version — code was already validated on next.
+      - name: Fast-pass (Release Please PR)
+        if: github.event_name == 'pull_request_target'
+        run: echo "Release Please PR — code quality already validated on the 'next' branch."
+      - name: Checkout code
+        if: github.event_name != 'pull_request_target'
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        if: github.event_name != 'pull_request_target'
+        uses: pnpm/action-setup@v5
+
+      - name: Set up Node.js
+        if: github.event_name != 'pull_request_target'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        if: github.event_name != 'pull_request_target'
+        id: install
+        run: pnpm install --frozen-lockfile
+
+      # ── Formatting (Prettier) ──
+      - name: Prettier (formatting)
+        id: prettier
+        if: github.event_name != 'pull_request_target' && always() && steps.install.outcome == 'success'
+        run: pnpm format:check
+
+      # ── Linting (ESLint) ──
+      - name: ESLint (linting)
+        id: eslint
+        if: github.event_name != 'pull_request_target' && always() && steps.install.outcome == 'success'
+        run: pnpm lint
+
+      # ── Type-check + production build (tsc + vite) ──
+      - name: Build (type-check + bundle)
+        id: build
+        if: github.event_name != 'pull_request_target' && always() && steps.install.outcome == 'success'
+        run: pnpm build
+
+      # ── Fail the job if any check above failed ──
+      - name: Gate
+        if: github.event_name != 'pull_request_target' && always()
+        run: |
+          results=(
+            "${{ steps.prettier.outcome }}"
+            "${{ steps.eslint.outcome }}"
+            "${{ steps.build.outcome }}"
+          )
+          for r in "${results[@]}"; do
+            if [ "$r" = "failure" ]; then
+              echo "::error::One or more quality checks failed"
+              exit 1
+            fi
+          done
+
+  # 2. Unit tests
+  test:
+    name: Unit tests
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      # Release Please PRs only bump CHANGELOG/version — tests already passed on next.
+      - name: Fast-pass (Release Please PR)
+        if: github.event_name == 'pull_request_target'
+        run: echo "Release Please PR — unit tests already validated on the 'next' branch."
+      - name: Checkout code
+        if: github.event_name != 'pull_request_target'
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        if: github.event_name != 'pull_request_target'
+        uses: pnpm/action-setup@v5
+
+      - name: Set up Node.js
+        if: github.event_name != 'pull_request_target'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        if: github.event_name != 'pull_request_target'
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
+        if: github.event_name != 'pull_request_target'
+        run: pnpm test:unit
+
+  # 3. Dependency security (OSV-scanner + pnpm audit)
+  security:
+    name: Dependency security
+    if: github.event_name != 'push' && github.event_name != 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      # ── OSV-scanner — scans pnpm-lock.yaml for known CVEs ──
+      - name: OSV-scanner (dependency CVEs)
+        id: osv
+        uses: google/osv-scanner-action/osv-scanner-action@v2.3.3
+        continue-on-error: true          # advisory — don't block PRs yet
+        with:
+          scan-args: |-
+            --lockfile=pnpm-lock.yaml
+
+      # ── pnpm audit ──
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: pnpm audit (dependency vulnerabilities)
+        id: audit
+        continue-on-error: true          # advisory — log but don't block
+        run: |
+          pnpm audit --audit-level=moderate 2>&1 || true
+          echo "pnpm audit completed (advisory)"
+
+      # ── Report findings in step summary ──
+      - name: Security summary
+        if: always()
+        run: |
+          echo "## Dependency Security" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Scanner | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| OSV-scanner | ${{ steps.osv.outcome }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| pnpm audit | ${{ steps.audit.outcome }} |" >> $GITHUB_STEP_SUMMARY
+
+  # 4. Docker build validation (PRs only, native per-arch)
+  docker:
+    name: Docker build (${{ matrix.platform }})
+    needs: [quality, test]
+    if: github.event_name != 'push' && github.event_name != 'pull_request_target'
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+          - runner: ubuntu-24.04-arm
+            platform: linux/arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Build image
+        run: docker build -f docker/Dockerfile -t cogtrix-webui:ci .
+
+  # ─────────────────────────────────────────────────────────────
+  # Publish jobs — run on push to main only.
+  # Branch protection guarantees CI passed on the PR before merge,
+  # so no need to re-run validation here.
+  # ─────────────────────────────────────────────────────────────
+
+  # 5. Publish per-arch images to GHCR
+  publish:
+    name: Publish (${{ matrix.arch }})
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    continue-on-error: true   # advisory until GHCR org package-write permission is confirmed
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Lowercase image name
+        run: |
+          REPO="${{ github.repository }}"
+          echo "IMAGE_NAME=${REPO,,}" >> "$GITHUB_ENV"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        run: |
+          SHA="${{ github.sha }}"
+          TAG="ghcr.io/${{ env.IMAGE_NAME }}:${SHA::7}-${{ matrix.arch }}"
+          docker build -f docker/Dockerfile -t "${TAG}" .
+          docker push "${TAG}"
+
+  # 6. Publish multi-arch manifest to GHCR
+  publish-manifest:
+    name: Publish manifest
+    needs: [publish]
+    if: ${{ !cancelled() && needs.publish.result != 'skipped' }}
+    continue-on-error: true   # advisory until GHCR org package-write permission is confirmed
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Lowercase image name
+        run: |
+          REPO="${{ github.repository }}"
+          echo "IMAGE_NAME=${REPO,,}" >> "$GITHUB_ENV"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push manifest
+        run: |
+          BASE="ghcr.io/${{ env.IMAGE_NAME }}"
+          SHA="${{ github.sha }}"
+          TAG="${SHA::7}"
+
+          docker manifest create "${BASE}:${TAG}" \
+            "${BASE}:${TAG}-amd64" \
+            "${BASE}:${TAG}-arm64"
+          docker manifest push "${BASE}:${TAG}"
+
+          docker manifest create "${BASE}:latest" \
+            "${BASE}:${TAG}-amd64" \
+            "${BASE}:${TAG}-arm64"
+          docker manifest push "${BASE}:latest"
+
+  # ─────────────────────────────────────────────────────────────
+  # 7. CI summary (always runs, reports all job outcomes)
+  # ─────────────────────────────────────────────────────────────
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [quality, test, security, docker, publish, publish-manifest]
+    steps:
+      - name: Post summary
+        run: |
+          echo "## CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Code quality (Prettier, ESLint, tsc + build) | ${{ needs.quality.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Unit tests (Vitest) | ${{ needs.test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency security (OSV-scanner, pnpm audit) | ${{ needs.security.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Docker build | ${{ needs.docker.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Publish to GHCR | ${{ needs.publish.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Publish manifest | ${{ needs.publish-manifest.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Toolchain:** Prettier · ESLint · TypeScript · Vite · Vitest · OSV-scanner · pnpm audit · GHCR" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  SUPERSEDED — Violet-600 accent colors. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  Component: Login Page (AuthPage — isRegister=false)
+  Page: /login
+  Design system version: 1.0 (2026-03-05)
+  Artboards: desktop 1280×800px
+  </desc>
+
+  <!-- ===================== PAGE BACKGROUND ===================== -->
+  <rect width="1280" height="800" fill="#fafafa"/>
+
+  <!-- ===================== CARD ===================== -->
+  <!-- Card: w-full max-w-sm (384px), bg-white, border border-zinc-200, rounded-lg, shadow-sm, p-6 -->
+  <!-- Card x = (1280 - 384) / 2 = 448, card y centered vertically ~160 -->
+  <g id="layer-content">
+    <!-- Drop shadow (shadow-sm approximation) -->
+    <rect x="448" y="160" width="384" height="432" rx="8" fill="#000000" fill-opacity="0.04"/>
+    <rect x="448" y="159" width="384" height="432" rx="8" fill="#000000" fill-opacity="0.02"/>
+    <!-- Card surface -->
+    <rect x="448" y="156" width="384" height="432" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- WORDMARK BLOCK — mb-6 (from brief: text-3xl font-bold = 30px, #18181b) -->
+    <g id="zone-wordmark">
+      <text x="472" y="208" font-size="30" font-weight="700" fill="#18181b" letter-spacing="-0.5">Cogtrix</text>
+      <!-- Subtitle: text-sm text-zinc-500 mt-1 — 14px #71717a -->
+      <text x="472" y="228" font-size="14" font-weight="400" fill="#71717a">Sign in to your account</text>
+    </g>
+
+    <!-- FORM — space-y-4, starts at y=252 (228 + 24 mb-6) -->
+    <g id="zone-form">
+
+      <!-- FIELD: Username — space-y-1.5 -->
+      <g id="zone-field-username">
+        <!-- Label: text-sm font-medium text-zinc-700 = #3f3f46 -->
+        <text x="472" y="270" font-size="14" font-weight="500" fill="#3f3f46">Username</text>
+        <!-- Input: border border-zinc-200 rounded-md h-9 px-3, default state -->
+        <rect x="472" y="277" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <!-- Placeholder text: text-sm text-zinc-400 = #a1a1aa -->
+        <text x="484" y="300" font-size="14" font-weight="400" fill="#a1a1aa">Enter your username</text>
+      </g>
+
+      <!-- FIELD: Password — gap-4 below username = 277+36+16=329 top of label -->
+      <g id="zone-field-password">
+        <text x="472" y="347" font-size="14" font-weight="500" fill="#3f3f46">Password</text>
+        <!-- Input: default state, border-zinc-200 -->
+        <rect x="472" y="354" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <!-- Placeholder text -->
+        <text x="484" y="377" font-size="14" font-weight="400" fill="#a1a1aa">Enter your password</text>
+        <!-- Password dots (visual representation) -->
+        <circle cx="484" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="496" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="508" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="520" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="532" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="544" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="556" cy="373" r="3" fill="#a1a1aa"/>
+        <circle cx="568" cy="373" r="3" fill="#a1a1aa"/>
+      </g>
+
+    </g>
+
+    <!-- SUBMIT BUTTON — mt-6 from last field, y = 354+36+24 = 414 -->
+    <!-- Button: w-full bg-violet-600 text-white rounded-md h-10 (size lg) -->
+    <g id="zone-submit">
+      <rect x="472" y="414" width="336" height="44" rx="6" fill="#7c3aed"/>
+      <text x="640" y="441" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Sign in</text>
+    </g>
+
+    <!-- FOOTER LINK — mt-4 text-center text-sm text-zinc-500 -->
+    <g id="zone-footer">
+      <!-- "Don't have an account? Register" -->
+      <text x="640" y="483" font-size="14" font-weight="400" fill="#71717a" text-anchor="middle">Don't have an account?&#160;</text>
+      <!-- Measure: "Don't have an account? " ≈ 166px at 14px — link starts after -->
+      <text x="640" y="483" font-size="14" font-weight="400" fill="#71717a" text-anchor="middle">
+        <tspan>Don't have an account?</tspan>
+        <tspan fill="#7c3aed" text-decoration="underline">&#160;Register</tspan>
+      </text>
+    </g>
+
+  </g>
+
+  <!-- ===================== CALLOUT ANNOTATIONS ===================== -->
+  <!-- Annotation lines and labels for web_coder zone identification -->
+  <g id="annotations" font-size="11" font-weight="400" fill="#6d28d9" font-family="'Geist Mono', 'Courier New', monospace">
+
+    <!-- Wordmark annotation -->
+    <line x1="832" y1="218" x2="870" y2="218" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="874" y="222" font-size="11" fill="#6d28d9">wordmark block</text>
+    <text x="874" y="235" font-size="10" fill="#a78bfa">text-3xl font-bold #18181b</text>
+    <text x="874" y="248" font-size="10" fill="#a78bfa">subtitle text-sm #71717a</text>
+
+    <!-- Field: username annotation -->
+    <line x1="448" y1="296" x2="420" y2="296" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="340" y="286" font-size="11" fill="#6d28d9">field group</text>
+    <text x="340" y="299" font-size="10" fill="#a78bfa">space-y-1.5</text>
+    <text x="340" y="312" font-size="10" fill="#a78bfa">Label + Input</text>
+
+    <!-- Field: password annotation -->
+    <line x1="448" y1="372" x2="420" y2="372" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="340" y="362" font-size="11" fill="#6d28d9">field group</text>
+    <text x="340" y="375" font-size="10" fill="#a78bfa">default state</text>
+    <text x="340" y="388" font-size="10" fill="#a78bfa">border #e4e4e7</text>
+
+    <!-- Submit button annotation -->
+    <line x1="832" y1="436" x2="870" y2="436" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="874" y="432" font-size="11" fill="#6d28d9">submit button</text>
+    <text x="874" y="445" font-size="10" fill="#a78bfa">bg-violet-600 #7c3aed</text>
+    <text x="874" y="458" font-size="10" fill="#a78bfa">hover: #6d28d9  size=lg  w-full</text>
+
+    <!-- Footer annotation -->
+    <line x1="832" y1="483" x2="870" y2="483" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="874" y="479" font-size="11" fill="#6d28d9">footer link</text>
+    <text x="874" y="492" font-size="10" fill="#a78bfa">text-zinc-500 + violet-600 link</text>
+
+    <!-- Card border annotation -->
+    <line x1="448" y1="156" x2="420" y2="130" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="290" y="122" font-size="11" fill="#6d28d9">Card: max-w-sm (384px)</text>
+    <text x="290" y="135" font-size="10" fill="#a78bfa">bg-white border-zinc-200 shadow-sm rounded-lg p-6</text>
+
+    <!-- Page background annotation -->
+    <text x="36" y="36" font-size="11" fill="#6d28d9">page: min-h-screen flex items-center justify-center</text>
+    <text x="36" y="50" font-size="10" fill="#a78bfa">bg-zinc-50 #fafafa</text>
+  </g>
+
+  <!-- ===================== INTERACTION STATE CALLOUT — Button hover ===================== -->
+  <g id="state-hover" transform="translate(0, 560)">
+    <text x="472" y="20" font-size="11" font-weight="500" fill="#52525b">Hover state (button)</text>
+    <rect x="472" y="28" width="200" height="36" rx="6" fill="#6d28d9"/>
+    <text x="572" y="51" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Sign in</text>
+    <text x="686" y="48" font-size="10" fill="#a78bfa">bg-violet-700 #6d28d9</text>
+  </g>
+
+  <!-- Loading state callout -->
+  <g id="state-loading" transform="translate(0, 610)">
+    <text x="472" y="20" font-size="11" font-weight="500" fill="#52525b">Loading state (submitting)</text>
+    <rect x="472" y="28" width="200" height="36" rx="6" fill="#7c3aed" opacity="0.8"/>
+    <!-- Spinner icon (Loader2 approximation) -->
+    <g transform="translate(560, 46)">
+      <circle r="7" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <path d="M 0 -7 A 7 7 0 0 1 4.95 -4.95" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </g>
+    <text x="686" y="48" font-size="10" fill="#a78bfa">disabled + Loader2 spinner text-white</text>
+  </g>
+
+</svg>

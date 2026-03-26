@@ -1,0 +1,376 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1820" viewBox="0 0 1440 1820" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  SUPERSEDED — Violet accent, pre-tab-layout architecture. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  Component: Assistant Page (ServiceControlPanel + 6 Tabs + GuardrailsPanel primary)
+  Page: /assistant
+  Design system version: 1.6 (2026-03-08)
+  Artboards: desktop 1440px
+  </desc>
+
+  <!-- Page background -->
+  <rect width="1440" height="1820" fill="#ffffff"/>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <g id="layer-sidebar">
+    <rect x="0" y="0" width="220" height="1820" fill="#fafafa"/>
+    <line x1="220" y1="0" x2="220" y2="1820" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="16" y="36" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Sessions -->
+    <g id="nav-sessions">
+      <rect x="8" y="64" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 72)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="0" width="16" height="13" rx="2"/>
+        <polyline points="0,13 0,16 4,13"/>
+        <line x1="4" y1="4" x2="12" y2="4"/>
+        <line x1="4" y1="7" x2="10" y2="7"/>
+      </g>
+      <text x="42" y="87" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    </g>
+    <!-- Documents -->
+    <g id="nav-documents">
+      <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 116)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 0 L10 0 L14 4 L14 16 L2 16 Z"/>
+        <polyline points="10,0 10,4 14,4"/>
+        <line x1="5" y1="8" x2="11" y2="8"/>
+        <line x1="5" y1="11" x2="11" y2="11"/>
+      </g>
+      <text x="42" y="131" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    </g>
+    <!-- Assistant — ACTIVE -->
+    <g id="nav-assistant-active">
+      <rect x="8" y="152" width="204" height="36" rx="6" fill="#f5f3ff"/>
+      <rect x="8" y="152" width="2" height="36" rx="1" fill="#7c3aed"/>
+      <g transform="translate(18, 160)" fill="none" stroke="#7c3aed" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="12" height="10" rx="2"/>
+        <circle cx="6" cy="9" r="1.5"/>
+        <circle cx="10" cy="9" r="1.5"/>
+        <line x1="8" y1="0" x2="8" y2="4"/>
+        <line x1="0" y1="9" x2="2" y2="9"/>
+        <line x1="14" y1="9" x2="16" y2="9"/>
+      </g>
+      <text x="42" y="175" font-size="14" font-weight="500" fill="#7c3aed">Assistant</text>
+    </g>
+    <!-- Settings -->
+    <g id="nav-settings">
+      <rect x="8" y="196" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 204)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="8" r="3"/>
+        <path d="M8 0 L8 2 M8 14 L8 16 M0 8 L2 8 M14 8 L16 8 M2.3 2.3 L3.8 3.8 M12.2 12.2 L13.7 13.7 M13.7 2.3 L12.2 3.8 M3.8 12.2 L2.3 13.7"/>
+      </g>
+      <text x="42" y="219" font-size="14" font-weight="500" fill="#52525b">Settings</text>
+    </g>
+
+    <!-- User section -->
+    <line x1="0" y1="1750" x2="220" y2="1750" stroke="#e4e4e7" stroke-width="1"/>
+    <circle cx="30" cy="1784" r="16" fill="#ede9fe"/>
+    <text x="30" y="1789" font-size="12" font-weight="600" fill="#6d28d9" text-anchor="middle">A</text>
+    <text x="54" y="1780" font-size="14" font-weight="500" fill="#18181b">alice</text>
+    <text x="54" y="1796" font-size="12" fill="#71717a">User</text>
+  </g>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <g id="layer-content">
+    <!-- content x: 318–1342 (max-w-5xl centered) -->
+
+    <!-- PAGE HEADER -->
+    <text x="318" y="54" font-size="24" font-weight="600" fill="#18181b">Assistant</text>
+    <line x1="318" y1="70" x2="1342" y2="70" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ===================== SERVICE CONTROL PANEL ===================== -->
+    <!-- space-y-6 below header: y=70+24=94 -->
+    <g id="service-control-panel">
+      <rect x="318" y="94" width="1024" height="88" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card header -->
+      <text x="342" y="124" font-size="20" font-weight="600" fill="#18181b">Service Status</text>
+      <line x1="318" y1="138" x2="1342" y2="138" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card content: flex items-center gap-4 -->
+      <!-- Running badge -->
+      <rect x="342" y="152" width="80" height="24" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <circle cx="357" cy="164" r="4" fill="#16a34a"/>
+      <text x="365" y="168" font-size="12" font-weight="500" fill="#15803d">Running</text>
+
+      <!-- Channels -->
+      <text x="434" y="168" font-size="14" fill="#71717a">Channels: </text>
+      <text x="504" y="168" font-size="14" font-weight="500" fill="#18181b">telegram, whatsapp</text>
+
+      <!-- Uptime -->
+      <text x="672" y="168" font-size="14" fill="#71717a">Uptime: </text>
+      <text x="724" y="168" font-size="14" font-weight="500" fill="#18181b">3d 12h 08m</text>
+      <!-- Live annotation -->
+      <rect x="826" y="156" width="30" height="16" rx="8" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
+      <text x="841" y="168" font-size="10" font-weight="500" fill="#15803d" text-anchor="middle">live</text>
+
+      <!-- Stop button (admin): ml-auto, border-red-200 text-red-600 -->
+      <rect x="1230" y="148" width="88" height="32" rx="8" fill="#ffffff" stroke="#fca5a5" stroke-width="1"/>
+      <text x="1274" y="169" font-size="13" font-weight="500" fill="#dc2626" text-anchor="middle">Stop</text>
+
+      <!-- State annotations below card -->
+      <!-- Stopped state annotation -->
+      <rect x="318" y="190" width="340" height="22" rx="4" fill="#f4f4f5"/>
+      <text x="326" y="205" font-size="10" fill="#71717a">Stopped state: badge zinc, Start button (default/violet variant)</text>
+      <!-- Error state annotation -->
+      <rect x="668" y="190" width="300" height="22" rx="4" fill="#f4f4f5"/>
+      <text x="676" y="205" font-size="10" fill="#71717a">Error state: AlertTriangle icon (red-600) + error text + Retry</text>
+    </g>
+
+    <!-- ===================== TABS BAR ===================== -->
+    <!-- space-y-6 below ServiceControlPanel bottom (94+220=314 - but card is 88px, so 94+88+24=206, annotations add ~30 → 236) -->
+    <!-- Tab bar at y=240 -->
+    <g id="tab-bar">
+      <rect x="318" y="236" width="1024" height="40" rx="6" fill="#f4f4f5"/>
+
+      <!-- Tab items: Chats, Scheduled, Deferred, Contacts, Knowledge, Guardrails -->
+      <!-- Guardrails is active -->
+      <!-- Each tab approx 150px wide, total ~900px for 6 tabs + padding -->
+
+      <!-- Chats tab (inactive) -->
+      <rect x="322" y="238" width="130" height="36" rx="5" fill="none"/>
+      <text x="387" y="261" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Chats</text>
+
+      <!-- Scheduled (inactive) -->
+      <rect x="456" y="238" width="130" height="36" rx="5" fill="none"/>
+      <text x="521" y="261" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Scheduled</text>
+
+      <!-- Deferred (inactive) -->
+      <rect x="590" y="238" width="130" height="36" rx="5" fill="none"/>
+      <text x="655" y="261" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+
+      <!-- Contacts (inactive) -->
+      <rect x="724" y="238" width="130" height="36" rx="5" fill="none"/>
+      <text x="789" y="261" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Contacts</text>
+
+      <!-- Knowledge (inactive) -->
+      <rect x="858" y="238" width="130" height="36" rx="5" fill="none"/>
+      <text x="923" y="261" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Knowledge</text>
+
+      <!-- Guardrails — ACTIVE -->
+      <rect x="992" y="238" width="130" height="36" rx="5" fill="#ffffff"/>
+      <text x="1057" y="261" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle">Guardrails</text>
+      <!-- Active underline indicator -->
+      <rect x="1010" y="270" width="94" height="2" rx="1" fill="#7c3aed"/>
+    </g>
+
+    <!-- Frame 1 label -->
+    <text x="318" y="296" font-size="11" font-weight="500" fill="#71717a">Frame 1 — Guardrails tab active (primary frame)</text>
+
+    <!-- ===================== GUARDRAILS PANEL ===================== -->
+    <!-- mt-4 below tab bar: y=236+40+16=292 → content starts y=308 -->
+
+    <!-- CARD 1: Recent Violations -->
+    <g id="card-recent-violations">
+      <rect x="318" y="308" width="1024" height="376" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card header: flex items-center justify-between, p-4 -->
+      <text x="342" y="336" font-size="16" font-weight="600" fill="#18181b">Recent Violations</text>
+      <!-- Count badge: "12 total" -->
+      <rect x="1224" y="322" width="72" height="22" rx="11" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="1260" y="337" font-size="12" font-weight="500" fill="#18181b" text-anchor="middle">12 total</text>
+
+      <!-- Divider under header -->
+      <line x1="318" y1="352" x2="1342" y2="352" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Table header row -->
+      <!-- Columns: Time(160), Chat ID(160), Channel(140), Type(160), Detail(~380) -->
+      <text x="342" y="374" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TIME</text>
+      <text x="502" y="374" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHAT ID</text>
+      <text x="662" y="374" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHANNEL</text>
+      <text x="802" y="374" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TYPE</text>
+      <text x="962" y="374" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">DETAIL</text>
+
+      <line x1="318" y1="382" x2="1342" y2="382" stroke="#f4f4f5" stroke-width="1"/>
+
+      <!-- Row 1: rate_limit -->
+      <rect x="318" y="382" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <line x1="318" y1="434" x2="1342" y2="434" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="342" y="412" font-size="14" fill="#18181b">Mar 7, 14:23</text>
+      <text x="502" y="412" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_8472</text>
+      <text x="662" y="412" font-size="14" fill="#18181b">telegram</text>
+      <!-- rate_limit badge: amber -->
+      <rect x="802" y="400" width="78" height="22" rx="11" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+      <text x="841" y="415" font-size="12" font-weight="500" fill="#b45309" text-anchor="middle">rate limit</text>
+      <text x="962" y="412" font-size="13" fill="#18181b">Too many requests in 60s window</text>
+
+      <!-- Row 2: content_filter -->
+      <rect x="318" y="434" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <line x1="318" y1="486" x2="1342" y2="486" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="342" y="464" font-size="14" fill="#18181b">Mar 7, 13:55</text>
+      <text x="502" y="464" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_1091</text>
+      <text x="662" y="464" font-size="14" fill="#18181b">whatsapp</text>
+      <!-- content_filter badge: red -->
+      <rect x="802" y="452" width="98" height="22" rx="11" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+      <text x="851" y="467" font-size="12" font-weight="500" fill="#b91c1c" text-anchor="middle">content filter</text>
+      <text x="962" y="464" font-size="13" fill="#18181b">Profanity detected in message</text>
+
+      <!-- Row 3: spam -->
+      <rect x="318" y="486" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <line x1="318" y1="538" x2="1342" y2="538" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="342" y="516" font-size="14" fill="#18181b">Mar 7, 11:12</text>
+      <text x="502" y="516" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_3388</text>
+      <text x="662" y="516" font-size="14" fill="#18181b">telegram</text>
+      <!-- spam badge: orange -->
+      <rect x="802" y="504" width="50" height="22" rx="11" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+      <text x="827" y="519" font-size="12" font-weight="500" fill="#c2410c" text-anchor="middle">spam</text>
+      <text x="962" y="516" font-size="13" fill="#18181b">Repeated identical messages</text>
+
+      <!-- Row 4: rate_limit -->
+      <rect x="318" y="538" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <line x1="318" y1="590" x2="1342" y2="590" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="342" y="568" font-size="14" fill="#18181b">Mar 6, 23:41</text>
+      <text x="502" y="568" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_8472</text>
+      <text x="662" y="568" font-size="14" fill="#18181b">telegram</text>
+      <rect x="802" y="556" width="78" height="22" rx="11" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+      <text x="841" y="571" font-size="12" font-weight="500" fill="#b45309" text-anchor="middle">rate limit</text>
+      <text x="962" y="568" font-size="13" fill="#18181b">Too many requests in 60s window</text>
+
+      <!-- Row 5: content_filter -->
+      <rect x="318" y="590" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <text x="342" y="620" font-size="14" fill="#18181b">Mar 6, 18:05</text>
+      <text x="502" y="620" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_7710</text>
+      <text x="662" y="620" font-size="14" fill="#18181b">telegram</text>
+      <rect x="802" y="608" width="98" height="22" rx="11" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+      <text x="851" y="623" font-size="12" font-weight="500" fill="#b91c1c" text-anchor="middle">content filter</text>
+      <text x="962" y="620" font-size="13" fill="#18181b">Off-topic promotion link</text>
+
+      <!-- Row hover annotation -->
+      <text x="342" y="655" font-size="10" fill="#71717a" font-style="italic">Row hover: bg-zinc-50 (#fafafa)</text>
+
+      <!-- Badge type legend annotation -->
+      <text x="342" y="676" font-size="10" fill="#71717a" font-style="italic">Badge types: rate_limit=amber, content_filter=red, spam=orange, unknown=zinc</text>
+    </g>
+
+    <!-- CARD 2: Blacklisted Chats -->
+    <!-- space-y-6 = 24px below card 1 (308+376=684 + 24 = 708) -->
+    <g id="card-blacklisted-chats">
+      <rect x="318" y="708" width="1024" height="252" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card header -->
+      <text x="342" y="736" font-size="16" font-weight="600" fill="#18181b">Blacklisted Chats</text>
+      <!-- Count badge: "3" -->
+      <rect x="1278" y="722" width="34" height="22" rx="11" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="1295" y="737" font-size="12" font-weight="500" fill="#18181b" text-anchor="middle">3</text>
+
+      <line x1="318" y1="752" x2="1342" y2="752" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Table header -->
+      <text x="342" y="774" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHAT ID</text>
+      <line x1="318" y1="782" x2="1342" y2="782" stroke="#f4f4f5" stroke-width="1"/>
+
+      <!-- Row 1 -->
+      <rect x="318" y="782" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <line x1="318" y1="834" x2="1342" y2="834" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="342" y="812" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_8472</text>
+      <!-- Trash icon button: ghost, text-red-600 -->
+      <rect x="1285" y="794" width="36" height="36" rx="6" fill="none"/>
+      <g transform="translate(1293, 802)" fill="none" stroke="#dc2626" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 20,3"/>
+        <path d="M2 3 L2 17 Q2 20 5 20 L15 20 Q18 20 18 17 L18 3"/>
+        <path d="M6 3 L6 1 L14 1 L14 3"/>
+      </g>
+
+      <!-- Row 2 -->
+      <rect x="318" y="834" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <line x1="318" y1="886" x2="1342" y2="886" stroke="#f4f4f5" stroke-width="1"/>
+      <text x="342" y="864" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_1091</text>
+      <rect x="1285" y="846" width="36" height="36" rx="6" fill="none"/>
+      <g transform="translate(1293, 854)" fill="none" stroke="#dc2626" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 20,3"/>
+        <path d="M2 3 L2 17 Q2 20 5 20 L15 20 Q18 20 18 17 L18 3"/>
+        <path d="M6 3 L6 1 L14 1 L14 3"/>
+      </g>
+
+      <!-- Row 3 -->
+      <rect x="318" y="886" width="1024" height="52" rx="0" fill="#ffffff"/>
+      <text x="342" y="916" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_3388</text>
+      <rect x="1285" y="898" width="36" height="36" rx="6" fill="none"/>
+      <g transform="translate(1293, 906)" fill="none" stroke="#dc2626" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,3 20,3"/>
+        <path d="M2 3 L2 17 Q2 20 5 20 L15 20 Q18 20 18 17 L18 3"/>
+        <path d="M6 3 L6 1 L14 1 L14 3"/>
+      </g>
+
+      <!-- Empty state annotation -->
+      <text x="342" y="950" font-size="11" fill="#71717a" font-style="italic">Empty state: "No blacklisted chats." (text-sm text-zinc-500)</text>
+    </g>
+
+    <!-- ConfirmDialog annotation -->
+    <g id="confirm-dialog-callout">
+      <rect x="318" y="984" width="480" height="120" rx="12" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="342" y="1006" font-size="12" font-weight="600" fill="#18181b">ConfirmDialog (triggered by Trash button)</text>
+      <text x="342" y="1022" font-size="12" fill="#71717a">Dialog max-w-md · Title: "Remove from blacklist"</text>
+      <text x="342" y="1038" font-size="12" fill="#71717a">Description: "This will allow the chat to use the assistant again."</text>
+      <!-- Buttons -->
+      <rect x="342" y="1052" width="72" height="32" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="378" y="1072" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle">Cancel</text>
+      <rect x="426" y="1052" width="72" height="32" rx="6" fill="#dc2626"/>
+      <text x="462" y="1072" font-size="13" font-weight="500" fill="#ffffff" text-anchor="middle">Remove</text>
+    </g>
+
+    <!-- ===================== FRAME 2: Chats tab (secondary stub) ===================== -->
+    <!-- Start at y=1120 -->
+    <line x1="318" y1="1120" x2="1342" y2="1120" stroke="#e4e4e7" stroke-width="2"/>
+    <text x="318" y="1144" font-size="11" font-weight="500" fill="#71717a">Frame 2 — Chats tab active (secondary stub, establishing tab-switch pattern)</text>
+
+    <!-- Tab bar with Chats active -->
+    <rect x="318" y="1156" width="1024" height="40" rx="6" fill="#f4f4f5"/>
+    <!-- Chats tab ACTIVE -->
+    <rect x="322" y="1158" width="130" height="36" rx="5" fill="#ffffff"/>
+    <text x="387" y="1181" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle">Chats</text>
+    <rect x="348" y="1190" width="78" height="2" rx="1" fill="#7c3aed"/>
+    <!-- Other tabs inactive -->
+    <text x="521" y="1181" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Scheduled</text>
+    <text x="655" y="1181" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+    <text x="789" y="1181" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Contacts</text>
+    <text x="923" y="1181" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Knowledge</text>
+    <text x="1057" y="1181" font-size="14" font-weight="500" fill="#71717a" text-anchor="middle">Guardrails</text>
+
+    <!-- AssistantChatList stub: table with chat threads -->
+    <rect x="318" y="1212" width="1024" height="320" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Table header -->
+    <line x1="318" y1="1248" x2="1342" y2="1248" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="342" y="1238" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHAT ID</text>
+    <text x="490" y="1238" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHANNEL</text>
+    <text x="640" y="1238" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">LAST MESSAGE</text>
+    <text x="1160" y="1238" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TIME</text>
+    <!-- Chat rows -->
+    <line x1="318" y1="1300" x2="1342" y2="1300" stroke="#f4f4f5" stroke-width="1"/>
+    <text x="342" y="1278" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_8472</text>
+    <text x="490" y="1278" font-size="14" fill="#18181b">telegram</text>
+    <text x="640" y="1278" font-size="14" fill="#71717a">How do I configure the assistant to...</text>
+    <text x="1160" y="1278" font-size="13" fill="#71717a">2 min ago</text>
+    <line x1="318" y1="1300" x2="1342" y2="1300" stroke="#f4f4f5" stroke-width="1"/>
+
+    <text x="342" y="1330" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_1091</text>
+    <text x="490" y="1330" font-size="14" fill="#18181b">whatsapp</text>
+    <text x="640" y="1330" font-size="14" fill="#71717a">Can you help me write a report on...</text>
+    <text x="1160" y="1330" font-size="13" fill="#71717a">18 min ago</text>
+    <line x1="318" y1="1352" x2="1342" y2="1352" stroke="#f4f4f5" stroke-width="1"/>
+
+    <text x="342" y="1382" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_3388</text>
+    <text x="490" y="1382" font-size="14" fill="#18181b">telegram</text>
+    <text x="640" y="1382" font-size="14" fill="#71717a">What is the best approach to...</text>
+    <text x="1160" y="1382" font-size="13" fill="#71717a">1 hour ago</text>
+    <line x1="318" y1="1404" x2="1342" y2="1404" stroke="#f4f4f5" stroke-width="1"/>
+
+    <text x="342" y="1434" font-size="14" font-family="'Geist Mono', 'Courier New', monospace" fill="#18181b">user_7710</text>
+    <text x="490" y="1434" font-size="14" fill="#18181b">telegram</text>
+    <text x="640" y="1434" font-size="14" fill="#71717a">Summarize this document for me: Q4...</text>
+    <text x="1160" y="1434" font-size="13" fill="#71717a">3 hours ago</text>
+    <line x1="318" y1="1456" x2="1342" y2="1456" stroke="#f4f4f5" stroke-width="1"/>
+
+    <!-- GuardrailsPanel loading/error state annotation -->
+    <text x="318" y="1564" font-size="11" font-weight="500" fill="#71717a">GuardrailsPanel loading state: 3 skeleton rows h-8 w-full, space-y-2</text>
+    <rect x="318" y="1576" width="1024" height="14" rx="4" fill="#e4e4e7"/>
+    <rect x="318" y="1596" width="1024" height="14" rx="4" fill="#e4e4e7"/>
+    <rect x="318" y="1616" width="1024" height="14" rx="4" fill="#e4e4e7"/>
+
+    <text x="318" y="1650" font-size="11" font-weight="500" fill="#71717a">GuardrailsPanel error state: "Failed to load guardrail data." (text-red-600) + outline Retry button</text>
+    <rect x="318" y="1660" width="80" height="30" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="358" y="1680" font-size="13" fill="#18181b" text-anchor="middle">Retry</text>
+    <text x="318" y="1660" font-size="14" fill="#dc2626" dy="-14">Failed to load guardrail data.</text>
+  </g>
+</svg>

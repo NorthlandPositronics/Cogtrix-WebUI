@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DESIGN BRIEF — Collapsible Sidebar: Expanded State
+
+  Toggle placement (Option A): The PanelLeftClose button lives inside the
+  sidebar logo bar, right-aligned (h-11 w-11, ghost variant). It moves with
+  the sidebar and is always visible while the sidebar is open, avoiding any
+  disruption to the main content header layout.
+
+  Collapsed state (Option B): Collapsing produces a 48px icon-rail — the
+  sidebar never fully disappears. Nav icons remain tappable, the C-mark
+  logomark stays visible at the rail top, and the expand toggle appears
+  at the same logical position (top of rail).
+
+  Animation: 200ms ease-in-out width transition on the sidebar container.
+  Nav label text fades to opacity-0 on the collapsed rail. This is fast
+  enough to feel snappy while remaining trackable to the eye.
+
+  Active nav item follows DS §4: bg-teal-50 fill + w-0.5 teal-600
+  left-edge accent bar, both required simultaneously.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  width="900"
+  height="600"
+  font-family="ui-sans-serif, Inter, system-ui, sans-serif"
+>
+  <desc>
+    Component: Sidebar — Expanded state
+    Page: All authenticated pages (AppShell)
+    Design system version: 3.14 (2026-03-25)
+    Artboards: desktop 1440px (shown at 900px viewport representation)
+  </desc>
+
+  <!-- ─── Artboard background ─── -->
+  <rect width="900" height="600" fill="#f4f4f5"/>
+
+  <!-- ══════════════════════════════════════════════
+       LAYER: SIDEBAR (expanded, 220px → scaled ~165px at 900/1440 ratio)
+       Actual sidebar width in mockup: 165px
+       ══════════════════════════════════════════════ -->
+  <g id="layer-sidebar">
+    <!-- Sidebar background surface: bg-zinc-50 -->
+    <rect x="0" y="0" width="165" height="600" fill="#fafafa"/>
+    <!-- Right border: border-zinc-200 -->
+    <line x1="165" y1="0" x2="165" y2="600" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Logo bar (h-14 = 56px, px-4) ── -->
+    <g id="sidebar-logo-bar">
+      <!-- Logo bar height indicator background (none, flush with sidebar) -->
+
+      <!-- C-mark logo (logo.svg geometry, 22×22, at x=16, y=17) -->
+      <!-- Arc: center(27,28) radius=10, sweep 270° CCW opening right -->
+      <!-- Path: from 315° (upper node) to 45° (lower node), large-arc CCW -->
+      <g transform="translate(16, 17)">
+        <!-- Arc: start at top-right (315°), sweep CCW 270°, end at bottom-right (45°) -->
+        <!-- Upper tip: center+(cos315°*10, sin315°*10) = (7.071, -7.071) → abs (14+7.071, 14-7.071) = (21.071, 6.929) -->
+        <!-- Lower tip: (14+7.071, 14+7.071) = (21.071, 21.071) -->
+        <path
+          d="M 21.071 6.929 A 10 10 0 1 0 21.071 21.071"
+          fill="none"
+          stroke="#0d9488"
+          stroke-width="3.5"
+          stroke-linecap="round"
+        />
+        <!-- Upper node (larger, r=2.2) -->
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <!-- Lower node (smaller, r=1.6) -->
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+
+      <!-- Wordmark "Cogtrix": text-lg font-semibold text-zinc-900, gap-2 from logo -->
+      <text x="46" y="33" font-size="15" font-weight="600" fill="#18181b" dominant-baseline="middle">Cogtrix</text>
+
+      <!-- Toggle button: PanelLeftClose, h-11 w-11, ghost, text-zinc-500 -->
+      <!-- Positioned right-aligned inside logo bar: x = 165-44 = 121, y = 7, w=44, h=44 -->
+      <g id="toggle-button-collapse" transform="translate(119, 7)">
+        <!-- Button hit area (transparent, for visual reference) -->
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+        <!-- PanelLeftClose icon — vertical bar left + arrow pointing left -->
+        <!-- Left vertical bar -->
+        <line x1="16" y1="14" x2="16" y2="30" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Panel body outline -->
+        <rect x="10" y="10" width="24" height="24" rx="3" fill="none" stroke="#71717a" stroke-width="1.5"/>
+        <!-- Chevron left arrow (pointing left, indicating collapse) -->
+        <polyline points="21,19 18,22 21,25" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Arrow shaft -->
+        <line x1="18" y1="22" x2="26" y2="22" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Separator: border-zinc-200 -->
+    <line x1="0" y1="56" x2="165" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Nav items (space-y-1, px-2, py-2) ── -->
+    <!-- Each nav item: h≈36px, rounded-md, px-3 py-2, text-sm font-medium -->
+    <!-- Items start at y=64 (56 + 8 padding) -->
+
+    <g id="sidebar-nav">
+
+      <!-- Nav item 1: Sessions (ACTIVE) — bg-teal-50 + teal-600 left accent -->
+      <g id="nav-sessions-active" transform="translate(8, 64)">
+        <!-- Active background: bg-teal-50 -->
+        <rect x="0" y="0" width="149" height="36" rx="6" fill="#f0fdfa"/>
+        <!-- Active left accent bar: w-0.5 h-full bg-teal-600 rounded-r-full -->
+        <rect x="0" y="0" width="2" height="36" rx="1" fill="#0d9488"/>
+        <!-- MessageSquare icon: h-4 w-4, teal-600 when active -->
+        <g transform="translate(12, 10)">
+          <rect x="0" y="0" width="16" height="16" rx="2" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+          <line x1="3.5" y1="5.5" x2="12.5" y2="5.5" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="3.5" y1="8.5" x2="9" y2="8.5" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Chat bubble tail -->
+          <path d="M 2 14 L 4 11.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <!-- Label: text-sm font-medium text-teal-600 -->
+        <text x="34" y="18" font-size="13" font-weight="500" fill="#0d9488" dominant-baseline="middle">Sessions</text>
+      </g>
+
+      <!-- Nav item 2: Documents — inactive -->
+      <g id="nav-documents" transform="translate(8, 108)">
+        <rect x="0" y="0" width="149" height="36" rx="6" fill="none"/>
+        <!-- FileText icon: h-4 w-4, text-zinc-400 -->
+        <g transform="translate(12, 10)">
+          <path d="M 3 2 L 10 2 L 13 5 L 13 14 L 3 14 Z" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M 10 2 L 10 5 L 13 5" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="5.5" y1="8" x2="10.5" y2="8" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="5.5" y1="11" x2="9" y2="11" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <!-- Label: text-zinc-600 -->
+        <text x="34" y="18" font-size="13" font-weight="500" fill="#52525b" dominant-baseline="middle">Documents</text>
+      </g>
+
+      <!-- Nav item 3: Assistant — inactive -->
+      <g id="nav-assistant" transform="translate(8, 152)">
+        <rect x="0" y="0" width="149" height="36" rx="6" fill="none"/>
+        <!-- Bot icon: h-4 w-4, text-zinc-400 -->
+        <g transform="translate(12, 10)">
+          <rect x="2" y="4" width="12" height="10" rx="2" fill="none" stroke="#a1a1aa" stroke-width="1.5"/>
+          <circle cx="6" cy="9" r="1.2" fill="#a1a1aa"/>
+          <circle cx="10" cy="9" r="1.2" fill="#a1a1aa"/>
+          <line x1="8" y1="4" x2="8" y2="2" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="8" cy="1.5" r="0.8" fill="#a1a1aa"/>
+          <line x1="2" y1="12" x2="0" y2="14" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="12" x2="16" y2="14" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <!-- Label: text-zinc-600 -->
+        <text x="34" y="18" font-size="13" font-weight="500" fill="#52525b" dominant-baseline="middle">Assistant</text>
+      </g>
+
+      <!-- Nav item 4: Settings — inactive -->
+      <g id="nav-settings" transform="translate(8, 196)">
+        <rect x="0" y="0" width="149" height="36" rx="6" fill="none"/>
+        <!-- Settings/Gear icon: h-4 w-4, text-zinc-400 -->
+        <g transform="translate(12, 10)">
+          <circle cx="8" cy="8" r="2.5" fill="none" stroke="#a1a1aa" stroke-width="1.5"/>
+          <path d="M 8 1 L 9 3 L 11 2.5 L 12.5 4 L 12 6 L 14 7 L 14 9 L 12 10 L 12.5 12 L 11 13.5 L 9 13 L 8 15 L 7 13 L 5 13.5 L 3.5 12 L 4 10 L 2 9 L 2 7 L 4 6 L 3.5 4 L 5 2.5 L 7 3 Z" fill="none" stroke="#a1a1aa" stroke-width="1.3"/>
+        </g>
+        <!-- Label: text-zinc-600 -->
+        <text x="34" y="18" font-size="13" font-weight="500" fill="#52525b" dominant-baseline="middle">Settings</text>
+      </g>
+
+      <!-- Nav item 5: Admin — inactive (admin user shown) -->
+      <g id="nav-admin" transform="translate(8, 240)">
+        <rect x="0" y="0" width="149" height="36" rx="6" fill="none"/>
+        <!-- Shield icon: h-4 w-4, text-zinc-400 -->
+        <g transform="translate(12, 10)">
+          <path d="M 8 1 L 14 4 L 14 9 C 14 12.5 11.5 15 8 15.5 C 4.5 15 2 12.5 2 9 L 2 4 Z" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M 5.5 8 L 7 9.5 L 10.5 6" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <!-- Label: text-zinc-600 -->
+        <text x="34" y="18" font-size="13" font-weight="500" fill="#52525b" dominant-baseline="middle">Admin</text>
+      </g>
+    </g>
+
+    <!-- Separator before footer -->
+    <line x1="0" y1="488" x2="165" y2="488" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Footer (h-[68px] = 68px, px-3, gap-2, items-center) ── -->
+    <!-- Footer sits at y = 600 - 68 = 532 -->
+    <g id="sidebar-footer" transform="translate(0, 532)">
+      <!-- Avatar: h-8 w-8, bg-teal-50, teal initial -->
+      <rect x="12" y="18" width="32" height="32" rx="16" fill="#f0fdfa"/>
+      <text x="28" y="34" font-size="11" font-weight="600" fill="#0f766e" text-anchor="middle" dominant-baseline="middle">A</text>
+
+      <!-- Username + role badge -->
+      <g transform="translate(52, 18)">
+        <text x="0" y="9" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="hanging">alex</text>
+        <!-- Role badge: border-teal-200 bg-teal-50 text-teal-700 (admin) -->
+        <rect x="0" y="23" width="34" height="15" rx="7.5" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+        <text x="17" y="30.5" font-size="10" font-weight="500" fill="#0f766e" text-anchor="middle" dominant-baseline="middle">admin</text>
+      </g>
+
+      <!-- LogOut icon button: h-11 w-11, text-zinc-500 -->
+      <g transform="translate(108, 12)">
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+        <!-- LogOut icon -->
+        <path d="M 10 22 L 20 22 M 17 19 L 20 22 L 17 25" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 24 18 L 24 14 L 14 14 L 14 30 L 24 30 L 24 26" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       LAYER: HEADER (SessionHeader h-14, sticky)
+       Starts at x=165, full width of main area
+       ══════════════════════════════════════════════ -->
+  <g id="layer-header">
+    <!-- Header background: bg-white, border-b border-zinc-200, sticky h-14 -->
+    <rect x="165" y="0" width="735" height="56" fill="#ffffff"/>
+    <line x1="165" y1="56" x2="900" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Session name: text-sm font-medium text-zinc-900 -->
+    <text x="181" y="28" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="middle">Project Alpha — GPT-4o</text>
+
+    <!-- Agent state badge: thinking state — bg-teal-50 text-teal-700, dot pulse -->
+    <g transform="translate(370, 19)">
+      <rect x="0" y="0" width="70" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <!-- Dot: bg-teal-400, animate-pulse -->
+      <circle cx="11" cy="10" r="3.5" fill="#2dd4bf"/>
+      <text x="36" y="10" font-size="10" font-weight="500" fill="#0f766e" text-anchor="middle" dominant-baseline="middle">thinking</text>
+    </g>
+
+    <!-- Header right-side buttons -->
+    <!-- Memory button: h-11 w-11, ghost, text-zinc-500 -->
+    <g transform="translate(799, 7)">
+      <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+      <!-- Brain/memory icon -->
+      <path d="M 12 8 C 10 8 8 10 8 12 C 8 15 10 16 10 18 L 14 18 L 14 8 Z" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 14 8 C 16 8 18 10 18 12 C 18 15 16 16 16 18 L 14 18 L 14 8 Z" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 10 20 L 18 20" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 11 22 L 17 22" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <!-- Tools button: h-11 w-11, ghost, text-zinc-500 -->
+    <g transform="translate(847, 7)">
+      <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+      <!-- Wrench icon -->
+      <path d="M 18 8 C 15.5 5.5 11 6 9 9 C 7.5 11.5 8.5 14.5 11 16 L 8 19 C 7 20 7 21.5 8 22.5 C 9 23.5 10.5 23.5 11.5 22.5 L 14.5 19.5 C 16.5 20.5 19 19.5 20.5 17.5 C 22 15 21.5 11.5 19.5 9.5" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="9.5" cy="21" r="1.2" fill="#71717a"/>
+    </g>
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       LAYER: CONTENT (main chat area)
+       ══════════════════════════════════════════════ -->
+  <g id="layer-content">
+    <!-- Content background: bg-white -->
+    <rect x="165" y="56" width="735" height="488" fill="#ffffff"/>
+
+    <!-- ── Message list ── -->
+    <!-- User message bubble: right-aligned, bg-teal-50 rounded-xl -->
+    <g transform="translate(500, 80)">
+      <rect x="0" y="0" width="280" height="52" rx="12" fill="#f0fdfa"/>
+      <text x="16" y="20" font-size="13" fill="#18181b" dominant-baseline="hanging">Can you analyze this dataset and</text>
+      <text x="16" y="37" font-size="13" fill="#18181b" dominant-baseline="hanging">identify any anomalies?</text>
+    </g>
+
+    <!-- Timestamp under user bubble -->
+    <text x="780" y="140" font-size="11" fill="#71717a" text-anchor="end">2:34 PM</text>
+
+    <!-- Tool-use indicator: inline, subtle — "Searching the web…" -->
+    <g transform="translate(181, 156)">
+      <!-- Tool start chip: bg-zinc-50 border border-zinc-200 rounded-full -->
+      <rect x="0" y="0" width="160" height="24" rx="12" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Small spinner dot -->
+      <circle cx="14" cy="12" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="11 6" stroke-linecap="round"/>
+      <text x="24" y="12" font-size="11" fill="#71717a" dominant-baseline="middle">Analyzing dataset…</text>
+    </g>
+
+    <!-- Assistant message bubble: left-aligned, bg-white, text-zinc-900 -->
+    <g transform="translate(181, 196)">
+      <!-- Avatar: h-8 w-8, bg-teal-50, C-mark -->
+      <rect x="0" y="0" width="28" height="28" rx="14" fill="#f0fdfa"/>
+      <g transform="translate(4, 4)">
+        <path d="M 16.071 3.929 A 7 7 0 1 0 16.071 16.071" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="16.071" cy="3.929" r="1.5" fill="#0d9488"/>
+        <circle cx="16.071" cy="16.071" r="1.2" fill="#0d9488"/>
+      </g>
+
+      <!-- Message content area -->
+      <text x="40" y="5" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="hanging">Cogtrix</text>
+
+      <!-- Markdown content block -->
+      <g transform="translate(40, 26)">
+        <text x="0" y="0" font-size="13" fill="#18181b" dominant-baseline="hanging">I've analyzed the dataset. Here are the key findings:</text>
+        <text x="0" y="22" font-size="13" fill="#18181b" dominant-baseline="hanging">• Columns A–C show a 23% null rate above the expected</text>
+        <text x="0" y="39" font-size="13" fill="#18181b" dominant-baseline="hanging">  5% threshold — likely a data pipeline gap.</text>
+        <text x="0" y="61" font-size="13" fill="#18181b" dominant-baseline="hanging">• Row 4,821 contains an outlier in column F (value: 99,999)</text>
+        <text x="0" y="78" font-size="13" fill="#18181b" dominant-baseline="hanging">  which is 14σ from the mean.</text>
+
+        <!-- Streaming cursor: blinking indicator at end of partial response -->
+        <rect x="0" y="100" width="3" height="14" rx="1.5" fill="#0d9488" opacity="0.9">
+          <!-- Represents blinking cursor — partial streaming response -->
+        </rect>
+        <text x="8" y="107" font-size="11" fill="#71717a" dominant-baseline="middle">streaming…</text>
+      </g>
+    </g>
+
+    <!-- Memory token usage: inline indicator near bottom of message list -->
+    <g transform="translate(181, 420)">
+      <text x="0" y="0" font-size="11" fill="#71717a" dominant-baseline="hanging">Context:</text>
+      <!-- Token bar: bg-zinc-100 container, bg-teal-400 fill -->
+      <rect x="52" y="2" width="80" height="7" rx="3.5" fill="#f4f4f5"/>
+      <rect x="52" y="2" width="38" height="7" rx="3.5" fill="#2dd4bf"/>
+      <text x="138" y="0" font-size="11" fill="#71717a" dominant-baseline="hanging">12,400 / 32,000 tokens</text>
+    </g>
+
+    <!-- ── Message input (sticky bottom) ── -->
+    <g id="message-input-bar" transform="translate(0, 0)">
+      <!-- Sticky bottom bar background: bg-white, border-t border-zinc-200 -->
+      <rect x="165" y="520" width="735" height="80" fill="#ffffff"/>
+      <line x1="165" y1="520" x2="900" y2="520" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Textarea container: rounded-xl border border-zinc-200, min-h-11 -->
+      <rect x="181" y="532" width="595" height="44" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="197" y="554" font-size="13" fill="#a1a1aa" dominant-baseline="middle">Message Cogtrix…</text>
+
+      <!-- Send button: bg-teal-600 hover:bg-teal-700, h-11 w-11, rounded-lg -->
+      <rect x="788" y="532" width="44" height="44" rx="8" fill="#0d9488"/>
+      <!-- Send icon (arrow up) -->
+      <path d="M 806 556 L 810 548 L 814 556" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="810" y1="548" x2="810" y2="562" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       ANNOTATIONS
+       ══════════════════════════════════════════════ -->
+
+  <!-- Annotation: toggle button label -->
+  <g transform="translate(0, 0)">
+    <!-- Arrow pointing to toggle button -->
+    <line x1="140" y1="25" x2="119" y2="29" stroke="#6366f1" stroke-width="1" stroke-dasharray="3 2"/>
+    <circle cx="139" cy="25" r="2" fill="#6366f1"/>
+    <rect x="0" y="14" width="135" height="22" rx="4" fill="#6366f1" opacity="0.08"/>
+    <text x="68" y="25" font-size="10" fill="#4f46e5" text-anchor="middle" dominant-baseline="middle">Toggle: PanelLeftClose</text>
+  </g>
+
+  <!-- Annotation: active nav item pattern -->
+  <g transform="translate(0, 0)">
+    <line x1="175" y1="82" x2="160" y2="82" stroke="#6366f1" stroke-width="1" stroke-dasharray="3 2"/>
+    <circle cx="175" cy="82" r="2" fill="#6366f1"/>
+    <rect x="175" y="70" width="130" height="22" rx="4" fill="#6366f1" opacity="0.08"/>
+    <text x="240" y="81" font-size="10" fill="#4f46e5" text-anchor="middle" dominant-baseline="middle">bg-teal-50 + w-0.5 accent bar</text>
+  </g>
+
+  <!-- Annotation: sidebar width -->
+  <!-- Dimension line -->
+  <line x1="0" y1="580" x2="165" y2="580" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="0" y1="575" x2="0" y2="585" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="165" y1="575" x2="165" y2="585" stroke="#94a3b8" stroke-width="1"/>
+  <text x="82" y="595" font-size="10" fill="#64748b" text-anchor="middle">220px (scaled)</text>
+
+  <!-- Annotation: main content width -->
+  <line x1="165" y1="580" x2="900" y2="580" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="900" y1="575" x2="900" y2="585" stroke="#94a3b8" stroke-width="1"/>
+  <text x="532" y="595" font-size="10" fill="#64748b" text-anchor="middle">Main content (flex-1)</text>
+
+  <!-- Legend box -->
+  <rect x="670" y="70" width="215" height="95" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="684" y="86" font-size="11" font-weight="600" fill="#18181b" dominant-baseline="middle">Legend</text>
+  <!-- Active nav -->
+  <rect x="684" y="96" width="10" height="10" rx="2" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <rect x="684" y="96" width="2" height="10" rx="1" fill="#0d9488"/>
+  <text x="698" y="101" font-size="10" fill="#52525b" dominant-baseline="middle">Active nav: bg-teal-50 + left bar</text>
+  <!-- Inactive nav -->
+  <rect x="684" y="114" width="10" height="10" rx="2" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="698" y="119" font-size="10" fill="#52525b" dominant-baseline="middle">Inactive nav: transparent</text>
+  <!-- Toggle button -->
+  <rect x="684" y="132" width="10" height="10" rx="2" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="698" y="137" font-size="10" fill="#52525b" dominant-baseline="middle">Toggle: ghost, text-zinc-500</text>
+  <!-- Streaming cursor -->
+  <rect x="684" y="150" width="3" height="10" rx="1.5" fill="#0d9488"/>
+  <text x="698" y="155" font-size="10" fill="#52525b" dominant-baseline="middle">Streaming cursor indicator</text>
+</svg>

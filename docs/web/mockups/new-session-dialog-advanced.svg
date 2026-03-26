@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <desc>
+    Component: NewSessionDialog — Advanced Config Fields
+    Page: /sessions (triggered by "New Session" button)
+    Design system version: 3.6 (2026-03-23)
+    Artboards: desktop 1440px (dialog canvas 1200×700, two frames side-by-side)
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: Geist, Inter, system-ui, sans-serif; }
+    </style>
+    <!-- Dialog shadow filter -->
+    <filter id="dialog-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#18181b" flood-opacity="0.12"/>
+    </filter>
+    <!-- Switch track active (teal-600) -->
+    <!-- Popover shadow -->
+    <filter id="popover-shadow" x="-8%" y="-5%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#18181b" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- PAGE BACKGROUND                                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <rect width="1200" height="700" fill="#f4f4f5"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- FRAME LABELS                                                            -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <text x="90" y="32" font-size="12" font-weight="500" fill="#71717a" letter-spacing="0.05em">FRAME A — COLLAPSED (default state)</text>
+  <text x="650" y="32" font-size="12" font-weight="500" fill="#71717a" letter-spacing="0.05em">FRAME B — EXPANDED (advanced open)</text>
+
+  <!-- DS token annotations (bottom) -->
+  <text x="40" y="684" font-size="10" fill="#a1a1aa">Dialog bg: #ffffff  |  Border: #e4e4e7  |  Primary text: #18181b  |  Muted: #71717a  |  Primary btn: #0d9488  |  Input bg: #fafafa  |  Label: text-sm font-medium  |  Focus ring: ring-zinc-400</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- FRAME A: COLLAPSED DIALOG                                               -->
+  <!-- Dialog: max-w-lg → ~512px, centered in frame. Backdrop overlay.        -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Backdrop -->
+  <rect x="0" y="44" width="580" height="648" fill="#18181b" opacity="0.40"/>
+
+  <!-- Dialog card (x=32, y=78, w=516, h=476) -->
+  <rect x="32" y="78" width="516" height="380" rx="8" fill="#ffffff" filter="url(#dialog-shadow)"/>
+
+  <!-- ── DialogHeader ── -->
+  <!-- Title: text-lg font-semibold text-zinc-900 -->
+  <text x="56" y="118" font-size="18" font-weight="600" fill="#18181b">New Session</text>
+  <!-- Description: text-sm text-zinc-500 -->
+  <text x="56" y="138" font-size="14" font-weight="400" fill="#71717a">Configure and create a new chat session.</text>
+  <!-- Header separator line -->
+  <line x1="32" y1="155" x2="548" y2="155" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ── Form body: space-y-4, px-6 ── -->
+
+  <!-- Field: Name (y=170) -->
+  <!-- Label: text-sm font-medium text-zinc-900 -->
+  <text x="56" y="186" font-size="14" font-weight="500" fill="#18181b">Name</text>
+  <!-- Input: h-11, border-zinc-200, bg-white, text-sm text-zinc-400 (placeholder) -->
+  <rect x="56" y="192" width="424" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="70" y="214" font-size="14" fill="#a1a1aa">Untitled Session</text>
+
+  <!-- Field: Model (y=242) -->
+  <text x="56" y="246" font-size="14" font-weight="500" fill="#18181b">Model</text>
+  <!-- Select trigger: h-11 w-full, border-zinc-200, text-sm -->
+  <rect x="56" y="252" width="424" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="70" y="274" font-size="14" fill="#18181b">Default</text>
+  <!-- Chevron down icon -->
+  <g transform="translate(458, 266)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="0,0 5,6 10,0"/>
+  </g>
+
+  <!-- Field: Memory mode (y=302) -->
+  <text x="56" y="306" font-size="14" font-weight="500" fill="#18181b">Memory mode</text>
+  <rect x="56" y="312" width="424" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="70" y="334" font-size="14" fill="#18181b">Default</text>
+  <!-- Chevron down icon -->
+  <g transform="translate(458, 326)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="0,0 5,6 10,0"/>
+  </g>
+
+  <!-- Advanced trigger row (collapsed) -->
+  <!-- flex w-full items-center justify-between py-1.5 text-sm font-medium text-zinc-700 -->
+  <text x="56" y="374" font-size="14" font-weight="500" fill="#3f3f46">Advanced</text>
+  <!-- Chevron down (collapsed — pointing down): text-zinc-400 -->
+  <g transform="translate(458, 366)" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="0,0 5,6 10,0"/>
+  </g>
+
+  <!-- ── DialogFooter ── -->
+  <!-- Footer separator line -->
+  <line x1="32" y1="390" x2="548" y2="390" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Cancel button: variant=outline, min-h-11 -->
+  <rect x="336" y="402" width="88" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="378" y="424" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle">Cancel</text>
+  <!-- Create button: primary, min-h-11, bg-teal-600 -->
+  <rect x="432" y="402" width="88" height="36" rx="6" fill="#0d9488"/>
+  <text x="476" y="424" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Create</text>
+
+  <!-- Annotation: collapsed state label -->
+  <text x="290" y="472" font-size="11" fill="#71717a" text-anchor="middle">Advanced section collapsed — no fields shown below trigger</text>
+  <text x="290" y="486" font-size="11" fill="#71717a" text-anchor="middle">Chevron points down (▾). Default state on dialog open.</text>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- FRAME B: EXPANDED DIALOG                                                -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Backdrop -->
+  <rect x="580" y="44" width="620" height="648" fill="#18181b" opacity="0.40"/>
+
+  <!-- Dialog card expanded (x=614, y=56, w=516, h=596) -->
+  <rect x="614" y="56" width="516" height="614" rx="8" fill="#ffffff" filter="url(#dialog-shadow)"/>
+
+  <!-- ── DialogHeader ── -->
+  <text x="638" y="96" font-size="18" font-weight="600" fill="#18181b">New Session</text>
+  <text x="638" y="116" font-size="14" font-weight="400" fill="#71717a">Configure and create a new chat session.</text>
+  <line x1="614" y1="133" x2="1130" y2="133" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ── Form body ── -->
+
+  <!-- Field: Name -->
+  <text x="638" y="158" font-size="14" font-weight="500" fill="#18181b">Name</text>
+  <rect x="638" y="164" width="468" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="652" y="186" font-size="14" fill="#a1a1aa">Untitled Session</text>
+
+  <!-- Field: Model -->
+  <text x="638" y="218" font-size="14" font-weight="500" fill="#18181b">Model</text>
+  <rect x="638" y="224" width="468" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="652" y="246" font-size="14" fill="#18181b">Default</text>
+  <g transform="translate(1084, 238)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="0,0 5,6 10,0"/>
+  </g>
+
+  <!-- Field: Memory mode -->
+  <text x="638" y="278" font-size="14" font-weight="500" fill="#18181b">Memory mode</text>
+  <rect x="638" y="284" width="468" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="652" y="306" font-size="14" fill="#18181b">Default</text>
+  <g transform="translate(1084, 298)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="0,0 5,6 10,0"/>
+  </g>
+
+  <!-- Advanced trigger row (EXPANDED) -->
+  <!-- text-zinc-700 hover:text-zinc-900, chevron rotated 180° -->
+  <text x="638" y="344" font-size="14" font-weight="500" fill="#3f3f46">Advanced</text>
+  <!-- Chevron UP (expanded — rotated 180°): text-zinc-400 -->
+  <g transform="translate(1084, 348) rotate(180, 5, 3)" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="0,6 5,0 10,6"/>
+  </g>
+
+  <!-- hr: border-zinc-200, separates trigger from field container -->
+  <line x1="638" y1="354" x2="1106" y2="354" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ── Advanced field container: space-y-4 pt-2 ── -->
+
+  <!-- System prompt field (y=365) -->
+  <text x="638" y="380" font-size="14" font-weight="500" fill="#18181b">System prompt</text>
+  <!-- Textarea: min-h-[96px] resize-y text-sm, 4 rows -->
+  <rect x="638" y="386" width="468" height="96" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Placeholder text (text-zinc-400 italic visual) -->
+  <text x="652" y="406" font-size="13" fill="#a1a1aa">Override system prompt for this session (optional)</text>
+  <!-- resize-y handle indicator (bottom-right corner) -->
+  <g transform="translate(1094, 474)">
+    <line x1="0" y1="6" x2="6" y2="0" stroke="#d4d4d8" stroke-width="1"/>
+    <line x1="2" y1="8" x2="8" y2="2" stroke="#d4d4d8" stroke-width="1"/>
+  </g>
+
+  <!-- Max steps field (y=500) -->
+  <text x="638" y="504" font-size="14" font-weight="500" fill="#18181b">Max steps</text>
+  <rect x="638" y="510" width="88" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- placeholder "100" -->
+  <text x="652" y="532" font-size="14" fill="#a1a1aa">100</text>
+  <!-- Helper span: text-sm text-zinc-500 -->
+  <text x="734" y="532" font-size="14" fill="#71717a">default: 100, max: 200</text>
+
+  <!-- Context compression field (y=562) -->
+  <!-- flex items-center justify-between -->
+  <!-- Left: label stack -->
+  <text x="638" y="568" font-size="14" font-weight="500" fill="#18181b">Context compression</text>
+  <!-- Sub-label: text-xs text-zinc-500 -->
+  <text x="638" y="582" font-size="12" fill="#71717a">Use global setting when off</text>
+  <!-- Switch: unchecked state (null → renders as unchecked) -->
+  <!-- Switch track: bg-zinc-200 (unchecked), w-[44px] h-[24px] rounded-full -->
+  <rect x="1060" y="560" width="44" height="24" rx="12" fill="#e4e4e7"/>
+  <!-- Switch thumb: translate-x-1 (unchecked = left), bg-white, w-5 h-5, rounded-full -->
+  <circle cx="1073" cy="572" r="9" fill="#ffffff"/>
+
+  <!-- ── DialogFooter ── -->
+  <line x1="614" y1="614" x2="1130" y2="614" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Cancel button -->
+  <rect x="916" y="626" width="88" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="960" y="648" font-size="14" font-weight="500" fill="#18181b" text-anchor="middle">Cancel</text>
+  <!-- Create button -->
+  <rect x="1012" y="626" width="88" height="36" rx="6" fill="#0d9488"/>
+  <text x="1056" y="648" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Create</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- ANNOTATION CALLOUTS (Frame B)                                           -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Annotation: Advanced trigger expanded -->
+  <line x1="1112" y1="344" x2="1140" y2="344" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="1145" y="340" font-size="10" fill="#71717a">text-zinc-700 / chevron rotate-180</text>
+
+  <!-- Annotation: hr divider -->
+  <line x1="1112" y1="354" x2="1140" y2="354" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="1145" y="357" font-size="10" fill="#71717a">hr border-zinc-200</text>
+
+  <!-- Annotation: textarea resize-y -->
+  <line x1="1112" y1="434" x2="1140" y2="434" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="1145" y="430" font-size="10" fill="#71717a">min-h-[96px] resize-y text-sm</text>
+  <text x="1145" y="442" font-size="10" fill="#71717a">maxLength=32768</text>
+
+  <!-- Annotation: max steps w-24 -->
+  <line x1="726" y1="528" x2="726" y2="548" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="638" y="560" font-size="10" fill="#a1a1aa">w-24 (96px) · type=number min=1 max=200</text>
+
+  <!-- Annotation: switch unchecked = null -->
+  <line x1="1082" y1="548" x2="1082" y2="558" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="986" y="546" font-size="10" fill="#71717a">Switch unchecked = null (use global)</text>
+
+</svg>

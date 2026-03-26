@@ -1,0 +1,250 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  SUPERSEDED — Violet-600 accent colors. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  Component: App Shell — Mobile (AppShell — top bar + Sheet)
+  Page: /sessions (Sessions route active), user=alice role=user
+  Design system version: 1.0 (2026-03-05)
+  Artboards: mobile 390×844px (iPhone 14 Pro equivalent) — two frames side by side
+  Frame A: Top bar, sheet closed — x=0
+  Frame B: Sheet open, sidebar visible — x=460
+  </desc>
+
+  <!-- Canvas background -->
+  <rect width="900" height="900" fill="#e8e8e8"/>
+
+  <!-- Frame label A -->
+  <text x="140" y="22" font-size="12" font-weight="600" fill="#52525b" text-anchor="middle">Frame A — Sheet closed</text>
+  <!-- Frame label B -->
+  <text x="600" y="22" font-size="12" font-weight="600" fill="#52525b" text-anchor="middle">Frame B — Sheet open</text>
+
+  <!-- ============================= FRAME A — TOP BAR CLOSED ============================= -->
+  <g id="frame-a" transform="translate(0, 28)">
+
+    <!-- Phone frame outline -->
+    <rect x="10" y="10" width="270" height="560" rx="20" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5"/>
+
+    <!-- STATUS BAR (phone chrome) -->
+    <rect x="10" y="10" width="270" height="28" rx="20" fill="#ffffff"/>
+    <rect x="10" y="28" width="270" height="10" fill="#ffffff"/>
+    <!-- Time indicator -->
+    <text x="30" y="28" font-size="10" font-weight="600" fill="#18181b">9:41</text>
+    <!-- Battery / signal (simplified) -->
+    <rect x="230" y="20" width="28" height="12" rx="3" fill="none" stroke="#18181b" stroke-width="1.2"/>
+    <rect x="232" y="22" width="20" height="8" rx="2" fill="#18181b"/>
+    <rect x="259" y="23" width="3" height="6" rx="1" fill="#18181b"/>
+
+    <!-- TOP BAR: h-14 border-b border-zinc-200 bg-white, flex items-center justify-between px-4 -->
+    <!-- h-14 = 56px, starts after status bar (38px) -->
+    <g id="layer-header">
+      <rect x="10" y="38" width="270" height="56" fill="#ffffff" stroke="none"/>
+      <line x1="10" y1="94" x2="280" y2="94" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Hamburger button: variant=ghost size=sm, aria-label="Open navigation" -->
+      <!-- Menu icon (w-5 h-5 = 20px): three horizontal lines -->
+      <g transform="translate(26, 58)" fill="none" stroke="#18181b" stroke-width="1.75" stroke-linecap="round">
+        <line x1="0" y1="2" x2="20" y2="2"/>
+        <line x1="0" y1="9" x2="20" y2="9"/>
+        <line x1="0" y1="16" x2="20" y2="16"/>
+      </g>
+
+      <!-- Wordmark: text-base font-semibold text-zinc-900 (16px) — centered -->
+      <text x="145" y="72" font-size="16" font-weight="600" fill="#18181b" text-anchor="middle">Cogtrix</text>
+
+      <!-- Avatar: w-8 h-8 = 32px, bg-violet-100 fallback "A" — right side -->
+      <circle cx="256" cy="66" r="16" fill="#ede9fe"/>
+      <text x="256" y="71" font-size="11" font-weight="600" fill="#6d28d9" text-anchor="middle">A</text>
+    </g>
+
+    <!-- MAIN CONTENT (skeleton state) -->
+    <g id="layer-content-mobile">
+      <!-- Skeleton "Sessions" page content approximation -->
+      <!-- PageHeader title -->
+      <rect x="26" y="110" width="100" height="16" rx="4" fill="#f4f4f5"/>
+      <!-- New session button skeleton -->
+      <rect x="196" y="108" width="68" height="20" rx="5" fill="#f4f4f5"/>
+
+      <!-- Separator -->
+      <line x1="26" y1="138" x2="264" y2="138" stroke="#f4f4f5" stroke-width="1"/>
+
+      <!-- Session Card 1 skeleton -->
+      <rect x="26" y="150" width="238" height="86" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="42" y="165" width="140" height="12" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="184" width="190" height="10" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="200" width="80" height="8" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="214" width="46" height="14" rx="7" fill="#f4f4f5"/>
+
+      <!-- Session Card 2 skeleton -->
+      <rect x="26" y="248" width="238" height="86" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="42" y="263" width="120" height="12" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="282" width="170" height="10" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="298" width="60" height="8" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="312" width="46" height="14" rx="7" fill="#f4f4f5"/>
+
+      <!-- Session Card 3 skeleton -->
+      <rect x="26" y="346" width="238" height="86" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="42" y="361" width="160" height="12" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="380" width="200" height="10" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="396" width="90" height="8" rx="4" fill="#f4f4f5"/>
+      <rect x="42" y="410" width="46" height="14" rx="7" fill="#f4f4f5"/>
+    </g>
+
+  </g>
+
+  <!-- ============================= FRAME B — SHEET OPEN ============================= -->
+  <g id="frame-b" transform="translate(460, 28)">
+
+    <!-- Phone frame outline -->
+    <rect x="10" y="10" width="270" height="560" rx="20" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5"/>
+
+    <!-- Backdrop overlay behind Sheet: bg-black/40 covers the main area -->
+    <!-- Sheet width ~220px (matches sidebar), backdrop covers rest from x=230 to x=280 -->
+    <rect x="230" y="10" width="50" height="560" rx="0" fill="rgba(0,0,0,0.4)" clip-path="url(#phone-clip-b)"/>
+    <!-- Also dim the non-sheet phone area: slight overlay on right portion -->
+    <clipPath id="phone-clip-b">
+      <rect x="10" y="10" width="270" height="560" rx="20"/>
+    </clipPath>
+    <rect x="230" y="10" width="50" height="560" fill="rgba(0,0,0,0.4)" clip-path="url(#phone-clip-b)"/>
+
+    <!-- Status bar overlay area (above sheet) -->
+    <rect x="10" y="10" width="220" height="28" rx="0" fill="#fafafa" clip-path="url(#phone-clip-b)"/>
+    <rect x="10" y="10" width="270" height="28" rx="20" fill="none"/>
+    <text x="30" y="28" font-size="10" font-weight="600" fill="#18181b">9:41</text>
+
+    <!-- SHEET SURFACE: slides in from left, ~220px wide, full height -->
+    <!-- Sheet: bg-zinc-50 border-r border-zinc-200, shadow elevated -->
+    <rect x="10" y="10" width="220" height="560" rx="0" fill="#fafafa" clip-path="url(#phone-clip-b)"/>
+    <line x1="230" y1="10" x2="230" y2="570" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- SHEET CONTENT: identical to desktop sidebar -->
+    <g id="layer-sidebar-sheet">
+
+      <!-- Wordmark: px-4 py-4 = offset (10+16=26, 10+16=26 in frame) -->
+      <text x="26" y="46" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+
+      <!-- Separator -->
+      <line x1="10" y1="60" x2="230" y2="60" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- NAV: Sessions — ACTIVE -->
+      <rect x="18" y="68" width="204" height="36" rx="6" fill="#f5f3ff"/>
+      <rect x="18" y="68" width="2" height="36" rx="1" fill="#7c3aed"/>
+      <!-- MessageSquare icon -->
+      <g transform="translate(28, 76)" fill="none" stroke="#7c3aed" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="0" width="16" height="13" rx="2"/>
+        <polyline points="0,13 0,16 4,13"/>
+        <line x1="4" y1="4" x2="12" y2="4"/>
+        <line x1="4" y1="7" x2="10" y2="7"/>
+      </g>
+      <text x="52" y="91" font-size="14" font-weight="500" fill="#7c3aed">Sessions</text>
+
+      <!-- NAV: Documents — INACTIVE -->
+      <rect x="18" y="112" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(28, 120)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 0 L10 0 L14 4 L14 16 L2 16 Z"/>
+        <polyline points="10,0 10,4 14,4"/>
+        <line x1="5" y1="8" x2="11" y2="8"/>
+        <line x1="5" y1="11" x2="11" y2="11"/>
+      </g>
+      <text x="52" y="135" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+
+      <!-- NAV: Assistant — INACTIVE -->
+      <rect x="18" y="156" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(28, 164)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="12" height="10" rx="2"/>
+        <circle cx="6" cy="9" r="1.5"/>
+        <circle cx="10" cy="9" r="1.5"/>
+        <line x1="8" y1="0" x2="8" y2="4"/>
+        <line x1="0" y1="9" x2="2" y2="9"/>
+        <line x1="14" y1="9" x2="16" y2="9"/>
+      </g>
+      <text x="52" y="179" font-size="14" font-weight="500" fill="#52525b">Assistant</text>
+
+      <!-- NAV: Settings — INACTIVE -->
+      <rect x="18" y="200" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(28, 208)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="8" r="3"/>
+        <path d="M8 0 L8 2 M8 14 L8 16 M0 8 L2 8 M14 8 L16 8 M2.3 2.3 L3.8 3.8 M12.2 12.2 L13.7 13.7 M13.7 2.3 L12.2 3.8 M3.8 12.2 L2.3 13.7"/>
+      </g>
+      <text x="52" y="223" font-size="14" font-weight="500" fill="#52525b">Settings</text>
+
+      <!-- Admin: NOT shown — user is regular "alice" -->
+
+      <!-- SEPARATOR above user section -->
+      <line x1="10" y1="480" x2="230" y2="480" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- USER SECTION -->
+      <circle cx="36" cy="508" r="16" fill="#ede9fe"/>
+      <text x="36" y="513" font-size="11" font-weight="600" fill="#6d28d9" text-anchor="middle">A</text>
+
+      <text x="58" y="502" font-size="14" font-weight="500" fill="#18181b">alice</text>
+      <rect x="58" y="507" width="34" height="16" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="75" y="519" font-size="11" font-weight="500" fill="#52525b" text-anchor="middle">user</text>
+
+      <!-- Sign out -->
+      <g transform="translate(18, 534)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 0 L2 0 Q0 0 0 2 L0 12 Q0 14 2 14 L6 14"/>
+        <polyline points="10,4 14,7 10,10"/>
+        <line x1="4" y1="7" x2="14" y2="7"/>
+      </g>
+      <text x="40" y="549" font-size="14" font-weight="400" fill="#71717a">Sign out</text>
+
+    </g>
+
+    <!-- DIMMED MAIN AREA — right side showing backdrop + content ghost -->
+    <rect x="230" y="38" width="50" height="560" fill="rgba(0,0,0,0.4)" clip-path="url(#phone-clip-b)"/>
+
+  </g>
+
+  <!-- ===================== CALLOUT ANNOTATIONS ===================== -->
+  <g id="annotations" font-family="'Geist Mono', 'Courier New', monospace">
+
+    <!-- Frame A annotations -->
+    <text x="10" y="614" font-size="10" font-weight="500" fill="#6d28d9">Frame A: Top bar</text>
+    <text x="10" y="627" font-size="10" fill="#a78bfa">h-14 border-b border-zinc-200 bg-white</text>
+    <text x="10" y="640" font-size="10" fill="#a78bfa">flex items-center justify-between px-4</text>
+    <text x="10" y="653" font-size="10" fill="#a78bfa">Left: Button variant=ghost Menu icon w-5</text>
+    <text x="10" y="666" font-size="10" fill="#a78bfa">Center: text-base font-semibold "Cogtrix"</text>
+    <text x="10" y="679" font-size="10" fill="#a78bfa">Right: Avatar 32px bg-violet-100 fallback "A"</text>
+    <text x="10" y="692" font-size="10" fill="#a78bfa">Main: skeleton cards px-4 py-4</text>
+
+    <!-- Frame B annotations -->
+    <text x="460" y="614" font-size="10" font-weight="500" fill="#6d28d9">Frame B: Sheet open (shadcn/ui Sheet from-left)</text>
+    <text x="460" y="627" font-size="10" fill="#a78bfa">Sheet width ~220px, backdrop bg-black/40</text>
+    <text x="460" y="640" font-size="10" fill="#a78bfa">Sheet bg-zinc-50, identical to desktop sidebar</text>
+    <text x="460" y="653" font-size="10" fill="#a78bfa">onNavigate closes Sheet on link click</text>
+    <text x="460" y="666" font-size="10" fill="#a78bfa">Active: bg-violet-50 text-violet-600 border-l-2</text>
+    <text x="460" y="679" font-size="10" fill="#a78bfa">Avatar: bg-violet-100 #ede9fe text-violet-700</text>
+
+    <!-- Zone labels pointing into Frame A -->
+    <line x1="70" y1="66" x2="10" y2="700" stroke="none"/>
+    <!-- Hamburger zone callout -->
+    <line x1="46" y1="96" x2="10" y2="706" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="10" y="706" font-size="10" fill="#6d28d9">hamburger btn</text>
+    <text x="10" y="718" font-size="10" fill="#a78bfa">variant=ghost aria-label="Open navigation"</text>
+
+    <!-- Wordmark zone callout Frame A -->
+    <line x1="145" y1="96" x2="145" y2="732" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="110" y="732" font-size="10" fill="#6d28d9">wordmark</text>
+    <text x="110" y="744" font-size="10" fill="#a78bfa">text-base font-semibold</text>
+
+    <!-- Avatar zone callout Frame A -->
+    <line x1="256" y1="96" x2="290" y2="706" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="210" y="706" font-size="10" fill="#6d28d9">user avatar</text>
+    <text x="210" y="718" font-size="10" fill="#a78bfa">w-8 h-8 fallback "A"</text>
+    <text x="210" y="730" font-size="10" fill="#a78bfa">no action Sprint 1</text>
+
+    <!-- Sheet sidebar callout Frame B -->
+    <line x1="690" y1="91" x2="740" y2="700" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="700" y="706" font-size="10" fill="#6d28d9">sidebar in Sheet</text>
+    <text x="700" y="718" font-size="10" fill="#a78bfa">transition-all duration-200</text>
+
+    <!-- Active nav annotation Frame B -->
+    <line x1="690" y1="86" x2="750" y2="732" stroke="#7c3aed" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="750" y="732" font-size="10" fill="#7c3aed">Sessions active</text>
+    <text x="750" y="744" font-size="10" fill="#a78bfa">bg-violet-50 + border-l-2 violet</text>
+
+    <!-- General note -->
+    <text x="10" y="860" font-size="11" font-weight="500" fill="#18181b">Mobile shell — 390×844px (iPhone 14 Pro equivalent). Sheet managed by AppShell isMobileMenuOpen state.</text>
+    <text x="10" y="876" font-size="10" fill="#52525b">Sheet closes on nav link click (onNavigate callback) or route change (useEffect on location).</text>
+  </g>
+
+</svg>

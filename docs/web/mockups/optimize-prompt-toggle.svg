@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="320" viewBox="0 0 900 320">
+  <desc>
+    Component: OptimizePromptButton — MessageInput bar variants
+    Page: /sessions/:id (chat page — MessageInput)
+    Design system version: 3.6 (2026-03-23)
+    Artboards: desktop 900px (component-level artboard, no mobile artboard — button is icon-only at all breakpoints)
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: Geist, Inter, system-ui, sans-serif; }
+      @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    </style>
+    <!-- Clip regions for each variant cell -->
+    <clipPath id="clip-A"><rect x="20" y="30" width="420" height="72"/></clipPath>
+    <clipPath id="clip-B"><rect x="460" y="30" width="420" height="72"/></clipPath>
+    <clipPath id="clip-C"><rect x="20" y="178" width="420" height="72"/></clipPath>
+    <clipPath id="clip-D"><rect x="460" y="178" width="420" height="72"/></clipPath>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PAGE BACKGROUND                                     -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <rect width="900" height="320" fill="#fafafa"/>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- VARIANT LABELS (above each cell)                   -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- A -->
+  <text x="20" y="20" font-size="11" font-weight="600" fill="#18181b">A — Toggle OFF, empty textarea</text>
+  <!-- B -->
+  <text x="460" y="20" font-size="11" font-weight="600" fill="#18181b">B — Toggle ON, empty textarea</text>
+  <!-- C -->
+  <text x="20" y="168" font-size="11" font-weight="600" fill="#18181b">C — Toggle ON, text in textarea (ready to send)</text>
+  <!-- D -->
+  <text x="460" y="168" font-size="11" font-weight="600" fill="#18181b">D — Disabled (agent running)</text>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- VARIANT A: Toggle OFF, empty                       -->
+  <!-- x=20 y=30, w=420 h=72                             -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <g id="variant-A">
+    <!-- Surface + border-t -->
+    <rect x="20" y="30" width="420" height="72" fill="#ffffff" rx="0"/>
+    <line x1="20" y1="30" x2="440" y2="30" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- px-4 py-3 → inner content starts at x=36 y=42 -->
+    <!-- flex items-end gap-2 — items aligned to bottom edge of row at y=90 (30+72-12=90 bottom padding) -->
+
+    <!-- ── Mode dropdown trigger: ghost, min-h-11 shrink-0 ── -->
+    <!-- button: ~44px tall, ~70px wide, at x=36 y=42 -->
+    <rect x="36" y="43" width="68" height="44" rx="6" fill="none"/>
+    <!-- MessageSquare icon (16×16) at center-left of button, y-aligned: icon top = 43+(44-16)/2 = 57 -->
+    <g transform="translate(44, 57)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 0 9 L 3 9 L 3 13 L 7 9 L 13 9 L 13 0 Z"/>
+    </g>
+    <!-- "Normal" label text-sm text-zinc-500 hidden sm:inline — shown at desktop -->
+    <text x="63" y="69" font-size="13" font-weight="400" fill="#71717a">Normal</text>
+    <!-- ChevronDown icon (16×16) -->
+    <g transform="translate(101, 57)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,4 4,8 8,4"/>
+    </g>
+
+    <!-- ── Optimize button: ghost, OFF state → text-zinc-500, no bg fill ── -->
+    <!-- button: 44×44 at x=112 y=43 -->
+    <rect x="112" y="43" width="44" height="44" rx="6" fill="none"/>
+    <!-- Sparkles icon (16×16), centered in 44×44: offset = (44-16)/2 = 14 → icon at x=126 y=57 -->
+    <!-- Sparkles: main 4-point star + two small 4-point stars -->
+    <g transform="translate(126, 57)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- main large sparkle at (8,8) -->
+      <path d="M 8 1 L 9.5 6.5 L 15 8 L 9.5 9.5 L 8 15 L 6.5 9.5 L 1 8 L 6.5 6.5 Z"/>
+      <!-- small sparkle top-right -->
+      <path d="M 13 0 L 13.75 2.25 L 16 3 L 13.75 3.75 L 13 6 L 12.25 3.75 L 10 3 L 12.25 2.25 Z" transform="scale(0.6) translate(8,-1)"/>
+      <!-- small sparkle bottom-left -->
+      <path d="M 3 10 L 3.6 11.8 L 5.4 12.4 L 3.6 13 L 3 14.8 L 2.4 13 L 0.6 12.4 L 2.4 11.8 Z" transform="scale(0.6) translate(-1,4)"/>
+    </g>
+
+    <!-- ── Textarea: flex-1, min-h-11, at x=164 y=43 width=216 ── -->
+    <rect x="164" y="43" width="216" height="44" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- placeholder text: text-sm text-zinc-500 -->
+    <text x="176" y="69" font-size="13" font-weight="400" fill="#71717a">Send a message...</text>
+
+    <!-- ── Send button: bg-teal-600 text-white, disabled (no text) ── -->
+    <!-- SendHorizontal icon + "Send" label, button at x=388 y=43 w=44 h=44 -->
+    <rect x="388" y="43" width="44" height="44" rx="6" fill="#0d9488" opacity="0.5"/>
+    <!-- SendHorizontal icon (20×20) centered: offset = (44-20)/2 = 12 → x=400 y=55 -->
+    <g transform="translate(400, 55)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="0" y1="10" x2="20" y2="10"/>
+      <polyline points="12,2 20,10 12,18"/>
+    </g>
+
+    <!-- ── Annotation for optimize button OFF ── -->
+    <!-- callout line from button center up to annotation text -->
+    <line x1="134" y1="43" x2="134" y2="32" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="78" y="28" font-size="9" font-weight="400" fill="#52525b" text-anchor="middle">off — text-zinc-500 (#71717a), no bg fill</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- VARIANT B: Toggle ON, empty                        -->
+  <!-- x=460 y=30, w=420 h=72                            -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <g id="variant-B">
+    <!-- Surface + border-t -->
+    <rect x="460" y="30" width="420" height="72" fill="#ffffff" rx="0"/>
+    <line x1="460" y1="30" x2="880" y2="30" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Mode dropdown trigger ── -->
+    <rect x="476" y="43" width="68" height="44" rx="6" fill="none"/>
+    <g transform="translate(484, 57)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 0 9 L 3 9 L 3 13 L 7 9 L 13 9 L 13 0 Z"/>
+    </g>
+    <text x="503" y="69" font-size="13" font-weight="400" fill="#71717a">Normal</text>
+    <g transform="translate(541, 57)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,4 4,8 8,4"/>
+    </g>
+
+    <!-- ── Optimize button: ON state → bg-teal-50, text-teal-600 ── -->
+    <rect x="552" y="43" width="44" height="44" rx="6" fill="#f0fdfa"/>
+    <!-- Sparkles icon in teal-600 -->
+    <g transform="translate(566, 57)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 8 1 L 9.5 6.5 L 15 8 L 9.5 9.5 L 8 15 L 6.5 9.5 L 1 8 L 6.5 6.5 Z"/>
+      <path d="M 13 0 L 13.75 2.25 L 16 3 L 13.75 3.75 L 13 6 L 12.25 3.75 L 10 3 L 12.25 2.25 Z" transform="scale(0.6) translate(8,-1)"/>
+      <path d="M 3 10 L 3.6 11.8 L 5.4 12.4 L 3.6 13 L 3 14.8 L 2.4 13 L 0.6 12.4 L 2.4 11.8 Z" transform="scale(0.6) translate(-1,4)"/>
+    </g>
+
+    <!-- ── Textarea: empty ── -->
+    <rect x="604" y="43" width="216" height="44" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="616" y="69" font-size="13" font-weight="400" fill="#71717a">Send a message...</text>
+
+    <!-- ── Send button: disabled (no text) ── -->
+    <rect x="828" y="43" width="44" height="44" rx="6" fill="#0d9488" opacity="0.5"/>
+    <g transform="translate(840, 55)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="0" y1="10" x2="20" y2="10"/>
+      <polyline points="12,2 20,10 12,18"/>
+    </g>
+
+    <!-- ── Tooltip: "Prompt optimization on" floating above optimize button ── -->
+    <!-- tooltip at x=540 y=24 (above the button which is at x=552 y=43) -->
+    <rect x="530" y="16" width="136" height="20" rx="4" fill="#18181b"/>
+    <text x="598" y="29" font-size="11" font-weight="400" fill="#ffffff" text-anchor="middle">Prompt optimization on</text>
+    <!-- tooltip arrow -->
+    <polygon points="572,36 578,36 575,40" fill="#18181b"/>
+
+    <!-- ── Callout annotations for button ON ── -->
+    <!-- Line from button center to right-side annotation -->
+    <line x1="596" y1="65" x2="628" y2="52" stroke="#0d9488" stroke-width="0.8" stroke-dasharray="3,2"/>
+    <text x="632" y="49" font-size="9" font-weight="400" fill="#0d9488">on — text-teal-600 (#0d9488), bg-teal-50 (#f0fdfa)</text>
+    <text x="632" y="60" font-size="9" font-weight="400" fill="#0d9488">contrast 5.22:1 on teal-50 — WCAG AA</text>
+
+    <!-- ── Layout annotation (below the bar) ── -->
+    <!-- Bracket under mode + optimize buttons in variant B -->
+    <line x1="476" y1="93" x2="596" y2="93" stroke="#a1a1aa" stroke-width="0.8"/>
+    <line x1="476" y1="90" x2="476" y2="96" stroke="#a1a1aa" stroke-width="0.8"/>
+    <line x1="596" y1="90" x2="596" y2="96" stroke="#a1a1aa" stroke-width="0.8"/>
+    <text x="536" y="103" font-size="9" font-weight="400" fill="#52525b" text-anchor="middle">min-h-11 shrink-0</text>
+
+    <!-- Bracket under textarea -->
+    <line x1="604" y1="93" x2="820" y2="93" stroke="#a1a1aa" stroke-width="0.8"/>
+    <line x1="604" y1="90" x2="604" y2="96" stroke="#a1a1aa" stroke-width="0.8"/>
+    <line x1="820" y1="90" x2="820" y2="96" stroke="#a1a1aa" stroke-width="0.8"/>
+    <text x="712" y="103" font-size="9" font-weight="400" fill="#52525b" text-anchor="middle">flex-1</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- VARIANT C: Toggle ON, text present (ready to send) -->
+  <!-- x=20 y=178, w=420 h=72                            -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <g id="variant-C">
+    <rect x="20" y="178" width="420" height="72" fill="#ffffff" rx="0"/>
+    <line x1="20" y1="178" x2="440" y2="178" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Mode dropdown trigger -->
+    <rect x="36" y="191" width="68" height="44" rx="6" fill="none"/>
+    <g transform="translate(44, 205)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 0 9 L 3 9 L 3 13 L 7 9 L 13 9 L 13 0 Z"/>
+    </g>
+    <text x="63" y="217" font-size="13" font-weight="400" fill="#71717a">Normal</text>
+    <g transform="translate(101, 205)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,4 4,8 8,4"/>
+    </g>
+
+    <!-- Optimize button: ON -->
+    <rect x="112" y="191" width="44" height="44" rx="6" fill="#f0fdfa"/>
+    <g transform="translate(126, 205)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 8 1 L 9.5 6.5 L 15 8 L 9.5 9.5 L 8 15 L 6.5 9.5 L 1 8 L 6.5 6.5 Z"/>
+      <path d="M 13 0 L 13.75 2.25 L 16 3 L 13.75 3.75 L 13 6 L 12.25 3.75 L 10 3 L 12.25 2.25 Z" transform="scale(0.6) translate(8,-1)"/>
+      <path d="M 3 10 L 3.6 11.8 L 5.4 12.4 L 3.6 13 L 3 14.8 L 2.4 13 L 0.6 12.4 L 2.4 11.8 Z" transform="scale(0.6) translate(-1,4)"/>
+    </g>
+
+    <!-- Textarea: with text, focused border -->
+    <rect x="164" y="191" width="216" height="44" rx="6" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
+    <!-- user text: text-sm text-zinc-900 -->
+    <text x="176" y="217" font-size="13" font-weight="400" fill="#18181b">Summarise this article for me</text>
+
+    <!-- Send button: ENABLED (full teal, no opacity reduction) -->
+    <rect x="388" y="191" width="44" height="44" rx="6" fill="#0d9488"/>
+    <g transform="translate(400, 203)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="0" y1="10" x2="20" y2="10"/>
+      <polyline points="12,2 20,10 12,18"/>
+    </g>
+
+    <!-- Annotation: position callout -->
+    <line x1="134" y1="191" x2="134" y2="176" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="134" y="173" font-size="9" font-weight="400" fill="#52525b" text-anchor="middle">between mode dropdown and textarea</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- VARIANT D: Disabled — agent running                -->
+  <!-- x=460 y=178, w=420 h=72                           -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <g id="variant-D" opacity="1">
+    <rect x="460" y="178" width="420" height="72" fill="#ffffff" rx="0"/>
+    <line x1="460" y1="178" x2="880" y2="178" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Mode dropdown trigger: opacity-50 -->
+    <g opacity="0.5">
+      <rect x="476" y="191" width="68" height="44" rx="6" fill="none"/>
+      <g transform="translate(484, 205)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 0 0 L 0 9 L 3 9 L 3 13 L 7 9 L 13 9 L 13 0 Z"/>
+      </g>
+      <text x="503" y="217" font-size="13" font-weight="400" fill="#71717a">Normal</text>
+      <g transform="translate(541, 205)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,4 4,8 8,4"/>
+      </g>
+    </g>
+
+    <!-- Optimize button: ON state colors, opacity-50 -->
+    <g opacity="0.5">
+      <rect x="552" y="191" width="44" height="44" rx="6" fill="#f0fdfa"/>
+      <g transform="translate(566, 205)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 8 1 L 9.5 6.5 L 15 8 L 9.5 9.5 L 8 15 L 6.5 9.5 L 1 8 L 6.5 6.5 Z"/>
+        <path d="M 13 0 L 13.75 2.25 L 16 3 L 13.75 3.75 L 13 6 L 12.25 3.75 L 10 3 L 12.25 2.25 Z" transform="scale(0.6) translate(8,-1)"/>
+        <path d="M 3 10 L 3.6 11.8 L 5.4 12.4 L 3.6 13 L 3 14.8 L 2.4 13 L 0.6 12.4 L 2.4 11.8 Z" transform="scale(0.6) translate(-1,4)"/>
+      </g>
+    </g>
+
+    <!-- Textarea: with text, opacity-50 -->
+    <g opacity="0.5">
+      <rect x="604" y="191" width="216" height="44" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="616" y="217" font-size="13" font-weight="400" fill="#18181b">Summarise this article for me</text>
+    </g>
+
+    <!-- Cancel button: variant="outline", Square icon — NOT opacity-50, full opacity (actionable) -->
+    <rect x="828" y="191" width="44" height="44" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Square icon (20×20) at x=840 y=203 -->
+    <rect x="840" y="203" width="20" height="20" rx="3" fill="none" stroke="#18181b" stroke-width="1.8"/>
+
+    <!-- Annotation: disabled state explanation -->
+    <text x="574" y="256" font-size="9" font-weight="400" fill="#52525b" text-anchor="middle">opacity-50 on mode + optimize + textarea</text>
+    <text x="574" y="266" font-size="9" font-weight="400" fill="#52525b" text-anchor="middle">Send replaced by Cancel (Square icon, variant="outline")</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- DIVIDER LINES between cells                        -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- Vertical divider between A and B -->
+  <line x1="450" y1="10" x2="450" y2="155" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Vertical divider between C and D -->
+  <line x1="450" y1="160" x2="450" y2="280" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Horizontal divider between top row (A/B) and bottom row (C/D) -->
+  <line x1="20" y1="155" x2="880" y2="155" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- COLOR SWATCH LEGEND                                -->
+  <!-- y=280 — bottom margin                             -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <g id="color-legend" transform="translate(20, 282)">
+    <text x="0" y="10" font-size="10" font-weight="600" fill="#18181b">Color reference</text>
+
+    <!-- Swatch 1: teal-600 → Active icon -->
+    <rect x="0" y="16" width="14" height="14" rx="2" fill="#0d9488"/>
+    <text x="18" y="27" font-size="10" font-weight="400" fill="#18181b">teal-600 — Active icon</text>
+    <text x="18" y="37" font-size="9" font-weight="400" fill="#71717a">#0d9488</text>
+
+    <!-- Swatch 2: teal-50 → Active background -->
+    <rect x="140" y="16" width="14" height="14" rx="2" fill="#f0fdfa" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="158" y="27" font-size="10" font-weight="400" fill="#18181b">teal-50 — Active background</text>
+    <text x="158" y="37" font-size="9" font-weight="400" fill="#71717a">#f0fdfa</text>
+
+    <!-- Swatch 3: teal-100 → Active hover -->
+    <rect x="320" y="16" width="14" height="14" rx="2" fill="#ccfbf1" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="338" y="27" font-size="10" font-weight="400" fill="#18181b">teal-100 — Active hover</text>
+    <text x="338" y="37" font-size="9" font-weight="400" fill="#71717a">#ccfbf1</text>
+
+    <!-- Swatch 4: zinc-500 → Inactive icon -->
+    <rect x="480" y="16" width="14" height="14" rx="2" fill="#71717a"/>
+    <text x="498" y="27" font-size="10" font-weight="400" fill="#18181b">zinc-500 — Inactive icon</text>
+    <text x="498" y="37" font-size="9" font-weight="400" fill="#71717a">#71717a  (4.7:1 on white — WCAG AA)</text>
+
+    <!-- Swatch 5: zinc-100 → Inactive hover -->
+    <rect x="680" y="16" width="14" height="14" rx="2" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="698" y="27" font-size="10" font-weight="400" fill="#18181b">zinc-100 — Inactive hover</text>
+    <text x="698" y="37" font-size="9" font-weight="400" fill="#71717a">#f4f4f5</text>
+  </g>
+</svg>

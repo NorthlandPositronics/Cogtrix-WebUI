@@ -1,0 +1,37 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+*.local
+.vite/
+
+# Editor
+.vscode/
+.idea/
+.tmp/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# shadcn CLI misplacement guard
+@/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+docker-compose.cogtrix.yml
+.env.cogtrix
+.cogtrix.yml
+.claude/

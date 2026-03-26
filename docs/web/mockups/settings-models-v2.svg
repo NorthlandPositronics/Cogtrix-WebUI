@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <desc>
+  Component: Settings — Models table (row-selection paradigm)
+  Page: Settings > Providers &amp; Models tab > Models section
+  Design system version: 3.14 (2026-03-25)
+  Artboards: desktop 1280px
+  Bug: BUG-01 — Models table: row-selection replaces "Switch to" button
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Page background -->
+  <rect width="1280" height="720" fill="#ffffff"/>
+
+  <!-- ── Annotation banner ── -->
+  <rect x="0" y="0" width="1280" height="36" fill="#fafafa" rx="0"/>
+  <line x1="0" y1="36" x2="1280" y2="36" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="24" y="22" font-size="11" fill="#71717a" font-weight="500">BUG-01 — Settings › Providers &amp; Models › Models section — Row-selection paradigm replaces "Switch to" button and Status column</text>
+
+  <!-- ── Section heading ── -->
+  <text x="64" y="92" font-size="18" font-weight="600" fill="#18181b">Models</text>
+  <!-- Removed: old "Add model" top-right button (replaced by ghost row BUG-09) -->
+  <text x="64" y="114" font-size="12" fill="#71717a">Click an inactive row to switch the active model. The CircleCheck icon marks the current active model.</text>
+
+  <!-- ── Table container ── rounded-xl border border-zinc-200 -->
+  <rect x="64" y="134" width="900" height="260" rx="12" ry="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Table header row -->
+  <rect x="64" y="134" width="900" height="44" rx="12" ry="12" fill="#fafafa"/>
+  <rect x="64" y="166" width="900" height="12" fill="#fafafa"/> <!-- flatten bottom corners of header -->
+  <!-- Header bottom border -->
+  <line x1="64" y1="178" x2="964" y2="178" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Column headers: text-xs font-medium text-zinc-500 uppercase tracking-wide -->
+  <text x="84" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">ALIAS</text>
+  <text x="370" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">PROVIDER</text>
+  <text x="600" y="162" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">MODEL NAME</text>
+
+  <!-- ── Row 1: ACTIVE row — bg-teal-50, border-l-2 border-l-teal-600 ── -->
+  <rect x="64" y="178" width="900" height="54" fill="#f0fdfa"/>
+  <!-- Left accent bar: 2px teal-600 -->
+  <rect x="64" y="178" width="3" height="54" fill="#0d9488"/>
+
+  <!-- Alias cell: font-mono text-sm font-medium text-zinc-900 -->
+  <!-- RadioGroupItem sr-only is not rendered visually -->
+  <text x="84" y="209" font-size="13" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">claude-sonnet-4-6</text>
+  <!-- CircleCheck icon h-4 w-4 text-teal-600, inline after alias text -->
+  <!-- Positioned after "claude-sonnet-4-6" (~168px wide at mono 13px) -->
+  <g transform="translate(274, 201)" aria-hidden="true">
+    <!-- CircleCheck: circle + check mark, text-teal-600 -->
+    <circle cx="8" cy="8" r="7.5" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+    <polyline points="4.5,8 7,10.5 11.5,5.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Provider cell -->
+  <text x="370" y="209" font-size="13" fill="#52525b">anthropic</text>
+  <!-- Model name cell -->
+  <text x="600" y="209" font-size="13" fill="#52525b">claude-sonnet-4-6-20251201</text>
+
+  <!-- Row 1 bottom border -->
+  <line x1="65" y1="232" x2="963" y2="232" stroke="#f3f4f6" stroke-width="1"/>
+
+  <!-- ── Row 2: INACTIVE + hover state (bg-zinc-50) ── -->
+  <rect x="64" y="232" width="900" height="54" fill="#fafafa"/>
+  <!-- Hover annotation pill -->
+  <rect x="840" y="240" width="100" height="22" rx="4" fill="#0d9488" opacity="0.12"/>
+  <text x="845" y="255" font-size="10" fill="#0d9488" font-weight="500">hover state</text>
+
+  <!-- cursor-pointer annotation -->
+  <!-- Alias -->
+  <text x="84" y="263" font-size="13" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">qwen3-8b</text>
+  <!-- Provider -->
+  <text x="370" y="263" font-size="13" fill="#52525b">ollama</text>
+  <!-- Model name -->
+  <text x="600" y="263" font-size="13" fill="#52525b">qwen3:8b</text>
+
+  <!-- Row 2 bottom border -->
+  <line x1="65" y1="286" x2="963" y2="286" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ── Row 3: INACTIVE + loading state (opacity-60) ── -->
+  <rect x="64" y="286" width="900" height="54" fill="#ffffff" opacity="0.6"/>
+
+  <!-- Alias -->
+  <text x="84" y="317" font-size="13" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace" opacity="0.6">gpt-4.1-mini</text>
+  <!-- Provider -->
+  <text x="370" y="317" font-size="13" fill="#52525b" opacity="0.6">openai</text>
+  <!-- Model name -->
+  <text x="600" y="317" font-size="13" fill="#52525b" opacity="0.6">gpt-4.1-mini-2025-04-14</text>
+
+  <!-- Loading annotation for row 3 -->
+  <rect x="840" y="294" width="110" height="22" rx="4" fill="#f5f5f5" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Spinner icon (simplified) -->
+  <circle cx="853" cy="305" r="5" fill="none" stroke="#71717a" stroke-width="1.5" stroke-dasharray="8 4"/>
+  <text x="862" y="309" font-size="10" fill="#71717a">switching…</text>
+
+  <!-- ── Ghost "Add model" tfoot row (BUG-09) ── -->
+  <!-- dashed top border -->
+  <line x1="65" y1="340" x2="963" y2="340" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="64" y="340" width="900" height="54" fill="#ffffff" rx="0"/>
+  <!-- bottom rounding for container -->
+  <rect x="64" y="370" width="900" height="24" rx="0" fill="#ffffff"/>
+  <rect x="64" y="370" width="900" height="24" rx="12" fill="#ffffff"/>
+  <!-- Plus icon + "Add model" text: flex items-center gap-1.5, text-sm text-zinc-500, centered -->
+  <!-- Center of row 340+27=367 -->
+  <g transform="translate(456, 355)">
+    <!-- Plus icon h-4 w-4 -->
+    <line x1="8" y1="2" x2="8" y2="14" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="2" y1="8" x2="14" y2="8" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="20" y="12" font-size="14" fill="#71717a">Add model</text>
+  </g>
+
+  <!-- ── Annotation: removed columns callout ── -->
+  <rect x="990" y="134" width="230" height="96" rx="8" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+  <text x="1005" y="155" font-size="11" font-weight="600" fill="#c2410c">Removed columns</text>
+  <text x="1005" y="172" font-size="11" fill="#c2410c">✕  Status column (green/zinc dot)</text>
+  <text x="1005" y="189" font-size="11" fill="#c2410c">✕  Action column ("Switch to" btn)</text>
+  <text x="1005" y="208" font-size="11" fill="#71717a">Now: 3 columns only</text>
+  <text x="1005" y="223" font-size="11" fill="#71717a">Alias / Provider / Model name</text>
+
+  <!-- ── State legend ── -->
+  <rect x="990" y="246" width="230" height="148" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="1005" y="267" font-size="11" font-weight="600" fill="#0d9488">State legend</text>
+
+  <!-- Active row sample -->
+  <rect x="1005" y="277" width="12" height="14" fill="#f0fdfa" rx="1"/>
+  <rect x="1005" y="277" width="2" height="14" fill="#0d9488" rx="1"/>
+  <text x="1022" y="288" font-size="11" fill="#18181b">Active — bg-teal-50 + left accent</text>
+
+  <!-- Hover row sample -->
+  <rect x="1005" y="299" width="12" height="14" fill="#fafafa" rx="1" stroke="#e4e4e7" stroke-width="0.5"/>
+  <text x="1022" y="310" font-size="11" fill="#18181b">Hover (admin) — bg-zinc-50</text>
+
+  <!-- Loading row sample (dimmed) -->
+  <rect x="1005" y="321" width="12" height="14" fill="#ffffff" rx="1" stroke="#e4e4e7" stroke-width="0.5" opacity="0.5"/>
+  <text x="1022" y="332" font-size="11" fill="#18181b" opacity="0.6">Loading — opacity-60</text>
+
+  <!-- Ghost row sample -->
+  <rect x="1005" y="343" width="12" height="14" fill="#ffffff" rx="1"/>
+  <line x1="1005" y1="343" x2="1017" y2="343" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="1022" y="354" font-size="11" fill="#18181b">Ghost add row — dashed border</text>
+
+  <!-- CircleCheck explainer -->
+  <g transform="translate(1005, 369)">
+    <circle cx="7" cy="7" r="6" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+    <polyline points="4,7 6.2,9 10,4.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="1022" y="380" font-size="11" fill="#0d9488">CircleCheck — active model indicator</text>
+
+  <!-- ── Column separator lines (visual guide only) ── -->
+  <line x1="355" y1="134" x2="355" y2="394" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+  <line x1="580" y1="134" x2="580" y2="394" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+
+  <!-- ── Bottom annotation ── -->
+  <text x="64" y="430" font-size="12" fill="#71717a">• No "Switch to" button. No Status column. Clicking an inactive row fires the switchModelMutation (admin only).</text>
+  <text x="64" y="448" font-size="12" fill="#71717a">• Active row: bg-teal-50 + border-l-2 border-l-teal-600 + CircleCheck h-4 w-4 text-teal-600 in Alias cell.</text>
+  <text x="64" y="466" font-size="12" fill="#71717a">• Ghost add row (tfoot): border-t border-dashed border-zinc-300 • spans all 3 columns • replaces top-right "Add model" outline button.</text>
+
+  <!-- ── aria-selected annotation ── -->
+  <text x="64" y="490" font-size="11" fill="#71717a" font-style="italic">Accessibility: RadioGroup aria-label="Select active model" wraps table body. Each row has aria-selected. CircleCheck is aria-hidden.</text>
+</svg>

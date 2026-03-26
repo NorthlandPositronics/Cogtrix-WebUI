@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="260" viewBox="0 0 640 260" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <desc>
+  SUPERSEDED — Violet-200 blockquote border and off-palette background. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005. Superseded by blockquote-corrected-v2.svg.
+  </desc>
+  <rect width="640" height="260" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="20" y="22" font-size="11" fill="#71717a" font-weight="500">Blockquote — before/after correction — blockquote-corrected.svg — Design System v3.0</text>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LEFT: Current (incorrect) -->
+  <!-- ═══════════════════════════════════════ -->
+
+  <!-- Label -->
+  <rect x="20" y="32" width="130" height="20" rx="3" ry="3" fill="#fef2f2"/>
+  <text x="28" y="46" font-size="11" fill="#dc2626" font-weight="600">Current — INCORRECT</text>
+
+  <!-- Incorrect blockquote: border-l-4 border-zinc-300 pl-3, no background, italic text-zinc-600 -->
+  <rect x="20" y="64" width="4" height="60" fill="#d4d4d8"/>
+  <!-- no background -->
+  <text x="32" y="88" font-size="14" fill="#52525b" font-style="italic">This is a quoted passage</text>
+  <text x="32" y="108" font-size="14" fill="#52525b" font-style="italic">from another source.</text>
+
+  <!-- Annotations -->
+  <text x="20" y="144" font-size="10" fill="#dc2626">border-l-4</text>
+  <text x="20" y="158" font-size="10" fill="#dc2626">border-zinc-300 (#d4d4d8)</text>
+  <text x="20" y="172" font-size="10" fill="#dc2626">No background tint</text>
+  <text x="20" y="186" font-size="10" fill="#dc2626">No violet accent connection</text>
+  <text x="20" y="200" font-size="10" fill="#dc2626">pl-3 (12px)</text>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- Divider -->
+  <!-- ═══════════════════════════════════════ -->
+  <line x1="310" y1="32" x2="310" y2="220" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="305" y="136" font-size="28" fill="#e4e4e7" font-weight="700" text-anchor="middle">→</text>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- RIGHT: Correct (v3.0) -->
+  <!-- ═══════════════════════════════════════ -->
+
+  <!-- Label -->
+  <rect x="330" y="32" width="130" height="20" rx="3" ry="3" fill="#f0fdf4"/>
+  <text x="338" y="46" font-size="11" fill="#15803d" font-weight="600">Correct — v3.0 Spec</text>
+
+  <!-- Correct blockquote: border-l-2 border-violet-200 bg-violet-50/40 pl-4 py-1 italic text-zinc-600 rounded-r-sm -->
+  <!-- Background: violet-50/40 blended with white ≈ #faf9ff -->
+  <rect x="332" y="64" width="284" height="64" fill="#faf9ff"/>
+  <!-- rounded-r-sm on right corners -->
+  <rect x="604" y="64" width="12" height="64" rx="4" ry="4" fill="#faf9ff"/>
+  <!-- violet-200 left border (2px) -->
+  <rect x="332" y="64" width="2" height="64" fill="#ddd6fe"/>
+  <!-- Text: italic text-zinc-600 pl-4 py-1 -->
+  <text x="348" y="88" font-size="14" fill="#52525b" font-style="italic">This is a quoted passage</text>
+  <text x="348" y="108" font-size="14" fill="#52525b" font-style="italic">from another source.</text>
+
+  <!-- Annotations -->
+  <text x="330" y="144" font-size="10" fill="#15803d">border-l-2</text>
+  <text x="330" y="158" font-size="10" fill="#15803d">border-violet-200 (#ddd6fe)</text>
+  <text x="330" y="172" font-size="10" fill="#15803d">bg-violet-50/40 (#faf9ff)</text>
+  <text x="330" y="186" font-size="10" fill="#15803d">Violet accent — design identity</text>
+  <text x="330" y="200" font-size="10" fill="#15803d">pl-4 (16px) · rounded-r-sm</text>
+
+  <!-- Color swatches legend -->
+  <text x="20" y="236" font-size="10" fill="#71717a">Color values: violet-200 = #ddd6fe · violet-50/40 on white ≈ #faf9ff · zinc-300 = #d4d4d8 · zinc-600 = #52525b</text>
+</svg>

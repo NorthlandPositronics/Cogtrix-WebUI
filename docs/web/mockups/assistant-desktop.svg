@@ -1,0 +1,362 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1900" viewBox="0 0 1440 1900" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Assistant Page (ServiceControlPanel + Tabs: Chats + Guardrails)
+  Page: /assistant
+  Design system version: 3.6 (2026-03-23)
+  Artboards: desktop 1440px — Frame 1 (Chats tab) y=0, Frame 2 (Guardrails tab) y=950
+  </desc>
+
+  <!-- ==================== FRAME 1: CHATS TAB ==================== -->
+  <rect x="0" y="0" width="1440" height="950" fill="#ffffff"/>
+  <text x="240" y="14" font-size="11" font-weight="500" fill="#71717a">Frame 1 — Assistant / Chats tab (default state)</text>
+
+  <!-- Sidebar F1 -->
+  <g id="layer-sidebar-f1">
+    <rect x="0" y="0" width="220" height="950" fill="#fafafa"/>
+    <line x1="220" y1="0" x2="220" y2="950" stroke="#e4e4e7" stroke-width="1"/>
+    <g transform="translate(16, 16)">
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="42" y="87" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    <text x="42" y="131" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    <!-- Assistant ACTIVE -->
+    <rect x="8" y="152" width="204" height="36" rx="6" fill="#f0fdfa"/>
+    <rect x="8" y="152" width="2" height="36" rx="1" fill="#0d9488"/>
+    <g transform="translate(18, 160)" fill="none" stroke="#0d9488" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="4" width="12" height="10" rx="2"/>
+      <circle cx="6" cy="9" r="1.5"/>
+      <circle cx="10" cy="9" r="1.5"/>
+      <line x1="8" y1="0" x2="8" y2="4"/>
+      <line x1="0" y1="9" x2="2" y2="9"/>
+      <line x1="14" y1="9" x2="16" y2="9"/>
+    </g>
+    <text x="42" y="175" font-size="14" font-weight="500" fill="#0d9488">Assistant</text>
+    <text x="42" y="219" font-size="14" font-weight="500" fill="#52525b">Settings</text>
+  </g>
+
+  <!-- Main content F1 -->
+  <g id="layer-content-f1">
+    <!-- Page header -->
+    <text x="248" y="50" font-size="24" font-weight="600" fill="#18181b">Assistant</text>
+
+    <!-- ServiceControlPanel -->
+    <g id="service-control-f1" transform="translate(248, 68)">
+      <rect width="1152" height="76" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="20" y="30" font-size="20" font-weight="600" fill="#18181b">Service Status</text>
+      <line x1="0" y1="46" x2="1152" y2="46" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Running badge -->
+      <g transform="translate(20, 56)">
+        <rect width="72" height="22" rx="11" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <circle cx="14" cy="11" r="4" fill="#16a34a"/>
+        <text x="24" y="15" font-size="12" font-weight="500" fill="#15803d" dominant-baseline="middle">Running</text>
+      </g>
+      <!-- Channels -->
+      <text x="104" y="71" font-size="14" fill="#71717a" dominant-baseline="middle">Channels: <tspan font-weight="500" fill="#18181b">telegram, whatsapp</tspan></text>
+      <!-- Uptime -->
+      <text x="390" y="71" font-size="14" fill="#71717a" dominant-baseline="middle">Uptime: <tspan font-weight="500" fill="#18181b">3d 12h 08m</tspan></text>
+      <text x="514" y="67" font-size="10" fill="#14b8a6" font-style="italic">live</text>
+      <!-- Stop button -->
+      <g transform="translate(1048, 56)">
+        <rect width="64" height="28" rx="6" fill="none" stroke="#fecaca" stroke-width="1.5"/>
+        <text x="32" y="18" font-size="13" font-weight="500" fill="#dc2626" text-anchor="middle" dominant-baseline="middle">Stop</text>
+      </g>
+    </g>
+
+    <!-- Tab bar -->
+    <g transform="translate(248, 158)">
+      <line x1="0" y1="36" x2="1152" y2="36" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Chats (active) -->
+      <text x="0" y="22" font-size="14" font-weight="500" fill="#18181b">Chats</text>
+      <line x1="0" y1="36" x2="40" y2="36" stroke="#18181b" stroke-width="2"/>
+      <text x="62" y="22" font-size="14" fill="#71717a">Scheduled</text>
+      <text x="146" y="22" font-size="14" fill="#71717a">Deferred</text>
+      <text x="224" y="22" font-size="14" fill="#71717a">Contacts</text>
+      <text x="302" y="22" font-size="14" fill="#71717a">Knowledge</text>
+      <text x="392" y="22" font-size="14" fill="#71717a">Guardrails</text>
+    </g>
+
+    <!-- AssistantChatList table -->
+    <g transform="translate(248, 210)">
+      <rect width="1152" height="280" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Header row -->
+      <rect width="1152" height="40" rx="10" fill="#fafafa"/>
+      <rect x="0" y="28" width="1152" height="12" fill="#fafafa"/>
+      <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="20" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHAT ID</text>
+      <text x="220" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHANNEL</text>
+      <text x="380" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">LAST MESSAGE</text>
+      <text x="800" y="24" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TIME</text>
+
+      <!-- Data rows -->
+      <g transform="translate(0, 40)">
+        <line x1="0" y1="48" x2="1152" y2="48" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="26" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_8472</text>
+        <text x="220" y="26" font-size="14" fill="#18181b">telegram</text>
+        <text x="380" y="26" font-size="14" fill="#18181b">Can you help me schedule a meeting for tomorrow?</text>
+        <text x="800" y="26" font-size="12" fill="#71717a">Today, 14:22</text>
+      </g>
+
+      <g transform="translate(0, 88)">
+        <line x1="0" y1="48" x2="1152" y2="48" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="26" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_1091</text>
+        <text x="220" y="26" font-size="14" fill="#18181b">whatsapp</text>
+        <text x="380" y="26" font-size="14" fill="#18181b">What's the weather forecast for this week?</text>
+        <text x="800" y="26" font-size="12" fill="#71717a">Today, 13:55</text>
+      </g>
+
+      <g transform="translate(0, 136)">
+        <line x1="0" y1="48" x2="1152" y2="48" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="26" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_3388</text>
+        <text x="220" y="26" font-size="14" fill="#18181b">telegram</text>
+        <text x="380" y="26" font-size="14" fill="#18181b">I need help writing a short bio for my LinkedIn profile.</text>
+        <text x="800" y="26" font-size="12" fill="#71717a">Today, 11:30</text>
+      </g>
+
+      <g transform="translate(0, 184)">
+        <line x1="0" y1="48" x2="1152" y2="48" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="26" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_7710</text>
+        <text x="220" y="26" font-size="14" fill="#18181b">telegram</text>
+        <text x="380" y="26" font-size="14" fill="#18181b">Translate this paragraph to French for me please</text>
+        <text x="800" y="26" font-size="12" fill="#71717a">Yesterday, 18:05</text>
+      </g>
+
+      <g transform="translate(0, 232)">
+        <text x="20" y="26" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_5522</text>
+        <text x="220" y="26" font-size="14" fill="#18181b">whatsapp</text>
+        <text x="380" y="26" font-size="14" fill="#18181b">What are the best Python libraries for data analysis?</text>
+        <text x="800" y="26" font-size="12" fill="#71717a">Yesterday, 09:14</text>
+      </g>
+    </g>
+
+    <!-- Service status annotations -->
+    <g transform="translate(248, 508)">
+      <rect width="480" height="100" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="12" y="20" font-size="11" font-weight="600" fill="#71717a">Service status additional states:</text>
+      <!-- Stopped state -->
+      <g transform="translate(12, 30)">
+        <rect width="76" height="20" rx="10" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+        <circle cx="14" cy="10" r="4" fill="#a1a1aa"/>
+        <text x="24" y="14" font-size="11" fill="#52525b" dominant-baseline="middle">Stopped</text>
+      </g>
+      <g transform="translate(100, 30)">
+        <rect width="60" height="20" rx="4" fill="#0d9488"/>
+        <text x="30" y="14" font-size="11" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">Start</text>
+      </g>
+      <!-- Stopping state -->
+      <text x="12" y="70" font-size="11" fill="#71717a">Stopping: outline "Stopping..." button with Loader2 spinner, disabled</text>
+      <text x="12" y="86" font-size="11" fill="#71717a">Error: AlertTriangle (text-red-600) + error text + Retry button</text>
+    </g>
+  </g>
+
+  <!-- ==================== FRAME 2: GUARDRAILS TAB ==================== -->
+  <rect x="0" y="950" width="1440" height="950" fill="#ffffff"/>
+  <text x="240" y="964" font-size="11" font-weight="500" fill="#71717a">Frame 2 — Assistant / Guardrails tab (GuardrailsPanel — PRIMARY FOCUS)</text>
+
+  <!-- Sidebar F2 -->
+  <g id="layer-sidebar-f2">
+    <rect x="0" y="950" width="220" height="950" fill="#fafafa"/>
+    <line x1="220" y1="950" x2="220" y2="1900" stroke="#e4e4e7" stroke-width="1"/>
+    <g transform="translate(16, 966)">
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="980" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="1006" x2="220" y2="1006" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="42" y="1037" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    <text x="42" y="1081" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    <!-- Assistant ACTIVE -->
+    <rect x="8" y="1102" width="204" height="36" rx="6" fill="#f0fdfa"/>
+    <rect x="8" y="1102" width="2" height="36" rx="1" fill="#0d9488"/>
+    <text x="42" y="1125" font-size="14" font-weight="500" fill="#0d9488">Assistant</text>
+    <text x="42" y="1169" font-size="14" font-weight="500" fill="#52525b">Settings</text>
+  </g>
+
+  <!-- Main content F2 -->
+  <g id="layer-content-f2">
+    <!-- Page header -->
+    <text x="248" y="1000" font-size="24" font-weight="600" fill="#18181b">Assistant</text>
+
+    <!-- ServiceControlPanel (running state, same as frame 1) -->
+    <g transform="translate(248, 1018)">
+      <rect width="1152" height="76" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="20" y="30" font-size="20" font-weight="600" fill="#18181b">Service Status</text>
+      <line x1="0" y1="46" x2="1152" y2="46" stroke="#e4e4e7" stroke-width="1"/>
+      <g transform="translate(20, 56)">
+        <rect width="72" height="22" rx="11" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <circle cx="14" cy="11" r="4" fill="#16a34a"/>
+        <text x="24" y="15" font-size="12" font-weight="500" fill="#15803d" dominant-baseline="middle">Running</text>
+      </g>
+      <text x="104" y="1071" font-size="14" fill="#71717a">Channels: <tspan font-weight="500" fill="#18181b">telegram, whatsapp</tspan></text>
+      <text x="390" y="1071" font-size="14" fill="#71717a">Uptime: <tspan font-weight="500" fill="#18181b">3d 12h 08m</tspan></text>
+      <g transform="translate(1048, 56)">
+        <rect width="64" height="28" rx="6" fill="none" stroke="#fecaca" stroke-width="1.5"/>
+        <text x="32" y="18" font-size="13" font-weight="500" fill="#dc2626" text-anchor="middle" dominant-baseline="middle">Stop</text>
+      </g>
+    </g>
+
+    <!-- Tab bar: Guardrails active -->
+    <g transform="translate(248, 1108)">
+      <line x1="0" y1="36" x2="1152" y2="36" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="0" y="22" font-size="14" fill="#71717a">Chats</text>
+      <text x="62" y="22" font-size="14" fill="#71717a">Scheduled</text>
+      <text x="146" y="22" font-size="14" fill="#71717a">Deferred</text>
+      <text x="224" y="22" font-size="14" fill="#71717a">Contacts</text>
+      <text x="302" y="22" font-size="14" fill="#71717a">Knowledge</text>
+      <!-- Guardrails (active) -->
+      <text x="392" y="22" font-size="14" font-weight="500" fill="#18181b">Guardrails</text>
+      <line x1="392" y1="36" x2="460" y2="36" stroke="#18181b" stroke-width="2"/>
+    </g>
+
+    <!-- GuardrailsPanel: Card 1 — Recent Violations -->
+    <g id="card-violations" transform="translate(248, 1160)">
+      <rect width="1152" height="290" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card header -->
+      <g transform="translate(0, 0)">
+        <text x="20" y="30" font-size="16" font-weight="600" fill="#18181b">Recent Violations</text>
+        <!-- "12 total" badge -->
+        <rect x="178" y="12" width="58" height="22" rx="11" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="207" y="26" font-size="12" fill="#18181b" text-anchor="middle" dominant-baseline="middle">12 total</text>
+        <line x1="0" y1="46" x2="1152" y2="46" stroke="#e4e4e7" stroke-width="1"/>
+      </g>
+
+      <!-- Table header -->
+      <g transform="translate(0, 46)">
+        <rect width="1152" height="34" fill="#fafafa"/>
+        <line x1="0" y1="34" x2="1152" y2="34" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="20" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TIME</text>
+        <text x="180" y="20" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHAT ID</text>
+        <text x="360" y="20" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHANNEL</text>
+        <text x="520" y="20" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">TYPE</text>
+        <text x="700" y="20" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">DETAIL</text>
+      </g>
+
+      <!-- Row 1: rate_limit -->
+      <g transform="translate(0, 80)">
+        <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-size="14" fill="#18181b">Mar 7, 14:23</text>
+        <text x="180" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_8472</text>
+        <text x="360" y="24" font-size="14" fill="#18181b">telegram</text>
+        <rect x="520" y="8" width="72" height="22" rx="11" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <text x="556" y="22" font-size="11" font-weight="500" fill="#b45309" text-anchor="middle" dominant-baseline="middle">rate limit</text>
+        <text x="700" y="24" font-size="14" fill="#18181b">Too many requests in 60s window</text>
+      </g>
+
+      <!-- Row 2: content_filter -->
+      <g transform="translate(0, 120)">
+        <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-size="14" fill="#18181b">Mar 7, 13:55</text>
+        <text x="180" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_1091</text>
+        <text x="360" y="24" font-size="14" fill="#18181b">whatsapp</text>
+        <rect x="520" y="8" width="88" height="22" rx="11" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+        <text x="564" y="22" font-size="11" font-weight="500" fill="#b91c1c" text-anchor="middle" dominant-baseline="middle">content filter</text>
+        <text x="700" y="24" font-size="14" fill="#18181b">Profanity detected in message</text>
+      </g>
+
+      <!-- Row 3: spam (orange) -->
+      <g transform="translate(0, 160)">
+        <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-size="14" fill="#18181b">Mar 7, 11:12</text>
+        <text x="180" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_3388</text>
+        <text x="360" y="24" font-size="14" fill="#18181b">telegram</text>
+        <rect x="520" y="8" width="44" height="22" rx="11" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+        <text x="542" y="22" font-size="11" font-weight="500" fill="#c2410c" text-anchor="middle" dominant-baseline="middle">spam</text>
+        <text x="700" y="24" font-size="14" fill="#18181b">Repeated identical messages</text>
+      </g>
+
+      <!-- Row 4: rate_limit -->
+      <g transform="translate(0, 200)">
+        <line x1="0" y1="40" x2="1152" y2="40" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-size="14" fill="#18181b">Mar 6, 23:41</text>
+        <text x="180" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_8472</text>
+        <text x="360" y="24" font-size="14" fill="#18181b">telegram</text>
+        <rect x="520" y="8" width="72" height="22" rx="11" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <text x="556" y="22" font-size="11" font-weight="500" fill="#b45309" text-anchor="middle" dominant-baseline="middle">rate limit</text>
+        <text x="700" y="24" font-size="14" fill="#18181b">Too many requests in 60s window</text>
+      </g>
+
+      <!-- Row 5: content_filter -->
+      <g transform="translate(0, 240)">
+        <text x="20" y="24" font-size="14" fill="#18181b">Mar 6, 18:05</text>
+        <text x="180" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_7710</text>
+        <text x="360" y="24" font-size="14" fill="#18181b">telegram</text>
+        <rect x="520" y="8" width="88" height="22" rx="11" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+        <text x="564" y="22" font-size="11" font-weight="500" fill="#b91c1c" text-anchor="middle" dominant-baseline="middle">content filter</text>
+        <text x="700" y="24" font-size="14" fill="#18181b">Off-topic promotion link</text>
+      </g>
+    </g>
+
+    <!-- GuardrailsPanel: Card 2 — Blacklisted Chats -->
+    <g id="card-blacklist" transform="translate(248, 1474)">
+      <rect width="1152" height="192" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card header -->
+      <text x="20" y="30" font-size="16" font-weight="600" fill="#18181b">Blacklisted Chats</text>
+      <!-- Count badge "3" -->
+      <rect x="164" y="12" width="28" height="22" rx="11" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="178" y="26" font-size="12" fill="#18181b" text-anchor="middle" dominant-baseline="middle">3</text>
+      <line x1="0" y1="46" x2="1152" y2="46" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Table header -->
+      <g transform="translate(0, 46)">
+        <rect width="1152" height="34" fill="#fafafa"/>
+        <line x1="0" y1="34" x2="1152" y2="34" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="20" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.05em">CHAT ID</text>
+      </g>
+
+      <!-- Row 1 -->
+      <g transform="translate(0, 80)">
+        <line x1="0" y1="44" x2="1152" y2="44" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_8472</text>
+        <!-- Trash button: h-11 w-11 text-red-600 ghost -->
+        <g transform="translate(1097, 6)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="0,3 14,3"/>
+          <path d="M2 3 L2 12 Q2 14 4 14 L10 14 Q12 14 12 12 L12 3"/>
+          <path d="M5 3 L5 1 L9 1 L9 3"/>
+        </g>
+      </g>
+
+      <!-- Row 2 -->
+      <g transform="translate(0, 124)">
+        <line x1="0" y1="44" x2="1152" y2="44" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="20" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_1091</text>
+        <g transform="translate(1097, 6)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="0,3 14,3"/>
+          <path d="M2 3 L2 12 Q2 14 4 14 L10 14 Q12 14 12 12 L12 3"/>
+          <path d="M5 3 L5 1 L9 1 L9 3"/>
+        </g>
+      </g>
+
+      <!-- Row 3 -->
+      <g transform="translate(0, 148)">
+        <text x="20" y="24" font-family="'Geist Mono', ui-monospace, monospace" font-size="13" fill="#18181b">user_3388</text>
+        <g transform="translate(1097, 6)" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="0,3 14,3"/>
+          <path d="M2 3 L2 12 Q2 14 4 14 L10 14 Q12 14 12 12 L12 3"/>
+          <path d="M5 3 L5 1 L9 1 L9 3"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Annotations: empty state + confirm dialog -->
+    <g transform="translate(248, 1684)">
+      <rect width="560" height="100" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="12" y="20" font-size="11" font-weight="600" fill="#71717a">GuardrailsPanel annotations:</text>
+      <text x="12" y="38" font-size="11" fill="#71717a">Empty blacklist state: "No blacklisted chats." — text-sm text-zinc-500</text>
+      <text x="12" y="54" font-size="11" fill="#71717a">Confirm dialog (Trash click): Dialog max-w-md, title "Remove from blacklist",</text>
+      <text x="12" y="70" font-size="11" fill="#71717a">  description + Cancel (outline) + Remove (destructive) buttons</text>
+      <text x="12" y="86" font-size="11" fill="#71717a">Loading state: 3 skeleton rows h-8 w-full. Error: text-red-600 + Retry button.</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DESIGN BRIEF — Collapsible Sidebar: Collapsed State (Icon Rail)
+
+  When collapsed, the sidebar narrows to a 48px icon-rail. It never fully
+  disappears — navigation remains accessible at all times without requiring
+  the user to hunt for a hidden toggle. The C-mark logomark occupies the
+  top of the rail. Below it, the five nav icons are stacked vertically,
+  centered within the 48px column. Each icon retains its teal active state.
+  The PanelLeftOpen toggle button occupies the logical bottom-of-logo-bar
+  position (same y-coordinate as in the expanded state), so the user's
+  muscle memory is consistent across states.
+
+  The footer collapses to show only the avatar circle — username, badge,
+  and logout button are hidden. The logout action becomes available via a
+  tooltip or expand-then-click affordance; this is an acceptable trade-off
+  for the reduced rail width.
+
+  Hover behavior on the icon rail: hovering any nav icon shows a tooltip
+  with the page name (standard shadcn/ui Tooltip, portal-rendered). This
+  satisfies the "navigation always accessible" requirement without requiring
+  any additional persistent UI surface.
+
+  Transition: width animates 200ms ease-in-out from 220px to 48px.
+  Nav labels fade to opacity-0 simultaneously with a 100ms delay so the
+  label disappears before the sidebar has fully narrowed.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  width="900"
+  height="600"
+  font-family="ui-sans-serif, Inter, system-ui, sans-serif"
+>
+  <desc>
+    Component: Sidebar — Collapsed state (48px icon rail)
+    Page: All authenticated pages (AppShell)
+    Design system version: 3.14 (2026-03-25)
+    Artboards: desktop 1440px (shown at 900px viewport representation)
+  </desc>
+
+  <!-- ─── Artboard background ─── -->
+  <rect width="900" height="600" fill="#f4f4f5"/>
+
+  <!-- ══════════════════════════════════════════════
+       LAYER: SIDEBAR — collapsed to 48px icon rail
+       ══════════════════════════════════════════════ -->
+  <g id="layer-sidebar">
+    <!-- Sidebar background: bg-zinc-50, now only 48px wide -->
+    <rect x="0" y="0" width="48" height="600" fill="#fafafa"/>
+    <!-- Right border: border-zinc-200 -->
+    <line x1="48" y1="0" x2="48" y2="600" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Logo bar (h-14 = 56px) — just the C-mark, centered ── -->
+    <g id="sidebar-logo-bar-collapsed">
+      <!-- C-mark logo centered in 48px rail: x = (48-22)/2 = 13, y = (56-22)/2 = 17 -->
+      <g transform="translate(13, 17)">
+        <path
+          d="M 21.071 6.929 A 10 10 0 1 0 21.071 21.071"
+          fill="none"
+          stroke="#0d9488"
+          stroke-width="3.5"
+          stroke-linecap="round"
+        />
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+
+    <!-- Separator: border-zinc-200 -->
+    <line x1="0" y1="56" x2="48" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Toggle button: PanelLeftOpen — sits just below separator, centered ── -->
+    <!-- h-11 w-11, ghost, text-zinc-500, centered in 48px: x = (48-44)/2 = 2 -->
+    <g id="toggle-button-expand" transform="translate(2, 60)">
+      <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+      <!-- PanelLeftOpen icon: panel outline + right-pointing arrow -->
+      <!-- Panel body outline -->
+      <rect x="10" y="10" width="24" height="24" rx="3" fill="none" stroke="#71717a" stroke-width="1.5"/>
+      <!-- Left vertical bar (panel left edge) -->
+      <line x1="16" y1="14" x2="16" y2="30" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Chevron right arrow (pointing right, indicating expand) -->
+      <polyline points="19,19 22,22 19,25" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Arrow shaft -->
+      <line x1="22" y1="22" x2="14" y2="22" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- ── Nav icons — stacked, centered, icon-only ── -->
+    <!-- Each icon container: 44×44, centered in 48px → x=2 -->
+    <!-- Starting y: 56 (separator) + 4 (gap) + 44 (toggle) + 4 (gap) + 8 (nav top padding) = 116 -->
+
+    <g id="sidebar-nav-collapsed">
+
+      <!-- Nav 1: Sessions (ACTIVE) — bg-teal-50, teal-600 left accent -->
+      <g id="nav-sessions-icon-active" transform="translate(2, 118)">
+        <!-- Active background: bg-teal-50, rounded-md -->
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="#f0fdfa"/>
+        <!-- Active left accent bar: w-0.5 h-full bg-teal-600 -->
+        <rect x="0" y="0" width="2" height="44" rx="1" fill="#0d9488"/>
+        <!-- MessageSquare icon centered: h-4 w-4 = 16×16, centered in 44px = (44-16)/2=14 -->
+        <g transform="translate(14, 14)">
+          <rect x="0" y="0" width="16" height="16" rx="2" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+          <line x1="3.5" y1="5.5" x2="12.5" y2="5.5" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="3.5" y1="8.5" x2="9" y2="8.5" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M 2 14 L 4 11.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- Tooltip for active item: "Sessions" -->
+      <!-- Tooltips are portal-rendered in runtime; shown here for documentation -->
+      <g id="tooltip-sessions-demo" transform="translate(56, 129)">
+        <rect x="0" y="0" width="65" height="22" rx="5" fill="#18181b" opacity="0.9"/>
+        <text x="32.5" y="11" font-size="11" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">Sessions</text>
+        <!-- Arrow pointing left -->
+        <polygon points="-5,11 0,8 0,14" fill="#18181b" opacity="0.9"/>
+      </g>
+
+      <!-- Nav 2: Documents — inactive -->
+      <g id="nav-documents-icon" transform="translate(2, 170)">
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+        <g transform="translate(14, 14)">
+          <path d="M 3 2 L 10 2 L 13 5 L 13 14 L 3 14 Z" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M 10 2 L 10 5 L 13 5" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="5.5" y1="8" x2="10.5" y2="8" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="5.5" y1="11" x2="9" y2="11" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- Nav 3: Assistant — inactive -->
+      <g id="nav-assistant-icon" transform="translate(2, 222)">
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+        <g transform="translate(14, 14)">
+          <rect x="2" y="4" width="12" height="10" rx="2" fill="none" stroke="#a1a1aa" stroke-width="1.5"/>
+          <circle cx="6" cy="9" r="1.2" fill="#a1a1aa"/>
+          <circle cx="10" cy="9" r="1.2" fill="#a1a1aa"/>
+          <line x1="8" y1="4" x2="8" y2="2" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="8" cy="1.5" r="0.8" fill="#a1a1aa"/>
+          <line x1="2" y1="12" x2="0" y2="14" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="12" x2="16" y2="14" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- Nav 4: Settings — inactive -->
+      <g id="nav-settings-icon" transform="translate(2, 274)">
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+        <g transform="translate(14, 14)">
+          <circle cx="8" cy="8" r="2.5" fill="none" stroke="#a1a1aa" stroke-width="1.5"/>
+          <path d="M 8 1 L 9 3 L 11 2.5 L 12.5 4 L 12 6 L 14 7 L 14 9 L 12 10 L 12.5 12 L 11 13.5 L 9 13 L 8 15 L 7 13 L 5 13.5 L 3.5 12 L 4 10 L 2 9 L 2 7 L 4 6 L 3.5 4 L 5 2.5 L 7 3 Z" fill="none" stroke="#a1a1aa" stroke-width="1.3"/>
+        </g>
+      </g>
+
+      <!-- Nav 5: Admin — inactive -->
+      <g id="nav-admin-icon" transform="translate(2, 326)">
+        <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+        <g transform="translate(14, 14)">
+          <path d="M 8 1 L 14 4 L 14 9 C 14 12.5 11.5 15 8 15.5 C 4.5 15 2 12.5 2 9 L 2 4 Z" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M 5.5 8 L 7 9.5 L 10.5 6" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Separator before footer -->
+    <line x1="0" y1="488" x2="48" y2="488" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ── Footer collapsed: avatar only, centered ── -->
+    <!-- h-[68px] footer at y=532, avatar centered in 48px -->
+    <g id="sidebar-footer-collapsed" transform="translate(0, 532)">
+      <!-- Avatar: h-8 w-8, centered in 48px = (48-32)/2 = 8 -->
+      <rect x="8" y="18" width="32" height="32" rx="16" fill="#f0fdfa"/>
+      <text x="24" y="34" font-size="11" font-weight="600" fill="#0f766e" text-anchor="middle" dominant-baseline="middle">A</text>
+    </g>
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       LAYER: HEADER (SessionHeader, now starts at x=48)
+       ══════════════════════════════════════════════ -->
+  <g id="layer-header">
+    <!-- Header background: bg-white, border-b border-zinc-200, h-14 -->
+    <rect x="48" y="0" width="852" height="56" fill="#ffffff"/>
+    <line x1="48" y1="56" x2="900" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Session name: text-sm font-medium text-zinc-900 -->
+    <text x="64" y="28" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="middle">Project Alpha — GPT-4o</text>
+
+    <!-- Agent state badge: thinking -->
+    <g transform="translate(254, 19)">
+      <rect x="0" y="0" width="70" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <circle cx="11" cy="10" r="3.5" fill="#2dd4bf"/>
+      <text x="36" y="10" font-size="10" font-weight="500" fill="#0f766e" text-anchor="middle" dominant-baseline="middle">thinking</text>
+    </g>
+
+    <!-- Header right-side buttons -->
+    <g transform="translate(799, 7)">
+      <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+      <path d="M 12 8 C 10 8 8 10 8 12 C 8 15 10 16 10 18 L 14 18 L 14 8 Z" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 14 8 C 16 8 18 10 18 12 C 18 15 16 16 16 18 L 14 18 L 14 8 Z" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 10 20 L 18 20" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 11 22 L 17 22" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(847, 7)">
+      <rect x="0" y="0" width="44" height="44" rx="6" fill="none"/>
+      <path d="M 18 8 C 15.5 5.5 11 6 9 9 C 7.5 11.5 8.5 14.5 11 16 L 8 19 C 7 20 7 21.5 8 22.5 C 9 23.5 10.5 23.5 11.5 22.5 L 14.5 19.5 C 16.5 20.5 19 19.5 20.5 17.5 C 22 15 21.5 11.5 19.5 9.5" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="9.5" cy="21" r="1.2" fill="#71717a"/>
+    </g>
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       LAYER: CONTENT (main chat area — expanded width)
+       ══════════════════════════════════════════════ -->
+  <g id="layer-content">
+    <rect x="48" y="56" width="852" height="488" fill="#ffffff"/>
+
+    <!-- User message bubble -->
+    <g transform="translate(555, 80)">
+      <rect x="0" y="0" width="280" height="52" rx="12" fill="#f0fdfa"/>
+      <text x="16" y="20" font-size="13" fill="#18181b" dominant-baseline="hanging">Can you analyze this dataset and</text>
+      <text x="16" y="37" font-size="13" fill="#18181b" dominant-baseline="hanging">identify any anomalies?</text>
+    </g>
+    <text x="835" y="140" font-size="11" fill="#71717a" text-anchor="end">2:34 PM</text>
+
+    <!-- Tool-use indicator -->
+    <g transform="translate(64, 156)">
+      <rect x="0" y="0" width="160" height="24" rx="12" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+      <circle cx="14" cy="12" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="11 6" stroke-linecap="round"/>
+      <text x="24" y="12" font-size="11" fill="#71717a" dominant-baseline="middle">Analyzing dataset…</text>
+    </g>
+
+    <!-- Assistant message bubble -->
+    <g transform="translate(64, 196)">
+      <rect x="0" y="0" width="28" height="28" rx="14" fill="#f0fdfa"/>
+      <g transform="translate(4, 4)">
+        <path d="M 16.071 3.929 A 7 7 0 1 0 16.071 16.071" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="16.071" cy="3.929" r="1.5" fill="#0d9488"/>
+        <circle cx="16.071" cy="16.071" r="1.2" fill="#0d9488"/>
+      </g>
+      <text x="40" y="5" font-size="13" font-weight="500" fill="#18181b" dominant-baseline="hanging">Cogtrix</text>
+      <g transform="translate(40, 26)">
+        <text x="0" y="0" font-size="13" fill="#18181b" dominant-baseline="hanging">I've analyzed the dataset. Here are the key findings:</text>
+        <text x="0" y="22" font-size="13" fill="#18181b" dominant-baseline="hanging">• Columns A–C show a 23% null rate above the expected</text>
+        <text x="0" y="39" font-size="13" fill="#18181b" dominant-baseline="hanging">  5% threshold — likely a data pipeline gap.</text>
+        <text x="0" y="61" font-size="13" fill="#18181b" dominant-baseline="hanging">• Row 4,821 contains an outlier in column F (value: 99,999)</text>
+        <text x="0" y="78" font-size="13" fill="#18181b" dominant-baseline="hanging">  which is 14σ from the mean.</text>
+        <rect x="0" y="100" width="3" height="14" rx="1.5" fill="#0d9488" opacity="0.9"/>
+        <text x="8" y="107" font-size="11" fill="#71717a" dominant-baseline="middle">streaming…</text>
+      </g>
+    </g>
+
+    <!-- Memory token usage indicator -->
+    <g transform="translate(64, 420)">
+      <text x="0" y="0" font-size="11" fill="#71717a" dominant-baseline="hanging">Context:</text>
+      <rect x="52" y="2" width="80" height="7" rx="3.5" fill="#f4f4f5"/>
+      <rect x="52" y="2" width="38" height="7" rx="3.5" fill="#2dd4bf"/>
+      <text x="138" y="0" font-size="11" fill="#71717a" dominant-baseline="hanging">12,400 / 32,000 tokens</text>
+    </g>
+
+    <!-- Message input bar -->
+    <rect x="48" y="520" width="852" height="80" fill="#ffffff"/>
+    <line x1="48" y1="520" x2="900" y2="520" stroke="#e4e4e7" stroke-width="1"/>
+    <rect x="64" y="532" width="695" height="44" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="80" y="554" font-size="13" fill="#a1a1aa" dominant-baseline="middle">Message Cogtrix…</text>
+    <rect x="771" y="532" width="44" height="44" rx="8" fill="#0d9488"/>
+    <path d="M 789 556 L 793 548 L 797 556" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="793" y1="548" x2="793" y2="562" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Hover preview: Documents icon with tooltip (shown in second position) -->
+    <!-- Illustrating the hover-tooltip pattern for the icon rail -->
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       HOVER STATE PREVIEW (separate inset)
+       Shows Documents nav item in hover state with tooltip
+       ══════════════════════════════════════════════ -->
+  <g id="hover-state-preview" transform="translate(2, 170)">
+    <!-- Hovered nav item background: hover:bg-zinc-100 -->
+    <rect x="0" y="0" width="44" height="44" rx="6" fill="#f4f4f5"/>
+    <!-- FileText icon: hover color text-zinc-900 -->
+    <g transform="translate(14, 14)">
+      <path d="M 3 2 L 10 2 L 13 5 L 13 14 L 3 14 Z" fill="none" stroke="#18181b" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M 10 2 L 10 5 L 13 5" fill="none" stroke="#18181b" stroke-width="1.5" stroke-linejoin="round"/>
+      <line x1="5.5" y1="8" x2="10.5" y2="8" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="5.5" y1="11" x2="9" y2="11" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <!-- Tooltip: "Documents" -->
+    <g transform="translate(52, 9)">
+      <rect x="0" y="0" width="74" height="22" rx="5" fill="#18181b" opacity="0.9"/>
+      <text x="37" y="11" font-size="11" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">Documents</text>
+      <polygon points="-5,11 0,8 0,14" fill="#18181b" opacity="0.9"/>
+    </g>
+  </g>
+
+  <!-- ══════════════════════════════════════════════
+       ANNOTATIONS
+       ══════════════════════════════════════════════ -->
+
+  <!-- Annotation: toggle button (expand) -->
+  <g>
+    <line x1="52" y1="82" x2="48" y2="82" stroke="#6366f1" stroke-width="1" stroke-dasharray="3 2"/>
+    <rect x="52" y="70" width="148" height="22" rx="4" fill="#6366f1" opacity="0.08"/>
+    <text x="126" y="81" font-size="10" fill="#4f46e5" text-anchor="middle" dominant-baseline="middle">Toggle: PanelLeftOpen (expand)</text>
+  </g>
+
+  <!-- Annotation: icon rail width -->
+  <line x1="0" y1="580" x2="48" y2="580" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="0" y1="575" x2="0" y2="585" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="48" y1="575" x2="48" y2="585" stroke="#94a3b8" stroke-width="1"/>
+  <text x="24" y="595" font-size="10" fill="#64748b" text-anchor="middle">48px rail</text>
+
+  <!-- Annotation: expanded content area -->
+  <line x1="48" y1="580" x2="900" y2="580" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="900" y1="575" x2="900" y2="585" stroke="#94a3b8" stroke-width="1"/>
+  <text x="474" y="595" font-size="10" fill="#64748b" text-anchor="middle">Main content (flex-1, wider when collapsed)</text>
+
+  <!-- Annotation: tooltip pattern -->
+  <g>
+    <line x1="148" y1="192" x2="130" y2="185" stroke="#6366f1" stroke-width="1" stroke-dasharray="3 2"/>
+    <circle cx="149" cy="192" r="2" fill="#6366f1"/>
+    <rect x="148" y="182" width="155" height="22" rx="4" fill="#6366f1" opacity="0.08"/>
+    <text x="225" y="193" font-size="10" fill="#4f46e5" text-anchor="middle" dominant-baseline="middle">Tooltip on hover (portal-rendered)</text>
+  </g>
+
+  <!-- Legend box -->
+  <rect x="670" y="70" width="215" height="115" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="684" y="86" font-size="11" font-weight="600" fill="#18181b" dominant-baseline="middle">Legend</text>
+  <!-- Active nav icon -->
+  <rect x="684" y="96" width="10" height="10" rx="2" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <rect x="684" y="96" width="2" height="10" rx="1" fill="#0d9488"/>
+  <text x="698" y="101" font-size="10" fill="#52525b" dominant-baseline="middle">Active: bg-teal-50 + w-0.5 bar</text>
+  <!-- Hover nav icon -->
+  <rect x="684" y="114" width="10" height="10" rx="2" fill="#f4f4f5"/>
+  <text x="698" y="119" font-size="10" fill="#52525b" dominant-baseline="middle">Hover: bg-zinc-100</text>
+  <!-- Inactive nav icon -->
+  <rect x="684" y="132" width="10" height="10" rx="2" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="698" y="137" font-size="10" fill="#52525b" dominant-baseline="middle">Inactive: transparent</text>
+  <!-- Transition note -->
+  <text x="684" y="152" font-size="10" fill="#52525b" dominant-baseline="middle">Transition: 200ms ease-in-out</text>
+  <text x="684" y="167" font-size="10" fill="#52525b" dominant-baseline="middle">Labels: opacity-0, 100ms delay</text>
+</svg>

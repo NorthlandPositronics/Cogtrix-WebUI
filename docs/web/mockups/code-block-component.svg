@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <desc>
+  SUPERSEDED — Pre-teal era, violet accent. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  </desc>
+  <rect width="640" height="420" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="20" y="24" font-size="11" fill="#71717a" font-weight="500">CodeBlock component — code-block-component.svg — Design System v3.0</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- STATE A: Default -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <text x="20" y="52" font-size="12" fill="#18181b" font-weight="600">State A — Default</text>
+
+  <!-- Outer wrapper: rounded-md border border-zinc-200 bg-zinc-50 -->
+  <rect x="20" y="62" width="560" height="144" rx="6" ry="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Header row: flex items-center justify-between px-3 pt-2 pb-1 -->
+  <!-- Language label: text-xs font-medium text-zinc-400 font-mono -->
+  <text x="32" y="82" font-size="11" font-family="ui-monospace, monospace" font-weight="500" fill="#a1a1aa">python</text>
+
+  <!-- Copy button: ghost 24×24, Clipboard icon 14px (w-3.5 h-3.5), text-zinc-400 -->
+  <rect x="548" y="64" width="24" height="24" rx="4" ry="4" fill="transparent"/>
+  <!-- Clipboard icon (simplified) -->
+  <g transform="translate(553, 69)" stroke="#a1a1aa" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Back page -->
+    <rect x="2" y="2" width="10" height="12" rx="1.5"/>
+    <!-- Front page -->
+    <rect x="0" y="0" width="10" height="12" rx="1.5" fill="#fafafa"/>
+    <!-- Clip at top -->
+    <path d="M3.5 0 L3.5 -1 Q5 -2.5 6.5 -1 L6.5 0" stroke-width="1.2"/>
+  </g>
+
+  <!-- Annotation for copy button -->
+  <text x="516" y="74" font-size="9" fill="#a1a1aa">ghost btn 24×24</text>
+  <text x="516" y="84" font-size="9" fill="#a1a1aa">Clipboard 14px</text>
+  <text x="516" y="94" font-size="9" fill="#a1a1aa">text-zinc-400</text>
+
+  <!-- Header divider (implied by pb-1) -->
+  <line x1="20" y1="92" x2="580" y2="92" stroke="#e4e4e7" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.5"/>
+
+  <!-- Code content: overflow-x-auto px-3 pb-3 pt-0 font-mono text-sm leading-relaxed -->
+  <text font-family="ui-monospace, monospace" font-size="13" fill="#18181b">
+    <tspan x="32" y="114"><tspan fill="#7c3aed">def</tspan> greet(name: <tspan fill="#0e7490">str</tspan>) -&gt; <tspan fill="#0e7490">str</tspan>:</tspan>
+    <tspan x="32" dy="22">    <tspan fill="#15803d">return</tspan> f<tspan fill="#b45309">"Hello, {name}!"</tspan></tspan>
+    <tspan x="32" dy="22"> </tspan>
+    <tspan x="32" dy="0"><tspan fill="#7c3aed">print</tspan>(greet(<tspan fill="#b45309">"world"</tspan>))</tspan>
+  </text>
+
+  <!-- Dimension annotations -->
+  <line x1="584" y1="62" x2="604" y2="62" stroke="#e4e4e7" stroke-width="1"/>
+  <line x1="584" y1="206" x2="604" y2="206" stroke="#e4e4e7" stroke-width="1"/>
+  <line x1="594" y1="62" x2="594" y2="206" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="608" y="134" font-size="9" fill="#a1a1aa" writing-mode="horizontal-tb">144px</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- STATE B: Copied feedback -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <text x="20" y="230" font-size="12" fill="#18181b" font-weight="600">State B — After Copy (2 second feedback)</text>
+
+  <!-- Same outer wrapper -->
+  <rect x="20" y="240" width="560" height="144" rx="6" ry="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Language label (unchanged) -->
+  <text x="32" y="260" font-size="11" font-family="ui-monospace, monospace" font-weight="500" fill="#a1a1aa">python</text>
+
+  <!-- Copy button: now shows Check icon in text-green-600 -->
+  <rect x="548" y="242" width="24" height="24" rx="4" ry="4" fill="transparent"/>
+  <!-- Check icon (14px) in green-600 -->
+  <g transform="translate(553, 247)" stroke="#16a34a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="1,7 4.5,10.5 13,2"/>
+  </g>
+
+  <!-- "Copied!" tooltip/label -->
+  <rect x="490" y="244" width="52" height="18" rx="3" ry="3" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="516" y="257" font-size="10" fill="#16a34a" font-weight="500" text-anchor="middle">Copied!</text>
+
+  <!-- Annotation -->
+  <text x="516" y="302" font-size="9" fill="#a1a1aa">Check icon</text>
+  <text x="516" y="312" font-size="9" fill="#a1a1aa">text-green-600</text>
+  <text x="516" y="322" font-size="9" fill="#16a34a">"Copied!" label</text>
+  <text x="516" y="332" font-size="9" fill="#a1a1aa">2s then revert</text>
+
+  <!-- Code content (same) -->
+  <text font-family="ui-monospace, monospace" font-size="13" fill="#18181b">
+    <tspan x="32" dy="0" y="292"><tspan fill="#7c3aed">def</tspan> greet(name: <tspan fill="#0e7490">str</tspan>) -&gt; <tspan fill="#0e7490">str</tspan>:</tspan>
+    <tspan x="32" dy="22">    <tspan fill="#15803d">return</tspan> f<tspan fill="#b45309">"Hello, {name}!"</tspan></tspan>
+    <tspan x="32" dy="22"> </tspan>
+    <tspan x="32" dy="0"><tspan fill="#7c3aed">print</tspan>(greet(<tspan fill="#b45309">"world"</tspan>))</tspan>
+  </text>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- INTERACTION STATES row -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <text x="20" y="410" font-size="11" fill="#71717a">Hover: copy button text-zinc-600 (darker) · Focus: ring-2 ring-zinc-400 ring-offset-2 · No other state changes</text>
+</svg>

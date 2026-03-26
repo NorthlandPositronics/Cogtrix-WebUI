@@ -1,0 +1,264 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  SUPERSEDED — Pre-teal era, violet accent. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  Component: Delete Session Confirmation Dialog
+  Page: /sessions (SessionsPage), /sessions/:id (SessionPage)
+  Design system version: 2.3 (2026-03-09)
+  Artboards: desktop 960px (corrective reference mockup — two states side by side)
+  Notes: Corrective reference for ConfirmDialog. Footer follows NewSessionDialog pattern exactly.
+         DialogFooter DOM order [Cancel, Delete] renders as Cancel-left Delete-right at sm+ breakpoint.
+         Both buttons min-h-11 (44px). Spinner (Loader2 16x16) appears LEFT of Delete text in pending state.
+  </desc>
+
+  <!--
+    LAYOUT
+    ──────
+    960 × 600px artboard.
+    Left half (0–480px):  Default state — dialog at rest.
+    Right half (480–960px): Pending state — delete mutation in flight.
+
+    DIALOG GEOMETRY
+    ───────────────
+    Width : 448px (max-w-md)
+    Height: 240px (p-6 top/bottom = 48px; header 20px icon + gap-2 + desc 38px = 68px; gap-4 = 16px; footer 44px; total ≈ 48+68+16+44 = 176px content + 48px padding = 240px – works)
+    Left half centering : x = (480 − 448) / 2 = 16,  y = (600 − 240) / 2 = 180
+    Right half centering: x = 480 + 16 = 496,         y = 180
+
+    FOOTER BUTTON POSITIONS (within dialog, flush right at x = 448 − 24 = 424)
+    ────────────────────────────────────────────────────────────────────────────
+    Default state  : Cancel w=88 starts at x=264; Delete w=72 starts at x=360; gap=8 between.
+                     Right edge of Delete = 360+72 = 432 — slightly inside 424; correct: flush = 424.
+                     Delete  x = 424 − 72  = 352,  Cancel x = 352 − 8 − 88 = 256.
+
+    Pending state  : Delete grows to w=96 (spinner+gap+text).
+                     Delete  x = 424 − 96  = 328,  Cancel x = 328 − 8 − 88 = 232.
+
+    Footer top y   : 240 − 24 (p-6 bottom) − 44 (button height) = 172.
+  -->
+
+  <!-- Page background: bg-zinc-50 app shell -->
+  <rect width="960" height="600" fill="#fafafa"/>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       STATE: DEFAULT (left half, x 0–480)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <g id="state-default">
+
+    <!-- Backdrop: bg-black/50 -->
+    <rect x="0" y="0" width="480" height="600" fill="rgba(0,0,0,0.50)"/>
+
+    <!-- Dialog panel -->
+    <g id="layer-dialog-default" transform="translate(16, 180)">
+
+      <!-- Surface: bg-white, rounded-lg (8px), border border-zinc-200 (#e4e4e7) -->
+      <!-- Shadow-lg: thin offset layer for depth impression -->
+      <rect x="2" y="4" width="448" height="240" rx="8" fill="rgba(0,0,0,0.08)"/>
+      <rect width="448" height="240" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Close button: absolute top-4 right-4 (16px from each edge)
+           X icon, 12×12 visual, opacity-70 default -->
+      <g transform="translate(416, 16)" opacity="0.70">
+        <line x1="0" y1="0" x2="12" y2="12" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="12" y1="0" x2="0" y2="12" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+
+      <!-- ── DialogHeader ──────────────────────────────────────────────────
+           Starts at x=24 (p-6), y=24 (p-6)
+           flex flex-col gap-2 sm:text-left
+      -->
+
+      <!-- Title row: flex items-center gap-2 -->
+      <!-- AlertTriangle icon: 20×20, stroke text-red-600 (#dc2626) -->
+      <g transform="translate(24, 24)">
+        <path d="M10 1.5 L18.5 17.5 L1.5 17.5 Z"
+              fill="none" stroke="#dc2626" stroke-width="1.75"
+              stroke-linejoin="round" stroke-linecap="round"/>
+        <line x1="10" y1="7.5" x2="10" y2="12.5"
+              stroke="#dc2626" stroke-width="1.75" stroke-linecap="round"/>
+        <circle cx="10" cy="15" r="0.9" fill="#dc2626"/>
+      </g>
+
+      <!-- Title text: text-lg (18px) font-semibold (600) text-zinc-900 (#18181b)
+           Vertically centered with the 20px icon: icon top=24, center=34.
+           SVG text y = baseline. For 18px with cap-height ~0.72em ≈ 13px, baseline = center + 13/2 ≈ 34+6.5 = 40.5 → 40 -->
+      <text x="52" y="40"
+            font-size="18" font-weight="600" fill="#18181b"
+            dominant-baseline="auto">Delete session</text>
+
+      <!-- Description: text-sm (14px) font-normal (400) text-muted-foreground (#71717a)
+           gap-2 (8px) below the 20px-tall title row: y start = 24 + 20 + 8 = 52
+           First tspan baseline at y ≈ 52 + 10 (half 14px cap) → ~66; use line-height 19px (leading-normal ≈ 1.5×14) -->
+      <text x="24" font-size="14" font-weight="400" fill="#71717a">
+        <tspan x="24" y="68">This session and all its messages will be permanently</tspan>
+        <tspan x="24" dy="20">deleted. This action cannot be undone.</tspan>
+      </text>
+
+      <!-- ── DialogFooter ──────────────────────────────────────────────────
+           flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
+           Desktop (sm+): [Cancel] [Delete] — Cancel LEFT, Delete RIGHT, group flush right
+           gap-2 = 8px. Both buttons min-h-11 = 44px height.
+           Footer top y = 172 (see geometry notes above).
+      -->
+
+      <!-- Cancel button: variant="outline"
+           bg-white (#ffffff), border border-zinc-200 (#e4e4e7), text-zinc-900 (#18181b)
+           w=88, h=44, x=256, y=172 -->
+      <g id="btn-cancel-default" transform="translate(256, 172)">
+        <rect width="88" height="44" rx="6"
+              fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="44" y="22"
+              font-size="14" font-weight="500" fill="#18181b"
+              text-anchor="middle" dominant-baseline="middle">Cancel</text>
+      </g>
+
+      <!-- Delete button: variant="destructive"
+           bg-red-600 (#dc2626), text-white (#ffffff)
+           w=72, h=44, x=352, y=172 (256+88+8=352; 352+72=424 = flush right) -->
+      <g id="btn-delete-default" transform="translate(352, 172)">
+        <rect width="72" height="44" rx="6" fill="#dc2626"/>
+        <text x="36" y="22"
+              font-size="14" font-weight="500" fill="#ffffff"
+              text-anchor="middle" dominant-baseline="middle">Delete</text>
+      </g>
+
+    </g><!-- /layer-dialog-default -->
+
+    <!-- State label (below dialog, above annotation band) -->
+    <text x="240" y="462"
+          font-size="11" font-weight="500" fill="#ffffff"
+          text-anchor="middle" opacity="0.80">Default state</text>
+
+  </g><!-- /state-default -->
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       STATE: PENDING (right half, x 480–960)
+       Delete mutation is in flight. Both buttons disabled (opacity-50).
+       Delete button shows Loader2 spinner (16×16) LEFT of "Delete" text.
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <g id="state-pending">
+
+    <!-- Backdrop: bg-black/50 -->
+    <rect x="480" y="0" width="480" height="600" fill="rgba(0,0,0,0.50)"/>
+
+    <!-- Dialog panel (same geometry, shifted right by 480) -->
+    <g id="layer-dialog-pending" transform="translate(496, 180)">
+
+      <!-- Surface -->
+      <rect x="2" y="4" width="448" height="240" rx="8" fill="rgba(0,0,0,0.08)"/>
+      <rect width="448" height="240" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Close button — also dimmed when mutation is pending (non-interactive) -->
+      <g transform="translate(416, 16)" opacity="0.35">
+        <line x1="0" y1="0" x2="12" y2="12" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="12" y1="0" x2="0" y2="12" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+
+      <!-- AlertTriangle icon (identical to default) -->
+      <g transform="translate(24, 24)">
+        <path d="M10 1.5 L18.5 17.5 L1.5 17.5 Z"
+              fill="none" stroke="#dc2626" stroke-width="1.75"
+              stroke-linejoin="round" stroke-linecap="round"/>
+        <line x1="10" y1="7.5" x2="10" y2="12.5"
+              stroke="#dc2626" stroke-width="1.75" stroke-linecap="round"/>
+        <circle cx="10" cy="15" r="0.9" fill="#dc2626"/>
+      </g>
+
+      <!-- Title (identical) -->
+      <text x="52" y="40"
+            font-size="18" font-weight="600" fill="#18181b"
+            dominant-baseline="auto">Delete session</text>
+
+      <!-- Description (identical) -->
+      <text x="24" font-size="14" font-weight="400" fill="#71717a">
+        <tspan x="24" y="68">This session and all its messages will be permanently</tspan>
+        <tspan x="24" dy="20">deleted. This action cannot be undone.</tspan>
+      </text>
+
+      <!-- ── Pending footer ──────────────────────────────────────────────
+           Delete button is wider (w=96) to fit: [Loader2 16px] [gap 6px] [Delete text ~38px]
+           Flush right at x=424: Delete x=328, Cancel x=232 (gap-2=8px)
+      -->
+
+      <!-- Cancel button — DISABLED: opacity-50
+           w=88, h=44, x=232, y=172 -->
+      <g id="btn-cancel-pending" transform="translate(232, 172)" opacity="0.50">
+        <rect width="88" height="44" rx="6"
+              fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="44" y="22"
+              font-size="14" font-weight="500" fill="#18181b"
+              text-anchor="middle" dominant-baseline="middle">Cancel</text>
+      </g>
+
+      <!-- Delete button — PENDING / DISABLED: opacity-50
+           bg-red-600, Loader2 spinner LEFT of "Delete" text
+           w=96, h=44, x=328, y=172 (328+96=424 = flush right) -->
+      <g id="btn-delete-pending" transform="translate(328, 172)" opacity="0.50">
+        <rect width="96" height="44" rx="6" fill="#dc2626"/>
+
+        <!-- Loader2 icon (16×16), centered vertically at y=14 (22−8=14), x=17 (left padding)
+             Rendered as static: faint circle track + bright leading arc (~270°)
+             Track circle: full circle, white at 0.30 opacity
+             Arc: ~270° white solid, stroke-linecap round (Loader2 appearance) -->
+        <g transform="translate(17, 14)">
+          <!-- Track (full circle, dim) -->
+          <circle cx="8" cy="8" r="5.5"
+                  fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="2"/>
+          <!-- Leading arc: start at top (270° = 12 o'clock), sweep 270° clockwise
+               SVG arc: M 8,2.5 arc to ~left-middle (2.5,8)
+               Large-arc-flag=1 (> 180°), sweep-flag=1 (clockwise) -->
+          <path d="M 8 2.5 A 5.5 5.5 0 1 1 2.5 8"
+                fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+        </g>
+
+        <!-- "Delete" text, positioned right of spinner
+             Spinner occupies x=17 to x=17+16=33; gap=6; text center = (33+6 + 96) / 2 → use x=65 center -->
+        <text x="65" y="22"
+              font-size="14" font-weight="500" fill="#ffffff"
+              text-anchor="middle" dominant-baseline="middle">Delete</text>
+      </g>
+
+    </g><!-- /layer-dialog-pending -->
+
+    <!-- State label -->
+    <text x="720" y="462"
+          font-size="11" font-weight="500" fill="#ffffff"
+          text-anchor="middle" opacity="0.80">Pending state — Loader2 spinner left of "Delete", both buttons opacity-50 disabled</text>
+
+  </g><!-- /state-pending -->
+
+
+  <!-- Vertical divider between the two states -->
+  <line x1="480" y1="20" x2="480" y2="510"
+        stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="5 4"/>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       ANNOTATION BAND — bottom strip
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <g id="annotation-band">
+    <rect x="0" y="528" width="960" height="72" fill="rgba(0,0,0,0.75)"/>
+
+    <!-- Section header -->
+    <text x="24" y="548" font-size="10" font-weight="600" fill="#a1a1aa"
+          letter-spacing="0.06em">FOOTER PATTERN — shadcn DialogFooter</text>
+
+    <!-- Key fact line 1 -->
+    <text x="24" y="565" font-size="11" fill="#e4e4e7">
+      flex flex-col-reverse gap-2 sm:flex-row sm:justify-end  |  DOM order: [Cancel] [Delete]  →  desktop renders: Cancel LEFT ·  Delete RIGHT · group flush right
+    </text>
+
+    <!-- Key fact line 2 -->
+    <text x="24" y="582" font-size="11" fill="#e4e4e7">
+      Both buttons: min-h-11 (44px).  Cancel: variant="outline" — white bg, #e4e4e7 border, #18181b text.  Delete: variant="destructive" — #dc2626 bg, white text.  gap-2 (8px) between.
+    </text>
+
+    <!-- Callout pill: matches pattern note -->
+    <rect x="694" y="542" width="244" height="24" rx="5"
+          fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+    <text x="816" y="558" font-size="10" font-weight="500" fill="#d4d4d8"
+          text-anchor="middle">Matches NewSessionDialog pattern exactly</text>
+  </g>
+
+</svg>

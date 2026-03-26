@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="800"
+  height="600"
+  viewBox="0 0 800 600"
+  role="img"
+  aria-labelledby="tri-switch-title tri-switch-desc"
+>
+  <title id="tri-switch-title">TriSwitch Component Mockup</title>
+  <desc id="tri-switch-desc">
+    SUPERSEDED — Violet-600 accent colors in track/thumb. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+    Component: TriSwitch
+    Page: Tools sidebar panel (ToolRow), chat page ToolsSidebar
+    Design system version: 2.0 (2026-03-08)
+    Artboards: component-focused 800×600px (desktop only; no separate mobile artboard — TriSwitch is identical at all breakpoints)
+  </desc>
+
+  <!-- ============================================================
+       SHARED DEFINITIONS
+       ============================================================ -->
+  <defs>
+    <!-- Thumb shadow filter (shadow-sm equivalent) -->
+    <filter id="shadow-sm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+
+    <!-- Focus ring clip paths per position — use rounded-full (r=12) outline around 64×24 track -->
+    <!-- No clip needed; focus ring drawn as a separate rect with stroke -->
+
+    <!-- Reusable track shape (64×24, rx=12) — referenced by use elements -->
+    <!-- Defined inline per instance for color variation -->
+  </defs>
+
+  <!-- ============================================================
+       PAGE BACKGROUND
+       ============================================================ -->
+  <rect width="800" height="600" fill="#ffffff"/>
+
+  <!-- ============================================================
+       SECTION LABEL — TOP
+       ============================================================ -->
+  <text x="32" y="32" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="start">COMPONENT STATES</text>
+
+  <!-- ================================================================
+       TOP SECTION — STATES GRID
+       Grid: rows = positions (0, 1, 2), columns = states (Resting, Hover, Focus, Disabled)
+       Row label column: x=32, width≈100px
+       Column start: x=148; each column: 148px wide (centered on track width 64px)
+       Row Y centers: row0=80, row1=148, row2=216  (header at y=54)
+       ================================================================ -->
+
+  <!-- Column headers -->
+  <text x="196" y="54" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="middle">RESTING</text>
+  <text x="324" y="54" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="middle">HOVER</text>
+  <text x="452" y="54" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="middle">FOCUS</text>
+  <text x="580" y="54" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="middle">DISABLED</text>
+
+  <!-- ——— Row 0: Position 0 — Disabled ——— -->
+  <text x="136" y="84" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#71717a" text-anchor="end">Pos 0 — Disabled</text>
+
+  <!-- Row 0, Col 0: Resting, Position 0 -->
+  <!-- Touch target indicator (44px tall, 64px wide, dashed) centered at (164, 77) -->
+  <g id="state-default-pos0">
+    <!-- Touch target bounding box: 44×44, centered on track -->
+    <rect x="164" y="55" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <!-- Track: zinc-200 fill, zinc-200 border -->
+    <rect x="164" y="65" width="64" height="24" rx="12" fill="#e4e4e7" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Tick dots at x=12, 32, 52 from track left (164+12=176, 164+32=196, 164+52=216), y=77 -->
+    <circle cx="176" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="196" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="216" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <!-- Thumb at position 0: center x=164+12=176, white fill, zinc-300 border, shadow-sm -->
+    <circle cx="176" cy="77" r="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- Row 0, Col 1: Hover, Position 0 -->
+  <g id="state-hover-pos0">
+    <rect x="292" y="55" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <!-- Track: zinc-200 fill, zinc-400 border (hover intensification) -->
+    <rect x="292" y="65" width="64" height="24" rx="12" fill="#e4e4e7" stroke="#a1a1aa" stroke-width="1"/>
+    <circle cx="304" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="324" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="344" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="304" cy="77" r="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1" filter="url(#shadow-sm)"/>
+    <!-- Cursor pointer indicator -->
+    <text x="360" y="81" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="9" fill="#a1a1aa">⬆</text>
+  </g>
+
+  <!-- Row 0, Col 2: Focus — NOT shown for position 0 (em-dash) -->
+  <text x="452" y="84" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#e4e4e7" text-anchor="middle">—</text>
+
+  <!-- Row 0, Col 3: Disabled, Position 0 -->
+  <g id="state-disabled-pos0" opacity="0.5">
+    <rect x="548" y="55" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <rect x="548" y="65" width="64" height="24" rx="12" fill="#e4e4e7" stroke="#e4e4e7" stroke-width="1"/>
+    <circle cx="560" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="580" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="600" cy="77" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="560" cy="77" r="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- ——— Row 1: Position 1 — On demand ——— -->
+  <text x="136" y="152" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#71717a" text-anchor="end">Pos 1 — On demand</text>
+
+  <!-- Row 1, Col 0: Resting, Position 1 -->
+  <g id="state-default-pos1">
+    <rect x="164" y="123" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <!-- Track: blue-100 fill -->
+    <rect x="164" y="133" width="64" height="24" rx="12" fill="#dbeafe" stroke="#e4e4e7" stroke-width="1"/>
+    <!-- Tick dots: at x+12, x+32, x+52 from 164; middle (x+32=196) is covered by thumb -->
+    <circle cx="176" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="196" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="216" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <!-- Thumb at position 1: center x=164+32=196, blue-500 fill -->
+    <circle cx="196" cy="145" r="10" fill="#3b82f6" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- Row 1, Col 1: Hover, Position 1 -->
+  <g id="state-hover-pos1">
+    <rect x="292" y="123" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <!-- Track: blue-100 fill, zinc-400 border (hover) -->
+    <rect x="292" y="133" width="64" height="24" rx="12" fill="#dbeafe" stroke="#a1a1aa" stroke-width="1"/>
+    <circle cx="304" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="324" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="344" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="324" cy="145" r="10" fill="#3b82f6" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- Row 1, Col 2: Focus — NOT shown for position 1 (em-dash) -->
+  <text x="452" y="152" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#e4e4e7" text-anchor="middle">—</text>
+
+  <!-- Row 1, Col 3: Disabled, Position 1 -->
+  <g id="state-disabled-pos1" opacity="0.5">
+    <rect x="548" y="123" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <rect x="548" y="133" width="64" height="24" rx="12" fill="#dbeafe" stroke="#e4e4e7" stroke-width="1"/>
+    <circle cx="560" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="580" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="600" cy="145" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="580" cy="145" r="10" fill="#3b82f6" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- ——— Row 2: Position 2 — Loaded ——— -->
+  <text x="136" y="220" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#71717a" text-anchor="end">Pos 2 — Loaded</text>
+
+  <!-- Row 2, Col 0: Resting, Position 2 -->
+  <g id="state-default-pos2">
+    <rect x="164" y="191" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <!-- Track: green-100 fill -->
+    <rect x="164" y="201" width="64" height="24" rx="12" fill="#dcfce7" stroke="#e4e4e7" stroke-width="1"/>
+    <circle cx="176" cy="213" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="196" cy="213" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="216" cy="213" r="2" fill="rgba(0,0,0,0.25)"/>
+    <!-- Thumb at position 2: center x=164+52=216, green-600 fill -->
+    <circle cx="216" cy="213" r="10" fill="#16a34a" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- Row 2, Col 1: Hover — NOT shown for position 2 (em-dash) -->
+  <text x="324" y="220" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#e4e4e7" text-anchor="middle">—</text>
+
+  <!-- Row 2, Col 2: Focus, Position 2 -->
+  <g id="state-focus-pos2">
+    <rect x="420" y="191" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+    <!-- Focus ring: 2px violet-600, 2px offset = outer rect at (420-4, 201-4, 64+8, 24+8) -->
+    <!-- ring-offset-2 means a 2px white gap, then the 2px violet ring -->
+    <!-- White offset layer -->
+    <rect x="418" y="199" width="68" height="28" rx="14" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <!-- Violet ring -->
+    <rect x="418" y="199" width="68" height="28" rx="14" fill="none" stroke="#7c3aed" stroke-width="2"/>
+    <!-- Track: green-100 fill -->
+    <rect x="420" y="201" width="64" height="24" rx="12" fill="#dcfce7" stroke="#e4e4e7" stroke-width="1"/>
+    <circle cx="432" cy="213" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="452" cy="213" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="472" cy="213" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="472" cy="213" r="10" fill="#16a34a" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- Row 2, Col 3: Disabled — NOT shown for position 2 (em-dash) -->
+  <text x="580" y="220" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#e4e4e7" text-anchor="middle">—</text>
+
+  <!-- Horizontal rule after top section -->
+  <line x1="32" y1="248" x2="768" y2="248" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ================================================================
+       MIDDLE SECTION — TOOLROW CONTEXT
+       Panel fragment: 320px wide, white background, left border zinc-200
+       Positioned at x=32, y=264
+       ================================================================ -->
+
+  <text x="32" y="266" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="start">TOOLROW CONTEXT — 320px panel</text>
+
+  <!-- Panel fragment: 320px wide, y=278 -->
+  <g id="layer-panel">
+    <!-- Panel background -->
+    <rect x="32" y="278" width="320" height="176" fill="#ffffff" stroke="#e4e4e7" stroke-width="1" rx="0"/>
+    <!-- Left border accent -->
+    <line x1="32" y1="278" x2="32" y2="454" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ——— ToolRow 1: web_search, Position 2 — Loaded ——— -->
+    <!-- Row container: flex min-h-11, px=12, py=10, gap=12; y=278 to y=337 (~59px) -->
+    <g id="toolrow-web-search">
+      <!-- Row bg (hover-like, just white) -->
+      <rect x="32" y="278" width="320" height="58" fill="#ffffff"/>
+      <!-- Bottom divider -->
+      <line x1="44" y1="336" x2="340" y2="336" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Left block starts at x=44 (px-3 = 12px padding) -->
+      <!-- Top line: tool name + badge -->
+      <!-- Tool name: text-sm font-medium text-zinc-900 -->
+      <text x="44" y="298" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="500" fill="#18181b">web_search</text>
+      <!-- Badge: bg-green-50 text-green-700 "Loaded" at x≈140 -->
+      <rect x="142" y="286" width="44" height="16" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <text x="164" y="298" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="#15803d" text-anchor="middle">Loaded</text>
+
+      <!-- Description line: text-xs text-zinc-500 mt-0.5 -->
+      <text x="44" y="314" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#71717a">Search the web for current information</text>
+
+      <!-- TriSwitch at position 2 (Loaded): right-aligned, vertically centered -->
+      <!-- Right edge x=340 (32+320-12), switch width=64, so switch x=276 -->
+      <!-- Row center y = 278 + 59/2 = 307.5; track y = 307.5 - 12 = 295.5 ≈ 296 -->
+      <rect x="276" y="295" width="64" height="24" rx="12" fill="#dcfce7" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Tick dots -->
+      <circle cx="288" cy="307" r="2" fill="rgba(0,0,0,0.25)"/>
+      <circle cx="308" cy="307" r="2" fill="rgba(0,0,0,0.25)"/>
+      <circle cx="328" cy="307" r="2" fill="rgba(0,0,0,0.25)"/>
+      <!-- Thumb at pos 2: x=276+52=328 -->
+      <circle cx="328" cy="307" r="10" fill="#16a34a" filter="url(#shadow-sm)"/>
+    </g>
+
+    <!-- ——— ToolRow 2: file_reader, Position 1 — On demand ——— -->
+    <g id="toolrow-file-reader">
+      <rect x="32" y="337" width="320" height="58" fill="#ffffff"/>
+      <line x1="44" y1="394" x2="340" y2="394" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Tool name -->
+      <text x="44" y="357" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="500" fill="#18181b">file_reader</text>
+      <!-- Badge: bg-blue-50 text-blue-700 "On demand" -->
+      <rect x="138" y="345" width="70" height="16" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+      <text x="173" y="357" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="#1d4ed8" text-anchor="middle">On demand</text>
+
+      <!-- Description -->
+      <text x="44" y="373" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#71717a">Read files from the workspace</text>
+
+      <!-- TriSwitch at position 1 -->
+      <rect x="276" y="354" width="64" height="24" rx="12" fill="#dbeafe" stroke="#e4e4e7" stroke-width="1"/>
+      <circle cx="288" cy="366" r="2" fill="rgba(0,0,0,0.25)"/>
+      <circle cx="308" cy="366" r="2" fill="rgba(0,0,0,0.25)"/>
+      <circle cx="328" cy="366" r="2" fill="rgba(0,0,0,0.25)"/>
+      <!-- Thumb at pos 1: x=276+32=308 -->
+      <circle cx="308" cy="366" r="10" fill="#3b82f6" filter="url(#shadow-sm)"/>
+    </g>
+
+    <!-- ——— ToolRow 3: calendar_events, Position 0 — Disabled ——— -->
+    <g id="toolrow-calendar-events">
+      <rect x="32" y="395" width="320" height="58" fill="#ffffff"/>
+
+      <!-- Tool name -->
+      <text x="44" y="416" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="500" fill="#18181b">calendar_events</text>
+      <!-- MCP badge: outline variant, text-xs -->
+      <rect x="172" y="404" width="34" height="16" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="189" y="416" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#52525b" text-anchor="middle">MCP</text>
+      <!-- Status badge: bg-zinc-50 text-zinc-500 "Disabled" -->
+      <rect x="212" y="404" width="48" height="16" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="236" y="416" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="#71717a" text-anchor="middle">Disabled</text>
+
+      <!-- Description -->
+      <text x="44" y="432" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#71717a">Read and create calendar events</text>
+
+      <!-- TriSwitch at position 0 -->
+      <rect x="276" y="412" width="64" height="24" rx="12" fill="#e4e4e7" stroke="#e4e4e7" stroke-width="1"/>
+      <circle cx="288" cy="424" r="2" fill="rgba(0,0,0,0.25)"/>
+      <circle cx="308" cy="424" r="2" fill="rgba(0,0,0,0.25)"/>
+      <circle cx="328" cy="424" r="2" fill="rgba(0,0,0,0.25)"/>
+      <!-- Thumb at pos 0: x=276+12=288, white fill, zinc-300 border -->
+      <circle cx="288" cy="424" r="10" fill="#ffffff" stroke="#d4d4d8" stroke-width="1" filter="url(#shadow-sm)"/>
+    </g>
+  </g>
+
+  <!-- Horizontal rule after middle section -->
+  <line x1="32" y1="462" x2="768" y2="462" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- ================================================================
+       BOTTOM SECTION — ANNOTATIONS
+       A large-scale reference rendering of Position 1 (On demand) at center,
+       with callout lines pointing to: track fill, thumb, tick dots, focus ring,
+       touch target bounding box.
+       ================================================================ -->
+
+  <text x="32" y="480" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="#a1a1aa" letter-spacing="0.08em" text-anchor="start">ANNOTATIONS</text>
+
+  <!-- Reference control: Position 1, focus state, centered in annotation zone -->
+  <!-- Placed at x=330, y=510 (track top-left), so track spans 330→394, y 510→534 -->
+  <g id="annotation-reference">
+    <!-- Touch target outline -->
+    <rect x="330" y="499" width="64" height="44" rx="4" fill="none" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <!-- Focus ring: white offset 2px, then violet 2px, offset from track -->
+    <rect x="326" y="507" width="72" height="32" rx="16" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <rect x="326" y="507" width="72" height="32" rx="16" fill="none" stroke="#7c3aed" stroke-width="2"/>
+
+    <!-- Track: blue-100 fill, zinc-200 border -->
+    <rect x="330" y="511" width="64" height="24" rx="12" fill="#dbeafe" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Tick dots -->
+    <circle cx="342" cy="523" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="362" cy="523" r="2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="382" cy="523" r="2" fill="rgba(0,0,0,0.25)"/>
+
+    <!-- Thumb at pos 1: x=330+32=362 -->
+    <circle cx="362" cy="523" r="10" fill="#3b82f6" filter="url(#shadow-sm)"/>
+  </g>
+
+  <!-- Callout 1: Track fill -->
+  <line x1="362" y1="511" x2="320" y2="486" stroke="#d4d4d8" stroke-width="1"/>
+  <circle cx="362" cy="511" r="2" fill="#a1a1aa"/>
+  <text x="315" y="484" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#71717a" text-anchor="end">Track fill: position-semantic</text>
+  <text x="315" y="496" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="end">bg-blue-100 #dbeafe</text>
+
+  <!-- Callout 2: Thumb -->
+  <line x1="362" y1="513" x2="420" y2="490" stroke="#d4d4d8" stroke-width="1"/>
+  <circle cx="362" cy="513" r="2" fill="#a1a1aa"/>
+  <text x="425" y="488" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#71717a" text-anchor="start">Thumb: accent fill at pos 1–2</text>
+  <text x="425" y="500" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="start">bg-blue-500 #3b82f6, shadow-sm</text>
+
+  <!-- Callout 3: Tick dots (pointing to left visible tick at cx=342) -->
+  <line x1="342" y1="525" x2="280" y2="548" stroke="#d4d4d8" stroke-width="1"/>
+  <circle cx="342" cy="525" r="2" fill="#a1a1aa"/>
+  <text x="275" y="546" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#71717a" text-anchor="end">Tick dots: discrete stop indicators</text>
+  <text x="275" y="558" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="end">4px circle, rgba(0,0,0,0.25)</text>
+
+  <!-- Callout 4: Focus ring -->
+  <line x1="394" y1="511" x2="490" y2="533" stroke="#d4d4d8" stroke-width="1"/>
+  <circle cx="394" cy="511" r="2" fill="#a1a1aa"/>
+  <text x="495" y="531" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#71717a" text-anchor="start">Focus ring: 2px violet-600</text>
+  <text x="495" y="543" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="start">#7c3aed, 2px offset</text>
+
+  <!-- Callout 5: Touch target -->
+  <line x1="330" y1="499" x2="280" y2="490" stroke="#d4d4d8" stroke-width="1"/>
+  <circle cx="330" cy="499" r="2" fill="#a1a1aa"/>
+  <text x="275" y="488" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#71717a" text-anchor="end">44px touch target</text>
+  <text x="275" y="500" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="end">min-h-11 container</text>
+
+  <!-- ARIA / active state footnote -->
+  <text x="32" y="580" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa">ARIA: role="slider" aria-valuemin="0" aria-valuemax="2" aria-valuenow="{position}" aria-valuetext="{label}" aria-label="{toolName} status"</text>
+  <text x="32" y="592" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#a1a1aa">Active (pressed): thumb scale-90 (instant, no transition). Keyboard: ArrowRight/Up = advance; ArrowLeft/Down = retreat. Mobile: no layout change; 44px touch target applies at all breakpoints.</text>
+
+</svg>

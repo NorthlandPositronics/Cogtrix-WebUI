@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <desc>
+  Component: Settings — Ghost "add" row at bottom of Models table
+  Page: Settings > Providers &amp; Models > Models section
+  Design system version: 3.14 (2026-03-25)
+  Artboards: desktop 1280px
+  Bug: BUG-09 — Add model / provider button placement: ghost row pattern
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Page background -->
+  <rect width="1280" height="720" fill="#ffffff"/>
+
+  <!-- ── Annotation banner ── -->
+  <rect x="0" y="0" width="1280" height="32" fill="#fafafa"/>
+  <line x1="0" y1="32" x2="1280" y2="32" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="16" y="21" font-size="11" fill="#71717a" font-weight="500">BUG-09 — Ghost "add" row pattern — Left: table collapsed (ghost row at bottom). Center: ghost row hovered. Right: form open (ghost row replaced by form panel).</text>
+
+  <!-- ════════════════════════════════════════════
+       STATE 1 — TABLE COLLAPSED (ghost row default)
+       ════════════════════════════════════════════ -->
+
+  <!-- Section heading — NO top-right "Add model" button (removed) -->
+  <text x="40" y="66" font-size="18" font-weight="600" fill="#18181b">Models</text>
+
+  <!-- Strikethrough annotation: old top-right button removed -->
+  <rect x="800" y="48" width="180" height="32" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+  <text x="812" y="60" font-size="10" fill="#dc2626">✕ Removed: top-right</text>
+  <text x="812" y="74" font-size="10" fill="#dc2626">"Add model" outline button</text>
+
+  <!-- Arrow pointing to ghost row area -->
+  <line x1="800" y1="64" x2="720" y2="360" stroke="#0d9488" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+
+  <!-- Table container: rounded-xl border border-zinc-200 -->
+  <rect x="40" y="82" width="720" height="340" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Table header -->
+  <rect x="40" y="82" width="720" height="44" rx="12" fill="#fafafa"/>
+  <rect x="40" y="106" width="720" height="20" fill="#fafafa"/>
+  <line x1="40" y1="126" x2="760" y2="126" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="60" y="110" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">ALIAS</text>
+  <text x="290" y="110" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">PROVIDER</text>
+  <text x="480" y="110" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">MODEL NAME</text>
+
+  <!-- Row 1: ACTIVE -->
+  <rect x="40" y="126" width="720" height="52" fill="#f0fdfa"/>
+  <rect x="40" y="126" width="3" height="52" fill="#0d9488"/>
+  <text x="60" y="157" font-size="13" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">claude-sonnet-4-6</text>
+  <!-- CircleCheck -->
+  <g transform="translate(220, 149)">
+    <circle cx="8" cy="8" r="7" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+    <polyline points="4.5,8 7,10.5 11.5,5.5" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="290" y="157" font-size="13" fill="#52525b">anthropic</text>
+  <text x="480" y="157" font-size="13" fill="#52525b">claude-sonnet-4-6-20251201</text>
+  <line x1="41" y1="178" x2="759" y2="178" stroke="#f3f4f6" stroke-width="1"/>
+
+  <!-- Row 2: INACTIVE -->
+  <rect x="40" y="178" width="720" height="52" fill="#ffffff"/>
+  <text x="60" y="209" font-size="13" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">qwen3-8b</text>
+  <text x="290" y="209" font-size="13" fill="#52525b">ollama</text>
+  <text x="480" y="209" font-size="13" fill="#52525b">qwen3:8b</text>
+  <line x1="41" y1="230" x2="759" y2="230" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Row 3: INACTIVE -->
+  <rect x="40" y="230" width="720" height="52" fill="#ffffff"/>
+  <text x="60" y="261" font-size="13" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">gpt-4.1-mini</text>
+  <text x="290" y="261" font-size="13" fill="#52525b">openai</text>
+  <text x="480" y="261" font-size="13" fill="#52525b">gpt-4.1-mini-2025-04-14</text>
+  <line x1="41" y1="282" x2="759" y2="282" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- GHOST ADD ROW (tfoot): border-t border-dashed border-zinc-300 -->
+  <!-- Already drawn above with the solid row separator, ghost row uses dashed -->
+  <!-- Override: dashed line replaces the last solid separator -->
+  <rect x="40" y="282" width="720" height="52" fill="#ffffff"/>
+  <!-- dashed top border override -->
+  <line x1="41" y1="282" x2="759" y2="282" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="4 3"/>
+  <!-- Plus icon + "Add model" text: centered, text-sm text-zinc-500 -->
+  <g transform="translate(358, 300)">
+    <!-- Plus h-4 w-4 -->
+    <line x1="8" y1="0" x2="8" y2="16" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="0" y1="8" x2="16" y2="8" stroke="#71717a" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="22" y="12" font-size="14" fill="#71717a">Add model</text>
+  </g>
+
+  <!-- Table bottom rounding clip -->
+  <rect x="40" y="334" width="720" height="12" rx="0" fill="#ffffff"/>
+  <rect x="40" y="338" width="720" height="8" rx="0" fill="#ffffff"/>
+
+  <!-- "State 1" label -->
+  <text x="40" y="440" font-size="11" font-weight="600" fill="#71717a">State 1 — collapsed (ghost row default: text-zinc-500)</text>
+  <text x="40" y="456" font-size="10" fill="#71717a">td: border-t border-dashed border-zinc-300 px-4 py-3 cursor-pointer hover:bg-zinc-50</text>
+  <text x="40" y="472" font-size="10" fill="#71717a">role="button" tabIndex=0 aria-label="Add model" — Plus icon h-4 w-4 text-zinc-500</text>
+
+  <!-- ════════════════════════════════════════════
+       STATE 2 — GHOST ROW HOVERED
+       (shown as inline annotation below State 1)
+       ════════════════════════════════════════════ -->
+
+  <!-- Hovered ghost row — separate small callout -->
+  <rect x="40" y="492" width="720" height="52" rx="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- dashed top illusion -->
+  <line x1="40" y1="492" x2="760" y2="492" stroke="#d4d4d8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Plus + "Add model" text: hover:text-zinc-900 -->
+  <g transform="translate(358, 510)">
+    <line x1="8" y1="0" x2="8" y2="16" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="0" y1="8" x2="16" y2="8" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="22" y="12" font-size="14" fill="#18181b">Add model</text>
+  </g>
+
+  <!-- Hover annotation -->
+  <rect x="740" y="500" width="98" height="22" rx="4" fill="#f0fdfa"/>
+  <text x="746" y="515" font-size="10" fill="#0d9488">hover state</text>
+
+  <text x="40" y="562" font-size="11" font-weight="600" fill="#71717a">State 2 — hovered (bg-zinc-50 + text-zinc-900)</text>
+
+  <!-- ════════════════════════════════════════════
+       STATE 3 — FORM OPEN (right side)
+       ════════════════════════════════════════════ -->
+
+  <!-- Right panel: Table + form panel below -->
+  <text x="852" y="66" font-size="11" font-weight="600" fill="#71717a">State 3 — ghost row clicked: form panel appears below table, ghost row gone</text>
+
+  <!-- Same table but WITHOUT ghost row -->
+  <rect x="852" y="82" width="400" height="296" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Table header -->
+  <rect x="852" y="82" width="400" height="44" rx="12" fill="#fafafa"/>
+  <rect x="852" y="106" width="400" height="20" fill="#fafafa"/>
+  <line x1="852" y1="126" x2="1252" y2="126" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="870" y="110" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">ALIAS</text>
+  <text x="1010" y="110" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">PROVIDER</text>
+  <text x="1130" y="110" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">MODEL NAME</text>
+
+  <!-- Row 1: ACTIVE -->
+  <rect x="852" y="126" width="400" height="52" fill="#f0fdfa"/>
+  <rect x="852" y="126" width="3" height="52" fill="#0d9488"/>
+  <text x="870" y="157" font-size="12" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">claude-sonnet-4-6</text>
+  <g transform="translate(1030, 149)">
+    <circle cx="7" cy="7" r="6" fill="none" stroke="#0d9488" stroke-width="1.4"/>
+    <polyline points="3.5,7 6,9.5 10.5,4.5" fill="none" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="1010" y="157" font-size="12" fill="#52525b">anthropic</text>
+  <text x="1130" y="157" font-size="12" fill="#52525b">claude-sonnet-4-6</text>
+  <line x1="853" y1="178" x2="1251" y2="178" stroke="#f3f4f6" stroke-width="1"/>
+
+  <!-- Row 2 -->
+  <rect x="852" y="178" width="400" height="52" fill="#ffffff"/>
+  <text x="870" y="209" font-size="12" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">qwen3-8b</text>
+  <text x="1010" y="209" font-size="12" fill="#52525b">ollama</text>
+  <text x="1130" y="209" font-size="12" fill="#52525b">qwen3:8b</text>
+  <line x1="853" y1="230" x2="1251" y2="230" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Row 3 -->
+  <rect x="852" y="230" width="400" height="52" fill="#ffffff"/>
+  <text x="870" y="261" font-size="12" font-weight="500" fill="#18181b" font-family="monospace, 'Courier New', monospace">gpt-4.1-mini</text>
+  <text x="1010" y="261" font-size="12" fill="#52525b">openai</text>
+  <text x="1130" y="261" font-size="12" fill="#52525b">gpt-4.1-mini</text>
+  <!-- NO ghost row below — form replaces it -->
+
+  <!-- Annotation: ghost row absent -->
+  <rect x="852" y="282" width="400" height="28" rx="0" fill="#fafafa"/>
+  <rect x="852" y="296" width="400" height="14" rx="0" fill="#fafafa"/>
+  <line x1="853" y1="282" x2="1251" y2="282" stroke="#e4e4e7" stroke-width="0.5"/>
+  <text x="1000" y="298" font-size="10" fill="#a1a1aa" text-anchor="middle">ghost row hidden while form is open</text>
+
+  <!-- ── Inline Add Model Form Panel ── -->
+  <!-- rounded-lg border border-zinc-200 bg-zinc-50 p-4 mt-2 -->
+  <rect x="852" y="390" width="400" height="152" rx="8" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Form title area -->
+  <text x="870" y="412" font-size="13" font-weight="500" fill="#18181b">Add model</text>
+  <!-- Cancel link button: ghost text-zinc-500 -->
+  <text x="1210" y="412" font-size="12" fill="#71717a" text-anchor="end">Cancel ✕</text>
+
+  <!-- Provider select -->
+  <text x="870" y="432" font-size="12" font-weight="500" fill="#18181b">Provider</text>
+  <rect x="870" y="438" width="168" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="882" y="460" font-size="12" fill="#52525b">anthropic</text>
+  <g transform="translate(1022, 452)">
+    <polyline points="0,2 4,6 8,2" fill="none" stroke="#71717a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Model name input -->
+  <text x="1052" y="432" font-size="12" font-weight="500" fill="#18181b">Model name</text>
+  <rect x="1052" y="438" width="168" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="1064" y="460" font-size="12" fill="#a1a1aa">e.g. claude-opus-4-5</text>
+
+  <!-- Alias input -->
+  <text x="870" y="492" font-size="12" font-weight="500" fill="#18181b">Alias</text>
+  <rect x="870" y="498" width="250" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="882" y="520" font-size="12" fill="#a1a1aa">e.g. claude-opus</text>
+
+  <!-- Add button -->
+  <rect x="1132" y="498" width="88" height="36" rx="6" fill="#0d9488"/>
+  <text x="1153" y="521" font-size="12" font-weight="500" fill="#ffffff">+ Add</text>
+
+  <!-- "mt-2 after table" annotation -->
+  <rect x="852" y="372" width="120" height="18" rx="4" fill="#f0fdfa"/>
+  <text x="858" y="384" font-size="9" fill="#0d9488">mt-2 gap below table</text>
+
+  <!-- Form DS tokens -->
+  <rect x="852" y="548" width="400" height="66" rx="6" fill="#f0fdfa" stroke="#99f6e4" stroke-width="0.5"/>
+  <text x="862" y="566" font-size="10" font-weight="600" fill="#0d9488">Form panel DS tokens</text>
+  <text x="862" y="582" font-size="9" fill="#71717a" font-family="monospace, monospace">rounded-lg border border-zinc-200 bg-zinc-50 p-4 mt-2</text>
+  <text x="862" y="596" font-size="9" fill="#71717a">Same inline form as existing — only the trigger changed (ghost row → was: top-right button)</text>
+  <text x="862" y="608" font-size="9" fill="#71717a">Focus moves to first input (Provider Select) when form opens</text>
+
+  <!-- ── Bottom annotation ── -->
+  <rect x="8" y="666" width="1264" height="48" rx="6" fill="#18181b" opacity="0.85"/>
+  <text x="24" y="684" font-size="11" font-weight="600" fill="#ffffff">Ghost row annotated pattern</text>
+  <text x="24" y="700" font-size="10" fill="#a1a1aa">td: border-t border-dashed border-zinc-300 px-4 py-3 cursor-pointer hover:bg-zinc-50 transition-colors duration-150</text>
+  <text x="24" y="710" font-size="9" fill="#71717a">span: flex items-center gap-1.5 text-sm text-zinc-500 — hover:text-zinc-900 — Plus h-4 w-4 — colspan=3 (spans all columns)</text>
+  <text x="660" y="700" font-size="10" fill="#a1a1aa">When form opens: ghost row disappears, form panel slides in below table</text>
+  <text x="660" y="710" font-size="9" fill="#71717a">Form panel: rounded-lg border border-zinc-200 bg-zinc-50 p-4 mt-2 — Cancel link re-hides form, ghost row returns</text>
+</svg>

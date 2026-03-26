@@ -1,0 +1,90 @@
+name: Bug Report
+description: Something in the UI isn't working as expected
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing a bug, please check [existing issues](../issues) and the [CHANGELOG](../blob/main/CHANGELOG.md).
+        For security vulnerabilities, use [Security Advisories](../security/advisories/new) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: "When I open a session and send a message, the header stays stuck on 'thinking...' even after the response appears."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: "I expected the header to show 'idle' once the response finished."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps that reliably trigger the bug.
+      placeholder: |
+        1. Open a session
+        2. Send a message
+        3. Wait for the response to complete
+        4. Observe the header still shows 'thinking...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Browser console errors
+      description: Open DevTools → Console, reproduce the issue, paste any errors here.
+      render: text
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected area
+      options:
+        - Chat / session view
+        - Session list
+        - Settings / setup wizard
+        - Assistant (chats, scheduled, deferred, contacts, knowledge, guardrails, campaigns, workflows)
+        - Admin (live logs, users)
+        - Documents
+        - Authentication (login / register)
+        - Sidebar / navigation
+        - WebSocket connection
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: WebUI version or commit SHA
+      placeholder: "v0.1.5  or  abc1234"
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 124 on Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: I reproduced this on the latest release
+          required: true

@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="1180" viewBox="0 0 640 1180" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <desc>
+  SUPERSEDED — Violet-200 blockquote border. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  </desc>
+  <!-- Background -->
+  <rect width="640" height="1180" fill="#ffffff"/>
+
+  <!-- Label: Assistant bubble context -->
+  <text x="20" y="24" font-size="11" fill="#71717a" font-weight="500">Assistant message bubble — markdown-full-spec.svg — Design System v3.0</text>
+
+  <!-- Bubble wrapper -->
+  <rect x="20" y="36" width="480" height="1124" rx="16" ry="16" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- rounded-bl-sm: flatten bottom-left corner -->
+  <rect x="20" y="1136" width="16" height="24" fill="#ffffff"/>
+
+  <!-- Shadow simulation (shadow-sm) -->
+  <rect x="21" y="37" width="480" height="1124" rx="16" ry="16" fill="none" stroke="#e4e4e7" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- ============ CONTENT: px-4 py-3 = 16px h, 12px v ============ -->
+  <!-- Content area starts at x=36, y=48 -->
+
+  <!-- space-y-3 rhythm guide: 12px between each block -->
+
+  <!-- ── h1 ── -->
+  <text x="36" y="72" font-size="20" font-weight="600" fill="#18181b" letter-spacing="-0.01em">Heading Level 1</text>
+  <!-- mt-4 = 16px above (first child: mt-0, so no top margin) -->
+  <!-- Annotation -->
+  <text x="516" y="72" font-size="9" fill="#a1a1aa">h1 · text-xl · semibold</text>
+
+  <!-- space-y-3 = 12px gap -->
+
+  <!-- ── h2 ── -->
+  <text x="36" y="102" font-size="18" font-weight="600" fill="#18181b">Heading Level 2</text>
+  <text x="516" y="102" font-size="9" fill="#a1a1aa">h2 · text-lg · semibold</text>
+
+  <!-- ── h3 ── -->
+  <text x="36" y="128" font-size="16" font-weight="600" fill="#18181b">Heading Level 3</text>
+  <text x="516" y="128" font-size="9" fill="#a1a1aa">h3 · text-base · semibold</text>
+
+  <!-- ── h4 ── -->
+  <text x="36" y="152" font-size="14" font-weight="600" fill="#3f3f46">Heading Level 4</text>
+  <text x="516" y="152" font-size="9" fill="#a1a1aa">h4 · text-sm · semibold · zinc-700</text>
+
+  <!-- ── h5 ── -->
+  <text x="36" y="174" font-size="14" font-weight="500" fill="#52525b">Heading Level 5</text>
+  <text x="516" y="174" font-size="9" fill="#a1a1aa">h5 · text-sm · medium · zinc-600</text>
+
+  <!-- ── h6 ── -->
+  <text x="36" y="196" font-size="14" font-weight="500" fill="#71717a">Heading Level 6</text>
+  <text x="516" y="196" font-size="9" fill="#a1a1aa">h6 · text-sm · medium · zinc-500</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Paragraph ── -->
+  <text x="36" y="220" font-size="16" fill="#18181b" line-height="28">
+    <tspan x="36" dy="0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</tspan>
+    <tspan x="36" dy="22">eiusmod tempor incididunt ut labore et dolore magna aliqua.</tspan>
+  </text>
+  <text x="516" y="220" font-size="9" fill="#a1a1aa">p · text-base · leading-relaxed</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Blockquote ── -->
+  <!-- violet-50/40 background: approx #faf9ff -->
+  <rect x="36" y="262" width="400" height="36" rx="0" ry="0" fill="#faf9ff"/>
+  <!-- rounded-r-sm on right side -->
+  <rect x="412" y="262" width="24" height="36" rx="4" ry="4" fill="#faf9ff"/>
+  <!-- violet-200 left border (2px) -->
+  <rect x="36" y="262" width="2" height="36" fill="#ddd6fe"/>
+  <!-- Blockquote text: italic, text-zinc-600 -->
+  <text x="54" y="284" font-size="14" fill="#52525b" font-style="italic">This is a quoted passage from another source.</text>
+  <text x="516" y="278" font-size="9" fill="#a1a1aa">blockquote</text>
+  <text x="516" y="288" font-size="9" fill="#a1a1aa">border-l-2 violet-200</text>
+  <text x="516" y="298" font-size="9" fill="#a1a1aa">bg-violet-50/40</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Unordered list ── -->
+  <text x="516" y="316" font-size="9" fill="#a1a1aa">ul · list-disc · pl-5</text>
+  <!-- Bullet 1 -->
+  <circle cx="50" cy="320" r="3" fill="#18181b"/>
+  <text x="62" y="324" font-size="16" fill="#18181b">First list item</text>
+  <!-- Bullet 2 -->
+  <circle cx="50" cy="344" r="3" fill="#18181b"/>
+  <text x="62" y="348" font-size="16" fill="#18181b">Second list item</text>
+  <!-- Bullet 3 -->
+  <circle cx="50" cy="368" r="3" fill="#18181b"/>
+  <text x="62" y="372" font-size="16" fill="#18181b">Third list item</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Ordered list ── -->
+  <text x="516" y="396" font-size="9" fill="#a1a1aa">ol · list-decimal · pl-5</text>
+  <text x="44" y="400" font-size="16" fill="#18181b">1.</text>
+  <text x="62" y="400" font-size="16" fill="#18181b">First ordered item</text>
+  <text x="44" y="424" font-size="16" fill="#18181b">2.</text>
+  <text x="62" y="424" font-size="16" fill="#18181b">Second ordered item</text>
+  <text x="44" y="448" font-size="16" fill="#18181b">3.</text>
+  <text x="62" y="448" font-size="16" fill="#18181b">Third ordered item</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Horizontal rule ── -->
+  <line x1="36" y1="472" x2="484" y2="472" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="516" y="476" font-size="9" fill="#a1a1aa">hr · border-zinc-200</text>
+
+  <!-- space-y-3 gap (my-4 for hr) -->
+
+  <!-- ── Image placeholder ── -->
+  <rect x="36" y="492" width="200" height="100" rx="6" ry="6" fill="#f4f4f5"/>
+  <text x="136" y="547" font-size="12" fill="#a1a1aa" text-anchor="middle">Image (max-w-full rounded-md)</text>
+  <text x="516" y="540" font-size="9" fill="#a1a1aa">img · max-w-full</text>
+  <text x="516" y="550" font-size="9" fill="#a1a1aa">rounded-md · my-2</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── CodeBlock ── -->
+  <!-- Outer wrapper: rounded-md border border-zinc-200 bg-zinc-50 -->
+  <rect x="36" y="608" width="448" height="130" rx="6" ry="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+  <!-- Header row: flex items-center justify-between px-3 pt-2 pb-1 -->
+  <text x="48" y="626" font-size="11" fill="#a1a1aa" font-family="ui-monospace, monospace" font-weight="500">python</text>
+  <!-- Copy button (ghost, 24×24) -->
+  <rect x="456" y="612" width="24" height="24" rx="4" ry="4" fill="none"/>
+  <!-- Clipboard icon at 14px, text-zinc-400 -->
+  <g transform="translate(462, 618)" stroke="#a1a1aa" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="9" height="11" rx="1"/>
+    <path d="M5 3V1.5A1.5 1.5 0 0 1 8 1.5V3"/>
+    <rect x="0" y="1" width="9" height="11" rx="1" fill="#fafafa" stroke="#a1a1aa"/>
+    <path d="M3 1V0a1 1 0 0 1 6 0v1"/>
+  </g>
+  <!-- Code content area -->
+  <text font-family="ui-monospace, monospace" font-size="13" fill="#18181b">
+    <tspan x="48" y="652">def greet(name: str) -&gt; str:</tspan>
+    <tspan x="48" dy="20">    return f"Hello, {name}!"</tspan>
+    <tspan x="48" dy="20"> </tspan>
+    <tspan x="48" dy="20">print(greet("world"))</tspan>
+  </text>
+  <text x="516" y="660" font-size="9" fill="#a1a1aa">CodeBlock</text>
+  <text x="516" y="670" font-size="9" fill="#a1a1aa">bg-zinc-50</text>
+  <text x="516" y="680" font-size="9" fill="#a1a1aa">border-zinc-200</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Table ── -->
+  <text x="516" y="764" font-size="9" fill="#a1a1aa">table · thead bg-zinc-50</text>
+  <text x="516" y="774" font-size="9" fill="#a1a1aa">row hover: bg-zinc-50</text>
+  <!-- Table wrapper: overflow-x-auto my-2 -->
+  <!-- Header row: bg-zinc-50 border-b border-zinc-200 -->
+  <rect x="36" y="752" width="448" height="28" fill="#fafafa"/>
+  <line x1="36" y1="780" x2="484" y2="780" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="44" y="770" font-size="11" fill="#71717a" font-weight="500" letter-spacing="0.05em">COLUMN A</text>
+  <text x="196" y="770" font-size="11" fill="#71717a" font-weight="500" letter-spacing="0.05em">COLUMN B</text>
+  <text x="348" y="770" font-size="11" fill="#71717a" font-weight="500" letter-spacing="0.05em">COLUMN C</text>
+  <!-- Row 1 -->
+  <rect x="36" y="780" width="448" height="28" fill="#ffffff"/>
+  <line x1="36" y1="808" x2="484" y2="808" stroke="#f4f4f5" stroke-width="1"/>
+  <text x="44" y="799" font-size="13" fill="#18181b">Value A1</text>
+  <text x="196" y="799" font-size="13" fill="#18181b">Value B1</text>
+  <text x="348" y="799" font-size="13" fill="#18181b">Value C1</text>
+  <!-- Row 2 (hover state shown) -->
+  <rect x="36" y="808" width="448" height="28" fill="#fafafa"/>
+  <line x1="36" y1="836" x2="484" y2="836" stroke="#f4f4f5" stroke-width="1"/>
+  <text x="44" y="827" font-size="13" fill="#18181b">Value A2</text>
+  <text x="196" y="827" font-size="13" fill="#18181b">Value B2</text>
+  <text x="348" y="827" font-size="13" fill="#18181b">Value C2</text>
+  <!-- hover label -->
+  <text x="340" y="824" font-size="9" fill="#8b5cf6" font-style="italic">← hover state (bg-zinc-50)</text>
+  <!-- Row 3 -->
+  <rect x="36" y="836" width="448" height="28" fill="#ffffff"/>
+  <text x="44" y="855" font-size="13" fill="#18181b">Value A3</text>
+  <text x="196" y="855" font-size="13" fill="#18181b">Value B3</text>
+  <text x="348" y="855" font-size="13" fill="#18181b">Value C3</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Inline code within paragraph ── -->
+  <text x="36" y="892" font-size="16" fill="#18181b">
+    <tspan>Use </tspan>
+    <!-- inline code chip -->
+  </text>
+  <!-- Inline code: rounded bg-zinc-100 px-1 py-0.5 font-mono text-sm text-zinc-900 -->
+  <rect x="77" y="877" width="72" height="18" rx="3" ry="3" fill="#f4f4f5"/>
+  <text x="81" y="890" font-size="13" font-family="ui-monospace, monospace" fill="#18181b">inline_code</text>
+  <text x="152" y="892" font-size="16" fill="#18181b"> in your response.</text>
+  <text x="516" y="890" font-size="9" fill="#a1a1aa">code (inline)</text>
+  <text x="516" y="900" font-size="9" fill="#a1a1aa">bg-zinc-100 · font-mono</text>
+
+  <!-- space-y-3 gap -->
+
+  <!-- ── Link ── -->
+  <text x="36" y="924" font-size="16" fill="#18181b">Visit the </text>
+  <text x="111" y="924" font-size="16" fill="#7c3aed" text-decoration="underline">documentation</text>
+  <text x="220" y="924" font-size="16" fill="#18181b"> for more details.</text>
+  <text x="516" y="924" font-size="9" fill="#a1a1aa">a · text-violet-600</text>
+  <text x="516" y="934" font-size="9" fill="#a1a1aa">underline</text>
+
+  <!-- ── space-y-3 gap annotation ── -->
+  <!-- Vertical rhythm annotation on left -->
+  <line x1="510" y1="84" x2="510" y2="96" stroke="#e4e4e7" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="512" y="92" font-size="8" fill="#a1a1aa">12px gap (space-y-3)</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+  <!--
+    Cogtrix logomark — gear with C-shaped negative space.
+    Design system v3.10.
+
+    Geometry:
+      6-tooth gear — center (14,14), tooth tips r=11, valley r=7.5.
+      Teeth at 0°/60°/120°/180°/240°/300°, ±10° flat face, V-valleys at ±30°.
+
+      C cutout — evenodd, punched from gear interior.
+      Outer r=5.5, inner r=2.5 (stroke width 3). Gap ±60° from 0° (opens right).
+      Arc sweeps 240° clockwise through the left side.
+  -->
+  <path
+    fill="#0d9488"
+    fill-rule="evenodd"
+    d="
+      M 20.495 10.250
+      L 24.836 12.090
+      L 24.836 15.910
+      L 20.495 17.750
+      L 21.071 22.426
+      L 17.762 24.335
+      L 14.000 21.500
+      L 10.238 24.335
+      L  6.929 22.426
+      L  7.505 17.750
+      L  3.164 15.910
+      L  3.164 12.090
+      L  7.505 10.250
+      L  6.929  5.574
+      L 10.238  3.665
+      L 14.000  6.500
+      L 17.762  3.665
+      L 21.071  5.574
+      Z
+      M 16.750 18.763
+      A 5.5 5.5 0 1 1 16.750  9.237
+      L 15.250 11.835
+      A 2.5 2.5 0 1 0 15.250 16.165
+      Z
+    "
+  />
+</svg>

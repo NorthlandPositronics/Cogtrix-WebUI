@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844">
+  <desc>
+    Component: Chat Page — Mobile Layout
+    Page: /sessions/:id
+    Design system version: 3.6 (2026-03-23)
+    Artboards: mobile 390px (iPhone 14 Pro equivalent)
+    Closes: D-001 (partial — mobile frame)
+  </desc>
+
+  <defs>
+    <style>
+      text { font-family: Geist, Inter, system-ui, sans-serif; }
+      .font-mono { font-family: "Geist Mono", "Courier New", monospace; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="390" height="844" fill="#ffffff"/>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TOP BAR (AppShell mobile header — h-14 border-b bg-white px-4) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-topbar">
+    <rect x="0" y="0" width="390" height="56" fill="#ffffff"/>
+    <line x1="0" y1="56" x2="390" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Hamburger menu button: ghost h-11 w-11, text-zinc-500 -->
+    <rect x="6" y="7" width="44" height="44" rx="6" fill="none"/>
+    <g transform="translate(16, 21)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round">
+      <line x1="0" y1="0" x2="22" y2="0"/>
+      <line x1="0" y1="7" x2="22" y2="7"/>
+      <line x1="0" y1="14" x2="22" y2="14"/>
+    </g>
+
+    <!-- C-mark logo centered (22×22) -->
+    <g transform="translate(178, 17)">
+      <path d="M 18.071 5.929 A 10 10 0 1 0 18.071 18.071"
+            fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="18.071" cy="5.929" r="2.2" fill="#0d9488"/>
+      <circle cx="18.071" cy="18.071" r="1.6" fill="#0d9488"/>
+    </g>
+    <text x="202" y="33" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SESSION HEADER (tighter — model selector w-24) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-header">
+    <rect x="0" y="56" width="390" height="56" fill="#ffffff"/>
+    <line x1="0" y1="112" x2="390" y2="112" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- ChevronLeft ghost button h-11 w-11 -->
+    <rect x="4" y="64" width="44" height="44" rx="6" fill="none"/>
+    <g transform="translate(20, 78)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="10,0 2,8 10,16"/>
+    </g>
+
+    <!-- Session name + AgentStateBadge -->
+    <text x="54" y="82" font-size="14" font-weight="500" fill="#18181b">Research on neural networks</text>
+    <!-- AgentStateBadge: thinking -->
+    <circle cx="57" cy="97" r="4" fill="#0d9488" opacity="0.75"/>
+    <text x="65" y="101" font-size="12" font-weight="500" fill="#0f766e">Thinking...</text>
+
+    <!-- Right controls -->
+    <!-- Model selector: w-24 h-8 -->
+    <rect x="220" y="70" width="96" height="28" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="228" y="87" font-size="11" font-weight="400" fill="#18181b">claude-3-5</text>
+    <g transform="translate(305, 79)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round">
+      <polyline points="0,0 4,4 8,0"/>
+    </g>
+
+    <!-- Trash2 ghost -->
+    <rect x="318" y="64" width="36" height="44" rx="6" fill="none"/>
+    <g transform="translate(326, 77)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,3 12,3"/>
+      <path d="M 3 3 L 3 0 L 9 0 L 9 3"/>
+      <path d="M 1 3 L 2 11 L 10 11 L 11 3"/>
+    </g>
+
+    <!-- Brain ghost: active teal -->
+    <rect x="352" y="64" width="36" height="44" rx="6" fill="#f0fdfa"/>
+    <g transform="translate(360, 76)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 8 14 C 8 14 4 14 2 11 C 0 8 1 5 4 4 C 4 2 6 0 8 1 C 10 0 12 2 12 4 C 15 5 16 8 14 11 C 12 14 8 14 8 14 Z"/>
+      <line x1="8" y1="5" x2="8" y2="14"/>
+      <line x1="4" y1="8" x2="12" y2="8"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- LAYER: CONTENT — Message list (scrollable, px-3 py-4 space-y-3) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-content">
+    <rect x="0" y="112" width="390" height="604" fill="#ffffff"/>
+
+    <!-- Message 1: User bubble (teal-50, max-w-[85%] on mobile) -->
+    <g id="msg-user-mobile">
+      <!-- right-aligned: justify-end -->
+      <!-- max-w-[85%] = ~331px on 390 viewport -->
+      <rect x="49" y="128" width="330" height="70" rx="16" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <!-- rounded-br-sm -->
+      <rect x="363" y="182" width="16" height="16" rx="2" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <rect x="364" y="183" width="15" height="15" fill="#f0fdfa"/>
+      <text x="61" y="153" font-size="13" font-weight="400" fill="#18181b">Can you explain how transformer</text>
+      <text x="61" y="171" font-size="13" font-weight="400" fill="#18181b">attention mechanisms work vs RNNs?</text>
+      <text x="360" y="208" font-size="11" fill="#71717a" text-anchor="end">10:42</text>
+    </g>
+
+    <!-- Message 2: Assistant bubble with tool call summary -->
+    <g id="msg-assistant-mobile">
+      <rect x="10" y="220" width="310" height="120" rx="16" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- rounded-bl-sm -->
+      <rect x="10" y="328" width="16" height="16" rx="2" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="10" y="329" width="15" height="15" fill="#ffffff"/>
+
+      <text x="24" y="244" font-size="13" font-weight="600" fill="#18181b">Transformer Attention</text>
+      <text x="24" y="264" font-size="13" font-weight="400" fill="#18181b">Transformers allow every token to</text>
+      <text x="24" y="282" font-size="13" font-weight="400" fill="#18181b">attend all others simultaneously,</text>
+      <text x="24" y="300" font-size="13" font-weight="400" fill="#18181b">unlike RNNs which process serially.</text>
+
+      <!-- Tool call summary -->
+      <line x1="24" y1="316" x2="312" y2="316" stroke="#e4e4e7" stroke-width="1"/>
+      <g transform="translate(24, 320)" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="0,5 3,9 11,2"/>
+      </g>
+      <text x="40" y="332" font-size="11" fill="#18181b" font-family="'Geist Mono', monospace">web_search</text>
+      <text x="102" y="332" font-size="11" fill="#71717a" font-family="'Geist Mono', monospace">1.23s</text>
+    </g>
+
+    <!-- Message 3: Streaming assistant bubble -->
+    <g id="msg-streaming-mobile">
+      <rect x="10" y="358" width="320" height="78" rx="16" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- rounded-bl-sm -->
+      <rect x="10" y="428" width="16" height="16" rx="2" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="10" y="429" width="15" height="15" fill="#ffffff"/>
+
+      <text x="24" y="382" font-size="13" font-weight="400" fill="#18181b">Based on recent research, the key</text>
+      <text x="24" y="400" font-size="13" font-weight="400" fill="#18181b">challenge is quadratic O(n²) scaling,</text>
+      <text x="24" y="418" font-size="13" font-weight="400" fill="#18181b">which FlashAttention addresses</text>
+      <!-- Streaming cursor -->
+      <rect x="256" y="406" width="2" height="14" fill="#18181b"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- STATUS BAR (collapsed — summary row only, border-t bg-zinc-50) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-statusbar">
+    <rect x="0" y="716" width="390" height="28" fill="#fafafa"/>
+    <line x1="0" y1="716" x2="390" y2="716" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Running entry border-l-2 border-teal-500 -->
+    <rect x="0" y="716" width="3" height="28" fill="#14b8a6"/>
+
+    <g transform="translate(10, 722)">
+      <!-- Pulse dot teal-500 -->
+      <circle cx="4" cy="7" r="4" fill="#14b8a6" opacity="0.8"/>
+      <text x="14" y="11" font-size="11" fill="#3f3f46">brave_search</text>
+      <text x="86" y="11" font-size="11" fill="#71717a">…</text>
+    </g>
+
+    <!-- ChevronUp button: collapsed state shows up arrow to expand -->
+    <g transform="translate(368, 724)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round">
+      <polyline points="0,6 6,0 12,6"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MESSAGE INPUT (sticky bottom, border-t bg-white px-3 py-3) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <g id="layer-input">
+    <rect x="0" y="744" width="390" height="56" fill="#ffffff"/>
+    <line x1="0" y1="744" x2="390" y2="744" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Mode selector ghost button -->
+    <rect x="8" y="756" width="44" height="36" rx="6" fill="none"/>
+    <g transform="translate(16, 765)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 0 9 L 3 9 L 3 12 L 6 9 L 11 9 L 11 0 Z"/>
+    </g>
+
+    <!-- Textarea -->
+    <rect x="58" y="754" width="268" height="40" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+    <text x="68" y="778" font-size="13" font-weight="400" fill="#18181b">What about O(n²) complexity?</text>
+
+    <!-- Send button: teal bg, min-h-11 -->
+    <rect x="332" y="752" width="52" height="44" rx="8" fill="#0d9488"/>
+    <g transform="translate(346, 766)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="0" y2="0"/>
+      <line x1="18" y1="6" x2="10" y2="13"/>
+      <line x1="0" y1="0" x2="6" y2="13"/>
+    </g>
+
+    <!-- Bottom safe area padding (iOS) -->
+    <rect x="0" y="800" width="390" height="44" fill="#ffffff"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- INTERACTION STATES (shown below viewport as reference frames) -->
+  <!-- These are at y > 844 so they are reference-only frames -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <!-- ARTBOARD LABEL -->
+  <text x="8" y="12" font-size="9" fill="#a1a1aa">chat-mobile · 390×844 · DS v3.6</text>
+</svg>

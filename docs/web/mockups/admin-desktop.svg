@@ -1,0 +1,293 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1040" viewBox="0 0 1440 1040" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  SUPERSEDED — No tab bar, missing UserManagementPanel, pre-tab architecture. DS §16 FLAG-001. Do not use as a build target. See DS §16 FLAG-001. Superseded by admin-desktop-v2.svg.
+  Component: Admin Page (AppShell + SystemInfoCard + LiveLogViewer)
+  Page: /admin (admin role required)
+  Design system version: 3.6 (2026-03-23)
+  Artboards: desktop 1440×1040px
+  </desc>
+
+  <!-- Page background -->
+  <rect width="1440" height="1040" fill="#ffffff"/>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <g id="layer-sidebar">
+    <rect x="0" y="0" width="220" height="1040" fill="#fafafa"/>
+    <line x1="220" y1="0" x2="220" y2="1040" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Logo -->
+    <g transform="translate(16, 16)">
+      <g transform="scale(0.785714)">
+        <path d="M 21.071,6.929 A 10,10 0 1 0 21.071,21.071" fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="21.071" cy="6.929" r="2.2" fill="#0d9488"/>
+        <circle cx="21.071" cy="21.071" r="1.6" fill="#0d9488"/>
+      </g>
+    </g>
+    <text x="44" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+    <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- Nav: Sessions -->
+    <g id="nav-sessions">
+      <rect x="8" y="64" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 72)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="0" width="16" height="13" rx="2"/>
+        <polyline points="0,13 0,16 4,13"/>
+        <line x1="4" y1="4" x2="12" y2="4"/>
+        <line x1="4" y1="7" x2="10" y2="7"/>
+      </g>
+      <text x="42" y="87" font-size="14" font-weight="500" fill="#52525b">Sessions</text>
+    </g>
+
+    <!-- Nav: Documents -->
+    <g id="nav-documents">
+      <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 116)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 0 L10 0 L14 4 L14 16 L2 16 Z"/>
+        <polyline points="10,0 10,4 14,4"/>
+        <line x1="5" y1="8" x2="11" y2="8"/>
+        <line x1="5" y1="11" x2="11" y2="11"/>
+      </g>
+      <text x="42" y="131" font-size="14" font-weight="500" fill="#52525b">Documents</text>
+    </g>
+
+    <!-- Nav: Assistant -->
+    <g id="nav-assistant">
+      <rect x="8" y="152" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 160)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="12" height="10" rx="2"/>
+        <circle cx="6" cy="9" r="1.5"/>
+        <circle cx="10" cy="9" r="1.5"/>
+        <line x1="8" y1="0" x2="8" y2="4"/>
+        <line x1="0" y1="9" x2="2" y2="9"/>
+        <line x1="14" y1="9" x2="16" y2="9"/>
+      </g>
+      <text x="42" y="175" font-size="14" font-weight="500" fill="#52525b">Assistant</text>
+    </g>
+
+    <!-- Nav: Settings -->
+    <g id="nav-settings">
+      <rect x="8" y="196" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(18, 204)" fill="none" stroke="#a1a1aa" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="8" r="3"/>
+        <path d="M8 0 L8 2 M8 14 L8 16 M0 8 L2 8 M14 8 L16 8 M2.3 2.3 L3.8 3.8 M12.2 12.2 L13.7 13.7 M13.7 2.3 L12.2 3.8 M3.8 12.2 L2.3 13.7"/>
+      </g>
+      <text x="42" y="219" font-size="14" font-weight="500" fill="#52525b">Settings</text>
+    </g>
+
+    <!-- Nav: Admin — ACTIVE -->
+    <g id="nav-admin-active">
+      <rect x="8" y="240" width="204" height="36" rx="6" fill="#f0fdfa"/>
+      <rect x="8" y="240" width="2" height="36" rx="1" fill="#0d9488"/>
+      <g transform="translate(18, 248)" fill="none" stroke="#0d9488" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="2" width="16" height="14" rx="2"/>
+        <path d="M4 2 L4 0 M8 2 L8 0 M12 2 L12 0"/>
+        <line x1="0" y1="7" x2="16" y2="7"/>
+        <line x1="4" y1="10" x2="7" y2="10"/>
+        <line x1="4" y1="13" x2="9" y2="13"/>
+      </g>
+      <text x="42" y="263" font-size="14" font-weight="500" fill="#0d9488">Admin</text>
+    </g>
+  </g>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <g id="layer-content">
+    <!-- Page header -->
+    <g id="layer-header">
+      <text x="248" y="54" font-size="24" font-weight="600" fill="#18181b">Administration</text>
+      <line x1="248" y1="70" x2="1400" y2="70" stroke="#e4e4e7" stroke-width="1"/>
+    </g>
+
+    <!-- ===== SystemInfoCard ===== -->
+    <g id="card-system-info" transform="translate(248, 90)">
+      <rect width="1152" height="166" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- drop shadow hint -->
+      <text x="20" y="32" font-size="20" font-weight="600" fill="#18181b">System Information</text>
+      <line x1="0" y1="48" x2="1152" y2="48" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- DL grid: 2 columns, 4 rows -->
+      <!-- Row 1 -->
+      <text x="20" y="72" font-size="14" font-weight="500" fill="#71717a">Version</text>
+      <text x="180" y="72" font-size="14" fill="#18181b">1.4.2</text>
+      <text x="596" y="72" font-size="14" font-weight="500" fill="#71717a">API Version</text>
+      <text x="756" y="72" font-size="14" fill="#18181b">v1</text>
+
+      <!-- Row 2 -->
+      <text x="20" y="96" font-size="14" font-weight="500" fill="#71717a">Uptime</text>
+      <text x="180" y="96" font-size="14" fill="#18181b">2d 4h 37m</text>
+      <text x="280" y="93" font-size="10" fill="#14b8a6" font-style="italic">live</text>
+      <text x="596" y="96" font-size="14" font-weight="500" fill="#71717a">Python</text>
+      <text x="756" y="96" font-size="14" fill="#18181b">3.12.3</text>
+
+      <!-- Row 3 -->
+      <text x="20" y="120" font-size="14" font-weight="500" fill="#71717a">Platform</text>
+      <text x="180" y="120" font-size="14" fill="#18181b">Linux-6.x-amd64</text>
+      <text x="596" y="120" font-size="14" font-weight="500" fill="#71717a">Debug</text>
+      <text x="756" y="120" font-size="14" fill="#18181b">Off</text>
+
+      <!-- Row 4 -->
+      <text x="20" y="144" font-size="14" font-weight="500" fill="#71717a">Verbose</text>
+      <text x="180" y="144" font-size="14" fill="#18181b">Off</text>
+    </g>
+
+    <!-- ===== LiveLogViewer ===== -->
+    <g id="card-live-log" transform="translate(248, 278)">
+      <rect width="1152" height="740" rx="10" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Card header -->
+      <text x="20" y="36" font-size="20" font-weight="600" fill="#18181b">Live Log Stream</text>
+
+      <!-- Control cluster (right side of header) -->
+      <!-- Debug Switch + Label -->
+      <!-- Switch OFF: track bg-zinc-200 thumb left -->
+      <g transform="translate(580, 20)">
+        <rect width="36" height="20" rx="10" fill="#e4e4e7"/>
+        <circle cx="12" cy="10" r="8" fill="#ffffff" stroke="#d4d4d8" stroke-width="1"/>
+      </g>
+      <text x="622" y="33" font-size="14" fill="#3f3f46">Debug</text>
+
+      <!-- Connection status badge: connected (green) -->
+      <g transform="translate(672, 16)">
+        <rect width="90" height="26" rx="13" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <circle cx="16" cy="13" r="4" fill="#16a34a"/>
+        <text x="26" y="17" font-size="12" font-weight="500" fill="#15803d" dominant-baseline="middle">connected</text>
+      </g>
+
+      <!-- Level Select: INFO, w-28 -->
+      <g transform="translate(770, 16)">
+        <rect width="112" height="26" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="10" y="17" font-size="13" fill="#18181b" dominant-baseline="middle">INFO</text>
+        <g transform="translate(92, 7)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="0,0 6,8 12,0"/>
+        </g>
+      </g>
+
+      <!-- Disconnect button (outline, connected state) -->
+      <g transform="translate(890, 16)">
+        <rect width="100" height="26" rx="6" fill="none" stroke="#e4e4e7" stroke-width="1.5"/>
+        <text x="50" y="17" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle" dominant-baseline="middle">Disconnect</text>
+      </g>
+
+      <!-- Clear button (ghost) -->
+      <g transform="translate(1000, 16)">
+        <rect width="60" height="26" rx="6" fill="none"/>
+        <text x="30" y="17" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle" dominant-baseline="middle">Clear</text>
+      </g>
+
+      <line x1="0" y1="56" x2="1152" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Log body: bg-zinc-50, max-h-96 desktop (384px), font-mono text-xs -->
+      <rect x="16" y="68" width="1120" height="630" rx="6" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Log lines — monospace font-size 12 -->
+      <g font-family="'Geist Mono', 'Cascadia Code', ui-monospace, monospace" font-size="12">
+        <!-- Line 1: INFO -->
+        <text x="28" y="92" fill="#71717a">14:23:07</text>
+        <rect x="100" y="80" width="36" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="118" y="92" fill="#1d4ed8" text-anchor="middle" dominant-baseline="middle" font-size="11">INFO</text>
+        <text x="144" y="92" fill="#71717a">cogtrix.core</text>
+        <text x="240" y="92" fill="#18181b">Agent session started — session_id=sess_a1b2c3</text>
+
+        <!-- Line 2: DEBUG -->
+        <text x="28" y="114" fill="#71717a">14:23:08</text>
+        <rect x="100" y="102" width="44" height="18" rx="4" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="122" y="114" fill="#52525b" text-anchor="middle" dominant-baseline="middle" font-size="11">DEBUG</text>
+        <text x="152" y="114" fill="#71717a">cogtrix.ws</text>
+        <text x="240" y="114" fill="#18181b">WebSocket connection established from 127.0.0.1:52341</text>
+
+        <!-- Line 3: INFO -->
+        <text x="28" y="136" fill="#71717a">14:23:09</text>
+        <rect x="100" y="124" width="36" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="118" y="136" fill="#1d4ed8" text-anchor="middle" dominant-baseline="middle" font-size="11">INFO</text>
+        <text x="144" y="136" fill="#71717a">cogtrix.llm</text>
+        <text x="240" y="136" fill="#18181b">Request to provider=anthropic model=claude-3-5-sonnet tokens=312</text>
+
+        <!-- Line 4: WARNING -->
+        <text x="28" y="158" fill="#71717a">14:23:11</text>
+        <rect x="100" y="146" width="62" height="18" rx="4" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <text x="131" y="158" fill="#b45309" text-anchor="middle" dominant-baseline="middle" font-size="11">WARNING</text>
+        <text x="170" y="158" fill="#71717a">cogtrix.rate</text>
+        <text x="240" y="158" fill="#18181b">Rate limit threshold 80% reached for user_8472 in telegram</text>
+
+        <!-- Line 5: DEBUG -->
+        <text x="28" y="180" fill="#71717a">14:23:12</text>
+        <rect x="100" y="168" width="44" height="18" rx="4" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="122" y="180" fill="#52525b" text-anchor="middle" dominant-baseline="middle" font-size="11">DEBUG</text>
+        <text x="152" y="180" fill="#71717a">cogtrix.tools</text>
+        <text x="240" y="180" fill="#18181b">Tool call dispatched: web_search(query="climate change 2026")</text>
+
+        <!-- Line 6: INFO -->
+        <text x="28" y="202" fill="#71717a">14:23:14</text>
+        <rect x="100" y="190" width="36" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="118" y="202" fill="#1d4ed8" text-anchor="middle" dominant-baseline="middle" font-size="11">INFO</text>
+        <text x="144" y="202" fill="#71717a">cogtrix.tools</text>
+        <text x="240" y="202" fill="#18181b">Tool web_search completed in 1.24s, 4 results returned</text>
+
+        <!-- Line 7: ERROR -->
+        <text x="28" y="224" fill="#71717a">14:23:15</text>
+        <rect x="100" y="212" width="40" height="18" rx="4" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+        <text x="120" y="224" fill="#b91c1c" text-anchor="middle" dominant-baseline="middle" font-size="11">ERROR</text>
+        <text x="148" y="224" fill="#71717a">cogtrix.db</text>
+        <text x="240" y="224" fill="#18181b">Database connection pool exhausted — retrying in 2s</text>
+
+        <!-- Line 8: INFO -->
+        <text x="28" y="246" fill="#71717a">14:23:17</text>
+        <rect x="100" y="234" width="36" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="118" y="246" fill="#1d4ed8" text-anchor="middle" dominant-baseline="middle" font-size="11">INFO</text>
+        <text x="144" y="246" fill="#71717a">cogtrix.db</text>
+        <text x="240" y="246" fill="#18181b">Database connection re-established successfully</text>
+
+        <!-- Line 9: DEBUG -->
+        <text x="28" y="268" fill="#71717a">14:23:18</text>
+        <rect x="100" y="256" width="44" height="18" rx="4" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="122" y="268" fill="#52525b" text-anchor="middle" dominant-baseline="middle" font-size="11">DEBUG</text>
+        <text x="152" y="268" fill="#71717a">cogtrix.ws</text>
+        <text x="240" y="268" fill="#18181b">Ping sent to client session sess_a1b2c3</text>
+
+        <!-- Line 10: INFO -->
+        <text x="28" y="290" fill="#71717a">14:23:19</text>
+        <rect x="100" y="278" width="36" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="118" y="290" fill="#1d4ed8" text-anchor="middle" dominant-baseline="middle" font-size="11">INFO</text>
+        <text x="144" y="290" fill="#71717a">cogtrix.llm</text>
+        <text x="240" y="290" fill="#18181b">Streaming response started — first token received in 340ms</text>
+      </g>
+
+      <!-- Scroll indicator: faded gradient at bottom of log area -->
+      <rect x="16" y="610" width="1120" height="88" rx="0" fill="url(#logFade)" opacity="0.8"/>
+
+      <!-- Footer note: buffer limit -->
+      <text x="28" y="712" font-size="12" fill="#71717a">Showing last 500 lines. Older entries have been discarded.</text>
+
+      <!-- ===== ANNOTATION: States ===== -->
+      <g transform="translate(20, 722)">
+        <text x="0" y="14" font-size="11" font-weight="600" fill="#71717a">Interaction state annotations:</text>
+        <!-- Disconnected badge -->
+        <g transform="translate(0, 20)">
+          <rect width="100" height="20" rx="10" fill="#fafafa" stroke="#e4e4e7" stroke-width="1"/>
+          <circle cx="14" cy="10" r="4" fill="#a1a1aa"/>
+          <text x="24" y="13" font-size="11" fill="#52525b" dominant-baseline="middle">disconnected</text>
+        </g>
+        <!-- Connect button (primary when disconnected) -->
+        <g transform="translate(110, 20)">
+          <rect width="82" height="20" rx="4" fill="#0d9488"/>
+          <text x="41" y="13" font-size="11" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">Connect</text>
+        </g>
+        <!-- Error badge -->
+        <g transform="translate(202, 20)">
+          <rect width="72" height="20" rx="10" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <circle cx="14" cy="10" r="4" fill="#dc2626"/>
+          <text x="24" y="13" font-size="11" fill="#b91c1c" dominant-baseline="middle">error</text>
+        </g>
+        <!-- Empty state text -->
+        <text x="284" y="32" font-size="11" fill="#71717a" font-style="italic">Disconnected empty: "Connect to start streaming logs."</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Gradient for log fade -->
+  <defs>
+    <linearGradient id="logFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafafa" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#fafafa" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+</svg>

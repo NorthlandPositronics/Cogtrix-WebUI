@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  SUPERSEDED — Violet-600 accent colors. DS §16 FLAG-005. Do not use as a build target. See DS §16 FLAG-005.
+  Component: Register Page (AuthPage — isRegister=true)
+  Page: /register
+  Design system version: 1.0 (2026-03-05)
+  Artboards: desktop 1280×800px
+  Notes: Shows email field-level error "This email is already in use." to demonstrate error treatment.
+  </desc>
+
+  <!-- ===================== PAGE BACKGROUND ===================== -->
+  <rect width="1280" height="800" fill="#fafafa"/>
+
+  <!-- ===================== CARD ===================== -->
+  <!-- Register form is taller: 3 fields + 1 with error. Approx height 498px -->
+  <!-- Card x = (1280 - 384) / 2 = 448, y = (800 - 498) / 2 = 151 -->
+  <g id="layer-content">
+    <!-- Drop shadow (shadow-sm approximation) -->
+    <rect x="448" y="152" width="384" height="498" rx="8" fill="#000000" fill-opacity="0.04"/>
+    <rect x="448" y="151" width="384" height="498" rx="8" fill="#000000" fill-opacity="0.02"/>
+    <!-- Card surface -->
+    <rect x="448" y="148" width="384" height="498" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+
+    <!-- WORDMARK BLOCK -->
+    <g id="zone-wordmark">
+      <text x="472" y="200" font-size="30" font-weight="700" fill="#18181b" letter-spacing="-0.5">Cogtrix</text>
+      <text x="472" y="220" font-size="14" font-weight="400" fill="#71717a">Create your account</text>
+    </g>
+
+    <!-- FORM — starts at y=244 -->
+    <g id="zone-form">
+
+      <!-- FIELD: Username -->
+      <g id="zone-field-username">
+        <text x="472" y="262" font-size="14" font-weight="500" fill="#3f3f46">Username</text>
+        <rect x="472" y="269" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="484" y="292" font-size="14" font-weight="400" fill="#a1a1aa">Enter your username</text>
+      </g>
+
+      <!-- FIELD: Email — y = 269+36+16+14 = 335 (label), rect at 342 -->
+      <!-- This field shows an ERROR state -->
+      <g id="zone-field-email">
+        <text x="472" y="335" font-size="14" font-weight="500" fill="#3f3f46">Email</text>
+        <!-- Input with error border: border-red-500 #ef4444 -->
+        <rect x="472" y="342" width="336" height="36" rx="6" fill="#ffffff" stroke="#ef4444" stroke-width="1.5"/>
+        <!-- User has typed something — realistic content, not placeholder -->
+        <text x="484" y="365" font-size="14" font-weight="400" fill="#18181b">alice@example.com</text>
+        <!-- Field error message: text-sm text-red-600 -->
+        <text x="472" y="392" font-size="14" font-weight="400" fill="#dc2626">This email is already in use.</text>
+      </g>
+
+      <!-- FIELD: Password — label y = 342+36+20+14 = 412, shifted down by error message height (20px) -->
+      <!-- error line height ~20px, so password starts at y=412 -->
+      <g id="zone-field-password">
+        <text x="472" y="415" font-size="14" font-weight="500" fill="#3f3f46">Password</text>
+        <rect x="472" y="422" width="336" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="484" y="445" font-size="14" font-weight="400" fill="#a1a1aa">Create a password</text>
+      </g>
+
+    </g>
+
+    <!-- SUBMIT BUTTON — mt-6 from last field: 422+36+24=482 -->
+    <g id="zone-submit">
+      <rect x="472" y="482" width="336" height="44" rx="6" fill="#7c3aed"/>
+      <text x="640" y="509" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Create account</text>
+    </g>
+
+    <!-- FOOTER LINK — mt-4 = 482+44+16=542 -->
+    <g id="zone-footer">
+      <text x="640" y="556" font-size="14" font-weight="400" text-anchor="middle">
+        <tspan fill="#71717a">Already have an account?</tspan>
+        <tspan fill="#7c3aed" text-decoration="underline">&#160;Sign in</tspan>
+      </text>
+    </g>
+
+  </g>
+
+  <!-- ===================== CALLOUT ANNOTATIONS ===================== -->
+  <g id="annotations" font-family="'Geist Mono', 'Courier New', monospace">
+
+    <!-- Wordmark annotation -->
+    <line x1="832" y1="210" x2="870" y2="210" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="874" y="206" font-size="11" fill="#6d28d9">wordmark block</text>
+    <text x="874" y="219" font-size="10" fill="#a78bfa">text-3xl font-bold + subtitle text-sm</text>
+
+    <!-- Username field annotation -->
+    <line x1="448" y1="287" x2="416" y2="287" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="316" y="283" font-size="11" fill="#6d28d9">field group (default)</text>
+    <text x="316" y="296" font-size="10" fill="#a78bfa">border #e4e4e7</text>
+
+    <!-- Email field error annotation -->
+    <line x1="448" y1="360" x2="416" y2="360" stroke="#dc2626" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="290" y="348" font-size="11" fill="#dc2626">field group (error state)</text>
+    <text x="290" y="361" font-size="10" fill="#f87171">Input border: #ef4444 (red-500)</text>
+    <text x="290" y="374" font-size="10" fill="#f87171">Error text: #dc2626 text-sm</text>
+
+    <!-- Error message callout arrow -->
+    <line x1="448" y1="392" x2="416" y2="392" stroke="#dc2626" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="290" y="395" font-size="10" fill="#dc2626">p.text-sm.text-red-600</text>
+
+    <!-- Password field annotation -->
+    <line x1="448" y1="440" x2="416" y2="440" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="316" y="436" font-size="11" fill="#6d28d9">field group (default)</text>
+    <text x="316" y="449" font-size="10" fill="#a78bfa">space-y-4 between fields</text>
+
+    <!-- Submit button annotation -->
+    <line x1="832" y1="504" x2="870" y2="504" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="874" y="500" font-size="11" fill="#6d28d9">submit button</text>
+    <text x="874" y="513" font-size="10" fill="#a78bfa">bg-violet-600 w-full size=lg</text>
+    <text x="874" y="526" font-size="10" fill="#a78bfa">label: "Create account"</text>
+
+    <!-- Footer annotation -->
+    <line x1="832" y1="556" x2="870" y2="556" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="874" y="552" font-size="11" fill="#6d28d9">footer link</text>
+    <text x="874" y="565" font-size="10" fill="#a78bfa">route Link to /login</text>
+
+    <!-- Card annotation -->
+    <line x1="448" y1="148" x2="418" y2="124" stroke="#6d28d9" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="290" y="116" font-size="11" fill="#6d28d9">Card: max-w-sm 384px, 3-field layout</text>
+    <text x="290" y="129" font-size="10" fill="#a78bfa">bg-white border-zinc-200 shadow-sm rounded-lg p-6</text>
+
+    <!-- Page bg annotation -->
+    <text x="36" y="36" font-size="11" fill="#6d28d9">page: min-h-screen flex items-center justify-center</text>
+    <text x="36" y="50" font-size="10" fill="#a78bfa">bg-zinc-50 #fafafa</text>
+
+    <!-- Register variant label -->
+    <text x="36" y="770" font-size="12" font-weight="600" fill="#6d28d9">Register variant — isRegister=true — email field shown in error state</text>
+  </g>
+
+  <!-- ===================== GENERAL ERROR ALERT — conditional, shown as reference ===================== -->
+  <!-- Positioned below wordmark as it would appear if API returns a 409 conflict -->
+  <g id="state-general-error-reference" transform="translate(448, 640)" opacity="0.85">
+    <text x="0" y="14" font-size="11" font-weight="500" fill="#52525b">General error alert (conditional — API 409 / 500):</text>
+    <!-- Alert: variant=destructive bg-red-50 border border-red-200 text-red-700 rounded-md p-3 -->
+    <rect x="0" y="20" width="336" height="48" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+    <!-- AlertCircle icon approximation (w-4 h-4 at x=12) -->
+    <circle cx="24" cy="44" r="7" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+    <line x1="24" y1="40" x2="24" y2="44" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="24" cy="47" r="1" fill="#dc2626"/>
+    <text x="40" y="41" font-size="13" font-weight="500" fill="#dc2626">Username or email is already taken</text>
+    <text x="40" y="57" font-size="12" fill="#b91c1c">API error 409 → general error alert (variant=destructive)</text>
+  </g>
+
+</svg>

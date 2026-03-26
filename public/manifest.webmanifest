@@ -1,0 +1,16 @@
+{
+  "name": "Cogtrix",
+  "short_name": "Cogtrix",
+  "description": "Cogtrix AI assistant",
+  "icons": [
+    {
+      "src": "/favicon-192x192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d9488"
+}
