@@ -123,6 +123,11 @@
   }
 }
 
+/* Streaming message cursor — step-end produces a hard terminal-style blink (DS §7 Streaming state) */
+.streaming-cursor {
+  animation: blink-cursor 1s step-end infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

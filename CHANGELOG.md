@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased] (2026-03-27)
+
+### Added
+
+* **assistant:** admin-only Testing tab (9th tab) with `SimulatorPanel` — run full agent pipeline via `POST /api/v1/assistant/simulate` without real channel delivery; results show response text, suppressed/deferred/guardrail-blocked/memory-persisted status badges, guardrail reason, and duration
+
+### Fixed
+
+* **design:** ProjectForge holistic audit — inline styles → Tailwind (`SimulatorPanel`, `AppShell`), semantic focus ring token (`StatusBar`)
+* **design:** DesignForge audit (2026-03-27) — streaming cursor animation rule added to `index.css` (`.streaming-cursor` class was absent, cursor rendered static); 404 page typography corrected (`text-2xl` → `text-3xl` for "404", `text-zinc-900` → `text-zinc-500` for "Page not found" heading per approved mockup S4-M3)
+
 ## [0.1.6](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.5...v0.1.6) (2026-03-26)
 
 
@@ -58,167 +69,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 * **projectforge:** adaptive polling, statusLog cap, docs interval ([1a0bb2a](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/1a0bb2a9981f0ca4ec5004a116bb434038c15093))
 
-## [Unreleased]
-
-### UI ConsistencyForge — holistic UI audit (2026-03-27)
-
-#### Fixed (UI ConsistencyForge 2026-03-27)
-- `src/components/StreamingMessageBubble.tsx` — P0: added streaming cursor `<span>` with `data-cy="streaming-cursor"` and `motion-reduce:hidden`; the `blink-cursor` keyframe was defined but the cursor element was never rendered (FORGE-001)
-- `src/pages/chat/ToolsSidebar.tsx` — P1: TriSwitch `on_demand` track color `bg-blue-100` → `bg-teal-100`; thumb color `bg-blue-600` → `bg-teal-500` to match DS teal scheme (FORGE-002)
-- `src/pages/settings/ProviderList.tsx` — P1: active model row accent `border-l-4` → `border-l-2`; decorative `CircleCheck` icon changed from `aria-label` to `aria-hidden` (FORGE-003)
-- `src/pages/documents/SemanticSearchBar.tsx` — P1: clear-search button `text-zinc-400` → `text-zinc-500` (WCAG 1.4.11; FORGE-004)
-- `src/components/TypingIndicator.tsx` — P1: mode label `text-zinc-400` → `text-zinc-500` (WCAG 1.4.3); refactored to accept a `mode` prop instead of reading `useStreamingStore` directly; `SessionPage` now passes `currentMode` down (FORGE-005)
-- `src/pages/chat/StatusBar.tsx` — P2: expand/collapse button focus ring `ring-ring` → `ring-zinc-400` per DS §7 spec (FORGE-006)
-- `src/components/MessageBubble.tsx` — P2: mode icon `text-zinc-400` → `text-zinc-500` on `bg-teal-50` surface (WCAG 1.4.11; FORGE-007)
-- `src/pages/layout/AppShell.tsx` — P2: mobile hamburger `text-zinc-600` → `text-zinc-500 hover:bg-zinc-100` (FORGE-008)
-- `src/pages/sessions/SessionBulkBar.tsx` — P2: select-all button missing `focus-visible:ring-offset-2` added (FORGE-009)
-- `src/components/MarkdownComponents.tsx` — P2: nested blockquote missing `[blockquote_&]:bg-teal-50`; corrected `[blockquote_&]:border-teal-100` → `[blockquote_&]:border-teal-200` to match DS spec (FORGE-010)
-- `src/pages/sessions/index.tsx` — P2: `TableHead` cells missing canonical `text-xs font-medium tracking-wide text-zinc-500 uppercase` classes added (FORGE-011)
-- `src/components/SessionCard.tsx` — P2: `SessionRow` name cell `min-w-0` added to prevent layout overflow on narrow mobile widths (FORGE-012)
-
-#### Documentation (UI ConsistencyForge 2026-03-27)
-- `docs/web/design-system.md` — bumped to v3.15; registered WhatsApp/Telegram brand hex fills in `ContactList.tsx` as permanent DS §16 exception (AUD-001)
-
-### DockerForge — Dockerfile holistic audit (2026-03-26)
-
-#### Fixed (DockerForge 2026-03-26)
-- `docker/nginx.conf` — `/assets/` location: replaced `expires 1y` + separate `add_header Cache-Control "public, immutable"` with a single `add_header Cache-Control "public, max-age=31536000, immutable" always`; the `expires` directive emits both an `Expires` header and `Cache-Control: max-age`, causing a duplicate `Cache-Control` response header when combined with an explicit `add_header`
-- `docker/nginx.conf` — `/health` location: added `default_type text/plain` to override nginx's built-in `application/octet-stream` for `return` directives; previously `add_header Content-Type text/plain` added a second `Content-Type` header alongside the default one, resulting in two `Content-Type` response headers
-- `docker/Dockerfile` — `HEALTHCHECK`: changed `wget -qO /dev/null` to `wget -qO-`; BusyBox wget exits 0 for all HTTP responses including 4xx/5xx when output is suppressed with `-O /dev/null` (connection refused still exits non-zero), whereas `-O-` streams the body which triggers correct exit behavior; increased `timeout` from 3s to 10s and `start-period` from 5s to 10s to give the nginx template-processing entrypoint adequate runway
-- `.dockerignore` — added `!README.md` exception after `*.md` glob; without it `README.md` was excluded from the build context (no functional impact on the build, but violates the principle that the ignore file should be deliberately explicit)
-
-### TestForge — Cypress test audit (2026-03-26)
-
-#### Fixed (TestForge 2026-03-26)
-- `cypress.config.ts` — added `optimizeDeps.include` for `react-syntax-highlighter` and its hljs sub-modules via `mergeConfig` so Cypress Vite pre-bundles them before specs run; eliminates the cold-start dep-optimization reload that caused `YamlBlock.cy.tsx` to fail
-- `cypress/e2e/sessions.cy.ts` — updated session deletion dialog selectors: `cy.contains("Delete session")` → `cy.contains("Remove session")`; `cy.contains("button", "Delete")` → `cy.contains("button", "Delete permanently")` to match the 3-option `SessionActionDialog`; test renamed to "creates and deletes a session permanently"
-- `cypress/component/SessionCard.cy.tsx` — replaced two `click({ force: true })` calls on hover-hidden checkbox with `trigger("mouseenter")` + plain `.click()`; replaced `have.class("ring-teal-600")` CSS assertion with `have.attr("data-selected", "true")` semantic attribute check
-- `cypress/component/StatusBar.cy.tsx` — replaced CSS class assertions (`have.class("h-6")`, `have.class("w-6")`) in "summary row is slim" test with `have.attr("aria-expanded", "false")` on the expand button
-- `src/components/SessionCard.tsx` — added `data-selected={String(selected)}` attribute to the `SessionCard` `Card` element to expose selection state for tests without CSS class assertions
-
-
-### Added
-### APIForge — schema contract audit (2026-03-26)
-
-#### Fixed (APIForge 2026-03-26)
-- `src/lib/api/types/system.ts` — `ViolationRecordOut.detail` corrected from `string | null` to `string`; schema declares this field required (always present in guardrail pipeline output)
-- `src/lib/api/types/workflow.ts` — `WorkflowOut.tool_policy` and `auto_detect` made optional (`?`) to match schema where these sub-objects are not in the `required` list
-- `src/lib/api/types/assistant.ts` — `ContactOut.channels` made optional (`channels?: string[]`); schema does not require this field for all phonebook contacts
-- `src/lib/api/client.ts` — `handleApiError`: removed stale `PAYLOAD_TOO_LARGE` and `UNSUPPORTED_MEDIA_TYPE` cases (these error codes no longer exist; 413/415 responses now use `VALIDATION_ERROR`); added explicit handlers for `CAMPAIGNS_NOT_AVAILABLE`, `CAMPAIGN_NOT_LAUNCHABLE`, `ASSISTANT_START_FAILED`, `BAD_REQUEST`, `MODEL_NOT_FOUND`, `WIZARD_STEP_ERROR`, `CONFIG_INVALID`
-- `src/pages/assistant/ContactList.tsx` — null-safe access for optional `channels` field via local `const channels = contact.channels ?? []`
-- `src/pages/assistant/WorkflowsPanel.tsx` — null-safe access for optional `tool_policy` and `auto_detect` sub-objects via optional chaining (`?.`) with fallback defaults in `formFromWorkflow` and the workflow table row
-
-#### Flags Raised (awaiting api_designer resolution)
-- **FLAG-001**: `ConfigOut.delegate_enabled` field used in frontend (`src/lib/api/types/config.ts:58`, `src/pages/chat/SessionPage.tsx:105`) is absent from `openapi.yaml` — schema update or removal required
-- **FLAG-002**: `POST`, `PATCH`, `DELETE /api/v1/config/providers` and `POST /api/v1/config/providers/{name}` called by `ProviderList.tsx` but not listed in `openapi.yaml` (MISSING-ENDPOINT-003)
-- **FLAG-003**: `POST /api/v1/sessions/{id}/restore` and `DELETE /sessions/{id}?permanent=true` called by sessions page but absent from `openapi.yaml` (MISSING-ENDPOINT-001/002 — previously known stubs)
-- **FLAG-004**: `ProviderOut.type` typed as `"openai" | "ollama" | "anthropic" | "google"` enum in frontend; schema uses open `string` — decision needed on whether to keep enum or widen to `string`
-
-### ProjectForge WebUI Audit — Format + Bundle (2026-03-26)
-
-#### Fixed (ProjectForge 2026-03-26)
-- `src/pages/chat/MessageInput.tsx` — fixed Prettier formatting: collapsed ternary `effectiveMode` declaration onto one line; reformatted `DropdownMenuRadioGroup` props across multiple lines
-- `src/pages/settings/ProviderList.tsx` — fixed Prettier formatting: destructured `mutationFn` param type across multiple lines; split `Label htmlFor` attributes; sorted `className` token order per Prettier canonical order
-- `src/components/YamlBlock.tsx` — switched from full `react-syntax-highlighter` default build to `Light` named export with only the `yaml` language registered; reduces the `SetupWizard` lazy chunk from **928 kB / 298 kB gzip** to **57 kB / 19 kB gzip** (94% reduction); eliminates Vite 500 kB chunk size warning
-
-### APISync — Activate new backend endpoints (2026-03-26)
-
-#### Added (APISync 2026-03-26)
-- `src/lib/api/types/config.ts` — added `ProviderCreateRequest` and `ProviderPatchRequest` interfaces matching the new `POST /api/v1/config/providers` and `PATCH /api/v1/config/providers/{name}` endpoints; inline error-code comments for `PROVIDER_EXISTS` (409) and `PROVIDER_IN_USE` (409)
-- `src/pages/settings/ProviderList.tsx` — full provider CRUD for admin users:
-  - Ghost "Add provider" `tfoot` row (DS §5 BUG-09 pattern) toggles an inline add form
-  - Add form: Name (slug-validated), Type select (openai/ollama/anthropic/google), Base URL, API key; calls `POST /config/providers`; inline error for `PROVIDER_EXISTS`
-  - Edit pencil icon button per row opens inline expand panel; calls `PATCH /config/providers/{name}`; only one row editable at a time
-  - Delete trash icon button opens `ConfirmDialog`; calls `DELETE /config/providers/{name}`; `PROVIDER_IN_USE` surfaced as toast
-  - Removed wizard-redirect callout (backend now has a real CRUD API); Setup Wizard tab still exists for initial config generation
-  - Actions column (`w-20`, icon buttons `h-11 w-11`) appended to providers table (admin only)
-  - All provider mutations invalidate `keys.providers()` and `keys.config()`
-- `docs/web/briefs/provider-crud.md` — design brief for provider CRUD UX (approved; implementation target)
-
-#### Fixed (APISync 2026-03-26)
-- `src/pages/sessions/index.tsx` — activated three previously stubbed mutations:
-  - `unarchiveMutation`: now calls `POST /sessions/{id}/restore`; toast "Session restored"
-  - `hardDeleteMutation`: now calls `DELETE /sessions/{id}?permanent=true`; toast "Session permanently deleted"; clears `actionTarget` on success
-  - `bulkDeleteMutation`: now fans out `DELETE /sessions/{id}?permanent=true` for each selected id; toast "{N} session(s) permanently deleted"
-- `src/pages/chat/MessageInput.tsx` — eliminated `react-hooks/set-state-in-effect` lint error: replaced `useEffect` delegate-mode guard with an `effectiveMode` derived value computed during render; behavior is identical (`delegateEnabled=false` while `mode="delegate"` still sends as "normal")
-
-
-* **feat(sessions):** grid/list view toggle with icon buttons
-  - Sessions page now supports grid (tile) and list views via LayoutGrid/LayoutList toggle
-  - Toggle group uses ghost icon buttons in a pill container; active view uses `bg-zinc-100`
-
-* **feat(sessions):** 3-option session removal dialog
-  - Replaced single-action delete `ConfirmDialog` with `SessionActionDialog`
-  - Dialog presents Archive and Delete permanently as distinct options with icon + description blocks
-  - Archive calls `DELETE /sessions/{id}` (actual backend behavior); Delete permanently shows pending toast (backend endpoint missing)
-
-* **feat(sessions):** unarchive and hard-delete actions for archived sessions
-  - Archived session cards and rows now show `ArchiveRestore` icon button (unarchive)
-  - Unarchive shows pending toast until backend unarchive endpoint is available
-
-* **feat(sessions):** bulk selection and group operations
-  - Checkbox per session card/row (hover-reveal in tile view, always-visible in list view)
-  - Selected tiles show teal ring; selected rows show `bg-zinc-50` highlight
-  - `SessionBulkBar` fixed at viewport bottom with Archive, Delete permanently, and Clear controls
-  - Header checkbox in list view supports indeterminate state for partial selection
-  - Bulk archive fans out individual mutations; bulk delete shows pending toast
-
-* **feat(sessions):** per-session model edit popover
-  - Clicking the model chip on a session card or row opens a popover with available models
-  - Selecting a model calls `PATCH /sessions/{id}` with `config.model` immediately (save on select)
-
-* **feat(settings):** Default model Select in General tab
-  - New "Default model" selector above the flag toggles in Settings > General
-  - Admin-only; switches global active model via `POST /config/model`
-
-* **feat(settings):** models table row-selection paradigm
-  - Removed "Switch to" buttons from Models table; inactive rows are now clickable
-  - Active model row shows `bg-teal-50` + teal left accent bar + `CircleCheck` icon
-  - Table reduced from 5 to 3 columns (Alias, Provider, Model name)
-
-* **feat(settings):** ghost "Add model" row in Models table
-  - Removed top-right "Add model" outline button
-  - Replaced with a dashed-border ghost `tfoot` row spanning all columns
-
-* **feat(settings):** add provider via Setup Wizard callout
-  - No backend endpoint exists for adding providers at runtime
-  - Added a visible callout in the Providers section linking to the Setup Wizard tab
-  - Settings tabs are now controlled state to allow programmatic tab switching
-
-* **feat(settings/wizard):** YAML syntax highlighting and copy/download
-  - All YAML preview blocks in `SetupWizard` replaced with new `YamlBlock` component
-  - `YamlBlock`: dark surface with `atomOneDark` syntax highlighting, Copy and Download buttons
-  - Copy button swaps to Check icon for 1.5 s; Download saves as `cogtrix.yaml`
-
-* **test:** 47 new Cypress component tests
-  - New spec files: `SessionCard.cy.tsx` (28), `SessionActionDialog.cy.tsx` (8), `SessionBulkBar.cy.tsx` (11), `YamlBlock.cy.tsx` (7)
-  - Component test count: 45 → 92
-
-### Bug Fixes
-
-* **fix(settings):** provider health check layout shift
-  - Health check result now occupies a fixed `min-w-[7rem]` reserved slot
-  - No column width change or row height shift when result appears
-
-* **design:** DesignForge holistic audit — 1 P0, 8 P1, 2 P2 findings resolved; DS v3.13; closes SCHEMA-001/002/003
-  - P0: `ApiKeyList` revoke button rest color corrected to `text-zinc-500` (GUARDRAIL-001)
-  - P1: `AssistantChatList` column order → Name/Channel/Mode/Lock/Last Activity/Messages; Last Activity cell `text-xs text-zinc-500 tabular-nums`; Messages cell `text-right tabular-nums`; lock icon `h-4 w-4`
-  - P1: `GuardrailsPanel` time cell → `font-mono tabular-nums text-zinc-500` (SCHEMA-001 closed)
-  - P1: `ContactList` overflow tooltip renders one identifier per line instead of `join(", ")` (SCHEMA-003 closed)
-  - P1: Settings tabs wrapper — removed erroneous `mb-4` (spacing owned by `TabsContent mt-4`)
-  - P1: `StatusBar` time column — `w-20` → `w-[4.5rem]` (exact 4-char mono width)
-  - P1: `ConfigFlagsForm` divided-list row padding `py-4` → `py-3` (DS §5 Divided List)
-  - P2: `ConfigFlagsForm` info card surface — `rounded-xl` → `rounded-lg` (inline form widget surface)
-  - P2: `McpServerList` restart button — added `text-zinc-500 hover:bg-zinc-100` (DS §5 ghost icon button)
-
-* **fix(webui):** DesignForge holistic audit — 1 P0, 4 P1, 1 P2 findings resolved (2026-03-26)
-  - P0: `StatusBar` expand/collapse button rest color `text-zinc-400` → `text-zinc-500` (WCAG AA 4.5:1 on `bg-zinc-50`)
-  - P1: `SessionCard` "Save on select" popover hint text `text-zinc-400` → `text-zinc-500` (WCAG AA on white)
-  - P1: `YamlBlock` outer container `rounded-xl` → `rounded-lg border border-zinc-700` (DS §5 YamlBlock spec)
-  - P1: `DeferredRecordTable` tooltip overflow `+N more` list item `text-zinc-400` → `text-zinc-500` (text on white tooltip)
-  - P1: `AssistantChatList` outer wrapper — removed spurious `mb-4` from tab content (DS v3.13 pattern: spacing owned by `TabsContent mt-4`)
-  - P2: `StatusBar` expand/collapse chevron `size-3` → `size-3.5` (DS §7 StatusBar spec)
-  - FLAG-001: `StreamingMessageBubble` streaming cursor implementation deferred pending `web_designer` ruling on ReactMarkdown cursor injection approach
 
 ## [0.1.3](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.2...v0.1.3) (2026-03-24)
 
@@ -259,7 +109,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 * **ui:** reconciliation corrections from chat/documents mockup audit ([8b31a62](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/8b31a625544815f91793235eec20eac1cd94a48a))
 * **ui:** reconciliation corrections from sessions/tools/settings/admin/assistant/404 audit ([8ad8a6a](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/8ad8a6a77e20e30a27f216c1e8d02a228d3d671a))
 
-## [Unreleased] — 2026-03-25
+### Sprint notes — 2026-03-25 (rolled into v0.1.3 and v0.1.4)
 
 ### APIForge — contract doc sync (2026-03-25)
 
@@ -401,7 +251,7 @@ Full re-sync of frontend TypeScript types and component usage against `docs/api/
 
 ---
 
-## [Unreleased] — 2026-03-24
+### Sprint notes — 2026-03-24 (rolled into v0.1.3)
 
 #### Test (TestForge — DS v3.8 compliance, 2026-03-24)
 - fix: StatusBar component test — update `span.animate-pulse` selector to `span[class*='animate-pulse']` (broken by DesignForge motion-safe prefix addition)
@@ -632,7 +482,7 @@ Full holistic audit of frontend API usage against `docs/api/openapi.yaml`:
 
 ---
 
-## [Unreleased] — 2026-03-23
+### Sprint notes — 2026-03-23
 
 ### Brand mark & favicon system
 
@@ -870,7 +720,7 @@ match backend Pydantic schemas. WebSocket message types match backend `ws.py` de
 - P1 fixes applied: 6 (semantic tokens, reduced-motion, animation migration)
 - P2 fixes applied: 2 (icon color consistency) + 6 files Prettier-formatted
 
-## [Unreleased] — 2026-03-22
+### Sprint notes — 2026-03-22
 
 ### ProjectForge WebUI Audit — cross-cutting fixes
 
@@ -989,7 +839,7 @@ APIForge contract validation run — 2026-03-22. 4 P2 deviations found and fixed
 * **tools:** auto_approved tools now user-adjustable via TriSwitch ([0652216](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/065221620ea89abab87c87536e15a0847bf0a7ec))
 * **wizard:** render question as markdown, strip protocol lines, surface 500 errors ([854ea0d](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/854ea0d4bfe6b34a561cd97255079a5c6c8f62d0))
 
-## [Unreleased] — 2026-03-22
+### Sprint notes — 2026-03-22
 
 ### feat(webui): visual design overhaul — markdown polish, WCAG corrections, design system v3.0
 
@@ -1033,7 +883,7 @@ APIForge contract validation run — 2026-03-22. 4 P2 deviations found and fixed
 
 ---
 
-## [Unreleased] – 2026-03-07
+### Sprint notes — 2026-03-07
 
 ### Fixed
 - Error input borders changed from `border-red-500` to `border-red-600` for WCAG AA 3:1 non-text graphics compliance
@@ -1075,7 +925,7 @@ APIForge contract validation run — 2026-03-22. 4 P2 deviations found and fixed
 
 ---
 
-## [Unreleased] — 2026-03-07
+### Sprint notes — 2026-03-07 (b)
 
 ### fix: DesignForge design system compliance audit (2nd pass)
 
@@ -1241,7 +1091,7 @@ APIForge contract validation run — 2026-03-22. 4 P2 deviations found and fixed
 - E2E tests: 78 → 83 (all passing)
 - Unit tests: 113/113 unchanged and passing
 
-## [Unreleased] — 2026-03-05
+### Sprint notes — 2026-03-05
 
 ### ProjectForge WebUI Run 1 — Holistic Frontend Audit
 
@@ -1276,7 +1126,7 @@ APIForge contract validation run — 2026-03-22. 4 P2 deviations found and fixed
 - GAP-04: Memory token usage warning threshold undefined
 - GAP-05: `prefers-reduced-motion` override for streaming cursor undocumented
 
-## [Unreleased] — DesignForge Audit Run 3
+### Sprint notes — DesignForge Audit Run 3
 **Date**: 2026-03-05
 
 ### Fixed — Button Loading Pattern (P1)
@@ -1306,7 +1156,7 @@ APIForge contract validation run — 2026-03-22. 4 P2 deviations found and fixed
 - FLAG-12: `AgentStateBadge` — decide whether `aria-live="polite"` should be added for state transitions
 - FLAG-13: `text-zinc-700` — codify as approved secondary body text color or prohibit and standardize
 
-## [Unreleased] — DesignForge Audit Run 2
+### Sprint notes — DesignForge Audit Run 2
 **Date**: 2026-03-05
 
 ### Fixed — Button Loading Pattern (P1)
@@ -1360,7 +1210,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - FLAG-07: Button icon sizing — design system says 20px (`h-5 w-5`) for icons in buttons, but shadcn/ui defaults to 16px (`size-4`). The MessageInput Send/Cancel icons and all sm-sized button icons use 16px. Decision needed on whether to override shadcn default.
 - FLAG-08: Sidebar nav icon sizing — design system says 24px for navigation icons, but mockup SVGs show 16px. Decision needed on which takes precedence.
 
-## [Unreleased] — DesignForge Audit
+### Sprint notes — DesignForge Audit
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1395,7 +1245,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - FLAG-05: ConfigFlagsForm muted info panel pattern (`bg-zinc-50` without `shadow-sm`) not documented in design system
 - FLAG-06: No SVG mockups exist for Session, Settings, Admin, Documents, Assistant, NotFound pages
 
-## [Unreleased] — Forge Audit Round 13
+### Sprint notes — Forge Audit Round 13
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1413,7 +1263,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - `DocumentCard` uses `Card` without `CardHeader` — acceptable for compact content cards
 - `LiveLogViewer` inline Tailwind badge classes — diagnostic-only admin component, not design-token-critical
 
-## [Unreleased] — Forge Audit Round 12
+### Sprint notes — Forge Audit Round 12
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1422,7 +1272,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - R12-03 (P2): Changed all table/card container wrappers from `rounded-lg` to `rounded-xl` in `ProviderList`, `ApiKeyList`, `McpServerList`, `ConfigFlagsForm`, and `login` page
 - R12-08 (P2): Changed `SemanticSearchBar` search result card from `rounded-md` to `rounded-xl` (card surface radius)
 
-## [Unreleased] — Forge Audit Round 11
+### Sprint notes — Forge Audit Round 11
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1440,7 +1290,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - R11-03: Switch `size` prop added in `src/components/ui/switch.tsx` — clean shadcn customization, documented in design system
 - R11-08: 404 page `text-3xl font-bold` on decorative "404" numeral — acceptable for decorative use outside auth-only restriction
 
-## [Unreleased] — Forge Audit Round 10
+### Sprint notes — Forge Audit Round 10
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1453,7 +1303,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 ### Accepted Deviations (architectural)
 - VIO-001–030 (except VIO-004): Sub-page components under `src/pages/*/` owning queries/mutations accepted as feature modules within the page layer — lifting everything to route files would create god-components
 
-## [Unreleased] — Forge Audit Round 9
+### Sprint notes — Forge Audit Round 9
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1485,7 +1335,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 ### Added
 - `setExclusivePanel` action in `useUIStore` for explicit panel switching
 
-## [Unreleased] — Forge Audit Round 8
+### Sprint notes — Forge Audit Round 8
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1514,7 +1364,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 ### Refactored
 - R8-001 accepted deviation: `ProviderList` `healthResults` Map accumulates per-provider ad-hoc results from multiple mutation calls — not cacheable via TanStack Query's single-result `useMutation`
 
-## [Unreleased] — Forge Audit Round 7
+### Sprint notes — Forge Audit Round 7
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1544,7 +1394,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - FORGE-058 (P1): Converted `ProviderList` `handleHealthCheck` from raw async handler to `useMutation`
 - FORGE-059 (P1): Moved `McpServerList` `setRestartingServer` side-effect out of `restartMutation.mutationFn`; derived loading from `mutation.isPending && mutation.variables`; removed `restartingServer` state
 
-## [Unreleased] — Forge Audit Round 6
+### Sprint notes — Forge Audit Round 6
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1564,7 +1414,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - FORGE-035 (P2): Stabilized `AssistantChatList.openChat` with `useCallback`
 - FORGE-036 (P2): Stabilized `ToolsSidebar.handleToggle` with `useCallback`
 
-## [Unreleased] — Forge Audit Round 5
+### Sprint notes — Forge Audit Round 5
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1582,7 +1432,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - FORGE-015 (P1): Extracted `useScheduledMessagesQuery`, `useDeferredRecordsQuery`, `useContactsQuery`, `useKnowledgeQuery` hooks from inline `useQuery` calls
 - FORGE-016 (P1): Extracted `useGuardrailsQuery` hook from `GuardrailsPanel` inline `useQuery`
 
-## [Unreleased] — Forge Audit Round 4
+### Sprint notes — Forge Audit Round 4
 **Date**: 2026-03-05
 
 ### Fixed
@@ -1602,7 +1452,7 @@ Changed `bg-*-100` to `bg-*-50` for semantic badge backgrounds.
 - FORGE-003 (P0): Extracted duplicate `ReactMarkdown` component configuration from `MessageBubble` and `StreamingMessageBubble` into a shared `src/pages/chat/markdownComponents.tsx` module
 - Typed `SessionSocketHandlers.onAgentState` as `(state: AgentState)` instead of `(state: string)` — removed unsafe cast in `useSessionSocket`
 
-## [Unreleased]
+### Sprint notes — pre-release (rolled into v0.1.0)
 
 ### Changed
 - Replaced `SetupWizard` `Loader2` content spinner with `Skeleton` layout

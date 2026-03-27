@@ -1,6 +1,6 @@
 # Cogtrix WebUI — Design System
 
-**Version**: 3.15
+**Version**: 3.17
 **Created**: 2026-03-05
 **Last updated**: 2026-03-27
 **Owner**: web_designer agent
@@ -10,6 +10,8 @@
 
 | Version | Date | Change |
 |---|---|---|
+| 3.17 | 2026-03-27 | §16 — DESIGN-001 resolved: `.streaming-cursor` CSS rule added to `src/index.css` (streaming cursor was rendering statically). DESIGN-002 resolved: `not-found.tsx` typography corrected to match approved mockup S4-M3 (`text-2xl` → `text-3xl` for "404"; `text-zinc-900` → `text-zinc-500` for "Page not found"). No design system rule changes — implementation corrections only. |
+| 3.16 | 2026-03-27 | §5 Badges — SimulatorResult badge color table added: four pipeline-outcome badges (Suppressed/amber, Deferred/blue, Guardrail blocked/red, Memory persisted/teal). §5 Collapsible disclosure — Collapsible disclosure pattern added (admin advanced-options fields). §14 Assistant page — Testing tab (9th tab) documented: admin-only, not gated on `serviceRunning`, SimulatorPanel split-layout spec. §16 — SIM-001 registered (assistant-testing-tab.svg mockup required). |
 | 3.15 | 2026-03-27 | §16 — AUD-001 registered: WhatsApp (`#25D366`) and Telegram (`#2AABEE`) hardcoded hex fills in `ContactList.tsx` inline SVGs approved as permanent brand-IP exceptions to the §1 no-hardcoded-hex rule. No rule changes. |
 | 3.14 | 2026-03-25 | §5 — Model row-selection pattern added (BUG-01): RadioGroup row selection replaces "Switch to" button; active row uses `bg-teal-50` + left `border-l-2 border-l-teal-600` + CircleCheck icon; Action and Status columns removed from Models table. §5 — View toggle button group pattern added (BUG-02): `rounded-lg border border-zinc-200 p-0.5` container, `h-8 w-8` icon buttons, `bg-zinc-100` active state. §5 — Ghost row add-action pattern added (BUG-09): `tfoot` row with `border-t border-dashed border-zinc-300`, `text-zinc-500 hover:text-zinc-900`, replaces top-right outline button for table creation actions. §5 — YamlBlock dark code surface added (BUG-10): dark theme (`bg-zinc-800/zinc-950` header/body), `atomOneDark` via react-syntax-highlighter, Copy + Download icon buttons in header. §12 — RadioGroup added to component inventory. §12 — SessionsPage updated: grid/list view toggle, bulk selection, 3-option remove dialog, archived action set. §14 — Sessions Dashboard updated with new patterns. §14 — Settings Providers & Models updated: ghost-row add pattern, model row-selection. §16 — BUG-08 registered as FEAT-001 (Add provider deferred — no backend endpoint). AUDIT-P2-001 deferred (already open). |
 | 3.13 | 2026-03-25 | §16 — SCHEMA-001/002/003 resolved by DesignForge holistic audit sprint. AUDIT-P2-001 registered (DeferredRecordTable missing count row). No rule changes — implementation corrections only. |
@@ -670,6 +672,23 @@ Rationale for not reusing amber: amber is reserved for warning/transient states 
 | `firing` | `bg-amber-50 text-amber-700 border-amber-200` | In-progress / transient — same amber-for-transient convention |
 | default/`pending` | `bg-blue-50 text-blue-700 border-blue-200` | Awaiting dispatch |
 
+**SimulatorResult pipeline-outcome badges** (applied in `SimulatorPanel` result card):
+
+The result card shows four badges simultaneously. Each badge uses an "active" state when the corresponding `SimulateOut` boolean is true, and a neutral zinc outline when false. Both active and inactive states are always rendered — the inactive state is not hidden, because seeing that guardrails did not fire is informative feedback.
+
+| Outcome | Active classes | Inactive classes | Rationale |
+|---|---|---|---|
+| Guardrail blocked | `bg-red-50 text-red-700 border-red-200` | `text-zinc-500 border-zinc-200` (outline) | Red follows the DS "blocked/error terminal state" convention (same as `rate_limit`/`llm_judge` ViolationBadge) |
+| Suppressed | `bg-amber-50 text-amber-700 border-amber-200` | `text-zinc-500 border-zinc-200` (outline) | Amber follows the DS "warning / transient / not-dispatched" convention; the message was not delivered |
+| Deferred | `bg-blue-50 text-blue-700 border-blue-200` | `text-zinc-500 border-zinc-200` (outline) | Blue follows the DS "informational / pending" convention (same as `ScheduledMessage` pending state) |
+| Memory persisted | `bg-teal-50 text-teal-700 border-teal-200` | `text-zinc-500 border-zinc-200` (outline) | Teal ties to the application accent and AI-activity states; persisting memory is an intentional, positive AI action |
+
+Badge order left-to-right: Guardrail blocked → Suppressed → Deferred → Memory persisted. Severity order (error first, informational last) supports quick scanning — the most consequential outcome is always leftmost.
+
+All four badges use the shared `Badge` component with `variant="outline"` as the base, overriding classes via `className`. Badge size: `text-xs font-medium px-2 py-0.5 rounded-full` (DS §5 badge standard).
+
+**Display note**: When `suppressed === true` and `response === ""`, the response text area renders an italic placeholder string `"(No response — message was suppressed)"` in `text-zinc-500 italic text-sm`. This replaces the response prose area — the placeholder and the Suppressed active badge together communicate the same fact through two independent channels.
+
 **CardTitle size exception — compact data-table cards**: Cards that contain a `Table` as their primary content and appear in a multi-card stacked layout (e.g., `GuardrailsPanel`) use `CardTitle className="text-base"` (16px / `font-semibold`). This is intentional. The default `text-xl` CardTitle creates excessive visual weight when the card is a data panel rather than a standalone section heading. This exception applies only when: (1) the card is stacked among other cards of the same hierarchy, and (2) the card header also contains a count `Badge` alongside the title. Do not apply `text-base` to standalone section-heading cards.
 
 ### Dialogs / Modals
@@ -873,6 +892,37 @@ Replaces top-right outline "Add X" buttons on the Models (and future Providers) 
 **Form open state**: When clicked, the ghost row disappears and the existing inline form panel (`rounded-lg border border-zinc-200 bg-zinc-50 p-4`) appears below the table. Focus moves to the first form input. An explicit "Cancel" ghost button inside the form closes it.
 
 **Keyboard**: `onKeyDown` handles Enter and Space.
+
+### Collapsible disclosure pattern (v3.16)
+
+Used to progressively reveal optional or infrequently-used form fields without adding a `Dialog` or an extra section. Preferred over the native HTML `<details>` / `<summary>` element because shadcn/ui `Collapsible` is keyboard-accessible, animates via the shadcn/ui transition system, and is consistent with other expand/collapse patterns in the app (e.g., `StatusBar` uses a single-button toggle).
+
+**When to use**: A small set of optional fields that most users do not need on each interaction. The SimulatorPanel "Advanced options" section (Sender name, Sender ID) is the canonical use case.
+
+**shadcn/ui component**: `Collapsible` / `CollapsibleTrigger` / `CollapsibleContent`. Install via `pnpm dlx shadcn@latest add collapsible` if not present.
+
+**Trigger button specification**:
+
+```html
+<CollapsibleTrigger class="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+  <ChevronDown class="h-4 w-4 transition-transform duration-150" />
+  Advanced options
+</CollapsibleTrigger>
+```
+
+When the collapsible is open, the `ChevronDown` icon rotates 180°: `data-[state=open]:rotate-180` applied to the icon via `className`. The icon rotation is a `transition-transform duration-150` animation.
+
+**Content surface**: The collapsed content region uses `mt-2` top margin to create visual separation from the trigger. Fields inside are standard form fields following DS §5 Forms rules — `space-y-4` between them, `Label` above `Input`.
+
+**No border/card wrapping**: The advanced options content is not placed inside a `rounded-lg border` surface. It appears in the form flow without additional framing — the indentation implied by the trigger label is sufficient visual grouping.
+
+| Element | Classes |
+|---|---|
+| Trigger | `flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors duration-150` |
+| Chevron icon | `h-4 w-4 transition-transform duration-150 data-[state=open]:rotate-180` |
+| Content container | `mt-2 space-y-4` |
+
+**Rationale for `Collapsible` over `<details>`**: The `<details>` element has unpredictable cross-browser animation behavior. `Collapsible` provides consistent `data-[state=open/closed]` attributes for styling, integrates with the app's focus management, and does not require overriding browser default marker styles. The trade-off (extra JS) is acceptable — `Collapsible` is already in the dependency tree via shadcn/ui.
 
 ### YamlBlock dark code surface (BUG-10, v3.14)
 
@@ -1436,7 +1486,7 @@ Rules for dark mode readiness:
 | `Switch` | default, sm | `switch` | Settings (feature flags), LiveLogViewer header (debug toggle). Note: the sm variant previously used in `ToolsSidebar` has been superseded by `TriSwitch`. |
 | `TriSwitch` | positions 0/1/2 | Custom (no shadcn/ui base) | Session page — `ToolsSidebar` / `ToolRow` only |
 | `Table` | default | `table` | Settings (API keys, MCP servers), Admin, Documents, Assistant (violations, blacklist, guardrails) |
-| `Tabs` | default | `tabs` | Settings page (5 tabs), Assistant page (8 tabs) |
+| `Tabs` | default | `tabs` | Settings page (5 tabs), Assistant page (9 tabs) |
 | `Tooltip` | default | `tooltip` | Icon buttons without visible labels |
 | `Toast` (Sonner) | info, success, error, warning | `sonner` | Global notifications |
 | `Select` | default | `select` | LiveLogViewer (log level selector), NewSessionDialog (model, memory mode) |
@@ -1464,6 +1514,7 @@ Rules for dark mode readiness:
 | `UserManagementPanel` | default | Custom (uses `Card`, `Table`) | Admin page — Users tab; user list with role and status management |
 | Markdown rendering (inline) | — | No standalone component — inlined in `AssistantBubble` (`MessageBubble.tsx`) and `StreamingMessageBubble.tsx` via `<div className="space-y-3 text-base leading-relaxed"><ReactMarkdown components={markdownComponents}>` | Session message list — assistant and streaming bubbles. Element overrides live in `src/components/MarkdownComponents.tsx`. Full specification in §7. |
 | `CodeBlock` | default | Custom (wraps `pre` with copy button) | Used by `src/components/MarkdownComponents.tsx` — handles fenced code blocks with language label and copy-to-clipboard button |
+| `SimulatorPanel` | default (split-pane at `lg+`, stacked below `lg`) | Custom (uses `Collapsible`, `Alert`, `Select`, `Textarea`, `Checkbox`, shadcn/ui `Badge`) | Assistant page — Testing tab only. Admin-only render guard. Full spec in §14 Testing tab and `docs/web/briefs/testing-tab-brief.md`. |
 
 ---
 
@@ -1547,7 +1598,68 @@ Model chip on `SessionCard`: the model subtitle is an interactive `Popover` trig
 
 **Retroactive mockup policy (CAMP-001 / WFLOW-001 / CONTACT-001 / SETTINGS-001)**: The following panels/pages have been implemented without prior approved SVG mockups: `CampaignsPanel`, `WorkflowsPanel`, `ContactList`, `ScheduledMessageTable`, `DeferredRecordTable`, `KnowledgePanel`, `SetupWizard`. Producing retroactive mockups of already-reviewed, in-production implementations yields minimal design value and incurs real cost. **Ruling: retroactive mockups are deferred indefinitely for all panels listed above.** The implementation is treated as the de-facto approved target for future audit cycles. Future changes to these panels must produce a mockup before implementation (forward-looking mockup requirement is unchanged). A retroactive mockup may be requested at any time if a substantial redesign of one of these panels is planned — at that point a full brief/mockup cycle is required for the new design, not the existing one.
 
-**Assistant**: Page header → `ServiceControlPanel` (running status badge, live-ticking uptime, start/stop button for admins) → `Tabs` with 8 tabs: Chats, Scheduled, Deferred, Contacts, Knowledge, Guardrails, Campaigns, Workflows. The Guardrails tab renders `GuardrailsPanel` which contains two cards stacked vertically: "Recent Violations" (violations table — see below) with `total_violations` count badge in card header, and "Blacklisted Chats" (table: Chat ID, remove trash icon button) with count badge in card header. GuardrailsPanel is exclusively on the Assistant page — it is not on the Admin page.
+**Assistant**: Page header → `ServiceControlPanel` (running status badge, live-ticking uptime, start/stop button for admins) → `Tabs` with 9 tabs: Chats, Scheduled, Deferred, Contacts, Knowledge, Guardrails, Campaigns, Workflows, Testing. The Guardrails tab renders `GuardrailsPanel` which contains two cards stacked vertically: "Recent Violations" (violations table — see below) with `total_violations` count badge in card header, and "Blacklisted Chats" (table: Chat ID, remove trash icon button) with count badge in card header. GuardrailsPanel is exclusively on the Assistant page — it is not on the Admin page.
+
+**Testing tab — admin-only, tab position 9 (v3.16)**:
+
+The Testing tab is the ninth and final tab. It renders `SimulatorPanel` — a form that calls `POST /api/v1/assistant/simulate` to run the full agent pipeline without dispatching a real channel message.
+
+**Admin gate**: The Testing tab trigger is conditionally rendered using `{isAdmin && <TabsTrigger>}`. Non-admin users do not see the tab at all — no disabled state is shown. `SimulatorPanel` also returns `null` when `isAdmin === false` as a belt-and-suspenders guard.
+
+**Service-running gate exception**: The Testing tab trigger does NOT receive the `disabled={!serviceRunning}` prop that all other 8 tabs receive. The simulate endpoint runs the pipeline independently — it does not require the real-time assistant service to be running. This is a deliberate, documented deviation from the existing tab pattern. A code comment is required at the trigger site in `index.tsx`.
+
+**Layout — split-pane at `lg+`, stacked below `lg`**:
+
+At `lg+` viewports (≥ 1024px), `SimulatorPanel` uses a two-column grid:
+```
+<div class="lg:grid lg:grid-cols-[2fr_3fr] lg:gap-6">
+  <!-- Left column: form (~40% of content width) -->
+  <!-- Right column: result area (~60% of content width) -->
+</div>
+```
+
+Below `lg`, the layout is a single column: form stacked above result area.
+
+Rationale for split at `lg+`: The form is moderately tall (7 fields + warning banner + submit) and the result card is tall (response prose + badges + metadata). Stacking both in a single scroll column on desktop creates excessive page length and severs the visual relationship between inputs and outputs. Side-by-side keeps cause and effect in the same viewport. At `< lg` viewports (mobile / small tablet), a split pane would make each column too narrow for readable text input — single-column with result scrolling below is correct.
+
+Rationale for `2fr / 3fr` ratio: The form is information-dense (multiple labels + help text) but narrower than the result — the response prose benefits from more horizontal space for readability. A strict 50/50 split would under-serve the response text. `2fr / 3fr` ≈ 40/60 is the correct balance within the `max-w-5xl` content container.
+
+**Form panel (left / top)**:
+
+The form panel contains all input fields for the simulation request. It is not wrapped in a `Card` — it is bare form content within the panel. Rationale: the form lives inside a tab content area that already has outer framing from the page layout; adding a `Card` shell would over-nest the visual hierarchy.
+
+Form fields in order:
+1. Channel (Select)
+2. Chat ID (Input)
+3. Direction (Select)
+4. Message (Textarea)
+5. Instructions (Textarea — conditionally rendered when `direction === "outbound"`)
+6. Persist memory (Checkbox + Label) + always-visible amber warning banner (DS §5 Inline Warning Banner)
+7. Advanced options disclosure (Collapsible — DS §5 Collapsible disclosure pattern) containing: Sender name (Input), Sender ID (Input)
+8. Submit button (full-width, "Run simulation")
+
+The `persist` warning banner is always visible regardless of checkbox state. See `testing-tab-brief.md` §5 for full rationale.
+
+**Result panel (right / bottom)**:
+
+Three states:
+
+- **Empty state** (no mutation yet): centered paragraph `"Run a simulation to see the pipeline response."` in `text-sm text-zinc-500 text-center py-12`. No illustration. No card border — empty state is bare text.
+- **Loading state** (mutation pending): `SimulatorPanel` clears the previous result on submission start (`simulateMutation.reset()` before `.mutate()`). The result area shows a `rounded-lg border border-zinc-200 bg-white p-6` skeleton block with a `Loader2 h-5 w-5 animate-spin text-zinc-400` icon + `"Running simulation…"` text in `text-sm text-zinc-500`, centered.
+- **Result card** (mutation success): `rounded-lg border border-zinc-200 bg-white p-6 space-y-4` (DS §5 inline form widget surface). Contains: (1) response prose area, (2) status badge row, (3) guardrail reason callout (conditional), (4) metadata footer.
+
+Result card internal layout:
+
+| Section | Content | Classes |
+|---|---|---|
+| Response prose | `ReactMarkdown` rendered response text. When suppressed + empty: italic placeholder | `text-base leading-relaxed text-zinc-900` (markdown); italic empty: `text-sm text-zinc-500 italic` |
+| Status badge row | Four pipeline-outcome badges (see §5 SimulatorResult badge table) | `flex flex-wrap gap-2` |
+| Guardrail reason | Visible only when `guardrail_reason` is non-null. Label + reason text | Label: `text-xs text-zinc-500 uppercase tracking-wide`; Value: `text-sm text-zinc-900` |
+| Metadata footer | Duration (right-aligned) + session key on next line | Duration: `text-xs text-zinc-500 tabular-nums text-right`; Session key: `font-mono text-xs text-zinc-500` |
+
+- **Error state** (mutation error): red callout `rounded-lg border border-red-200 bg-red-50 p-4` with `AlertTriangle h-4 w-4 text-red-600` + error message in `text-sm text-red-700`.
+
+**Component inventory note**: `SimulatorPanel` is added to §12. Install `Collapsible` and `Alert` via `pnpm dlx shadcn@latest add collapsible alert` if not present.
 
 **GuardrailsPanel — violations table (v3.12)**: The "Recent Violations" card shows the actual `ViolationRecordOut` fields. The card header title is "Recent Violations" (not "Violations"). The count badge in the card header displays `GuardrailStatusOut.total_violations` — the cumulative total from the server — not `recentViolations.length` (which is only the length of the truncated recent list).
 
@@ -1655,3 +1767,6 @@ This section is the authoritative register of design gaps that are acknowledged 
 | MISSING-ENDPOINT-001 | **Open (v3.14, 2026-03-25)** — No backend hard-delete endpoint for sessions. `DELETE /sessions/{id}` is the archive action; a separate permanent-delete endpoint does not exist in the current OpenAPI schema. The "Delete permanently" action in `SessionActionDialog` and `SessionBulkBar` currently shows a pending toast stub. When the backend adds the endpoint, remove the toast stub and wire the real mutation. No design review required — existing dialog UI is sufficient. | Low | No — archive is the primary destructive action | Backend adds endpoint → `web_coder` removes toast stub and wires mutation. |
 | MISSING-ENDPOINT-002 | **Open (v3.14, 2026-03-25)** — No backend unarchive endpoint. Unarchiving a session (restoring `archived_at` to null via `PATCH /sessions/{id} { archived_at: null }`) currently shows a pending toast stub because the backend does not expose this operation. The Unarchive `ArchiveRestore` button is present on archived `SessionCard` and `SessionRow` but is non-functional until the endpoint is available. | Low | No — users can still create new sessions | Backend adds endpoint → `web_coder` removes toast stub and wires mutation. |
 | AUD-001 | **Permanent exception (v3.15, 2026-03-27)** — `ContactList.tsx` (`src/pages/assistant/ContactList.tsx`) channel icons use hardcoded hex fills in inline SVG `fill` attributes: `#25D366` (WhatsApp green) and `#2AABEE` (Telegram blue). These are brand IP requirements — the colors are not design choices and no semantic design-system token approximates either value. Substituting any other color would make the marks unrecognisable as brand identifiers. These fills are exempt from the §1 "no hardcoded hex" rule. No action required; exception is permanent for as long as these brand SVGs are in use. | — | No | No resolution required — exception is intentional and permanent. |
+| SIM-001 | **RESOLVED (v3.16, 2026-03-27)** — `docs/web/mockups/assistant-testing-tab.svg` produced and approved; `SimulatorPanel.tsx` implemented at `src/pages/assistant/SimulatorPanel.tsx` (commit `b6222a9`). Implementation includes: full simulate form, persist checkbox with always-visible amber warning banner, result card with suppressed/deferred/guardrail-blocked/memory-persisted badges, guardrail reason display, duration footer. | — | — | Resolved. |
+| DESIGN-001 | **RESOLVED (v3.17, 2026-03-27)** — `.streaming-cursor` CSS rule absent from `src/index.css`. The `@keyframes blink-cursor` keyframe was defined but the class rule applying the animation (`animation: blink-cursor 1s step-end infinite`) was missing. `StreamingMessageBubble.tsx` references the class — without the rule the cursor rendered as a static block instead of blinking. Rule added to `src/index.css` (commit `a833f5c`). | — | — | Resolved. |
+| DESIGN-002 | **RESOLVED (v3.17, 2026-03-27)** — `not-found.tsx` typography corrected to match approved mockup S4-M3 (BACKLOG.md). "404" text `text-2xl` → `text-3xl`; "Page not found" heading `text-zinc-900 font-medium` → `text-zinc-500` (no font-medium). Commit `a833f5c`. | — | — | Resolved. |
