@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased] (2026-03-27)
+
+
+### Bug Fixes
+
+* **design:** ProjectForge holistic audit — inline style → Tailwind (SimulatorPanel, AppShell), semantic focus ring token (StatusBar)
+
 ## [0.1.6](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.5...v0.1.6) (2026-03-26)
 
 

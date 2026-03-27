@@ -195,11 +195,8 @@ export function SimulatorPanel() {
 
           {/* Advanced options */}
           <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
-            <CollapsibleTrigger className="focus-visible:ring-ring flex items-center gap-1.5 text-sm text-zinc-500 transition-colors duration-150 hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none">
-              <ChevronDown
-                className="h-4 w-4 transition-transform duration-150"
-                style={{ transform: advancedOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-              />
+            <CollapsibleTrigger className="group focus-visible:ring-ring flex items-center gap-1.5 text-sm text-zinc-500 transition-colors duration-150 hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none">
+              <ChevronDown className="h-4 w-4 transition-transform duration-150 group-data-[state=open]:rotate-180" />
               Advanced options
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-2">
