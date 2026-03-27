@@ -15,6 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 * **design:** ProjectForge holistic audit — inline styles → Tailwind (`SimulatorPanel`, `AppShell`), semantic focus ring token (`StatusBar`)
 * **design:** DesignForge audit (2026-03-27) — streaming cursor animation rule added to `index.css` (`.streaming-cursor` class was absent, cursor rendered static); 404 page typography corrected (`text-2xl` → `text-3xl` for "404", `text-zinc-900` → `text-zinc-500` for "Page not found" heading per approved mockup S4-M3)
 
+## [0.1.7](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.6...v0.1.7) (2026-03-26)
+
+
+### Features
+
+* initial commit — Cogtrix WebUI v0.1.6 ([a6d10fd](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/a6d10fde777cccaa38e8907c59059b8d2239cffc))
+
 ## [0.1.6](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.5...v0.1.6) (2026-03-26)
 
 
