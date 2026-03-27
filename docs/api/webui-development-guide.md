@@ -339,8 +339,13 @@ Relevant only when the Cogtrix instance is running in `--assistant` mode (headle
 | Update campaign | `PATCH /api/v1/assistant/campaigns/{id}` | admin |
 | Delete campaign | `DELETE /api/v1/assistant/campaigns/{id}` | admin |
 | Launch campaign | `POST /api/v1/assistant/campaigns/{id}/launch` | admin |
+| Run pipeline simulation | `POST /api/v1/assistant/simulate` | admin |
 
 The assistant maintains per-chat memory isolation. Each `(channel, chat_id)` pair has its own conversation history that is never shared with other chats.
+
+#### Testing tab (admin-only)
+
+`SimulatorPanel` (`src/pages/assistant/SimulatorPanel.tsx`) is a 9th tab on the Assistant dashboard, rendered only when `isAdmin` is `true` (guarded by a `useAuthStore` check that returns `null` for non-admin users). It lets operators inject a message into the full assistant pipeline without delivering anything to a real channel. The form collects `channel`, `chat_id`, `message`, and optional `direction`, `sender_name`, `sender_id`, and `persist` fields, then calls `POST /api/v1/assistant/simulate` via a TanStack Query `useMutation`. The `SimulateOut` response is displayed inline: the response text is rendered through `ReactMarkdown`, and `suppressed`, `deferred`, `blocked_by_guardrails`, and `memory_persisted` boolean flags are shown as status badges. When `blocked_by_guardrails` is `true`, the `guardrail_reason` string is rendered in an alert. `duration_ms` is shown as a footer metric.
 
 `POST /api/v1/assistant/stop` is an async operation — the server wraps blocking shutdown calls with `asyncio.to_thread` to avoid blocking the event loop. The UI should show a "stopping..." indicator and poll `GET /api/v1/assistant/status` until `running` becomes `false`.
 
@@ -717,6 +722,7 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | PATCH | `/api/v1/assistant/campaigns/{id}` | admin | Assistant dashboard |
 | DELETE | `/api/v1/assistant/campaigns/{id}` | admin | Assistant dashboard |
 | POST | `/api/v1/assistant/campaigns/{id}/launch` | admin | Assistant dashboard |
+| POST | `/api/v1/assistant/simulate` | admin | Assistant dashboard (Testing tab) |
 
 ### RAG / Documents
 

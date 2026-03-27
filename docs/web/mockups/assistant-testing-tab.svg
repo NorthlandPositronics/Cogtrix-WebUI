@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2500" viewBox="0 0 1440 2500"
+  font-family="'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif">
+  <desc>
+  Component: Assistant Page — Testing tab (SimulatorPanel), 3 scenes
+  Page: /assistant (Testing tab, tab-9, admin-only)
+  Design system version: 3.16 (2026-03-27)
+  Artboards: desktop 1440px
+  Scenes:
+    Scene 1 y=0    — Form populated, advanced options open, outbound, empty result state
+    Scene 2 y=860  — Guardrail-blocked result (inbound, compact form)
+    Scene 3 y=1700 — Clean inbound result (all badges inactive)
+  </desc>
+
+  <!-- ============================================================
+       SHARED DEFS
+  ============================================================ -->
+  <defs>
+    <!-- Checkbox checked mark -->
+    <symbol id="checkbox-checked" viewBox="0 0 16 16">
+      <rect x="0.5" y="0.5" width="15" height="15" rx="3" fill="#0d9488" stroke="#0d9488"/>
+      <polyline points="3.5,8 6.5,11 12,5" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Checkbox unchecked -->
+    <symbol id="checkbox-unchecked" viewBox="0 0 16 16">
+      <rect x="0.5" y="0.5" width="15" height="15" rx="3" fill="#ffffff" stroke="#e4e4e7"/>
+    </symbol>
+    <!-- Select chevron down -->
+    <symbol id="chevron-down" viewBox="0 0 12 12">
+      <polyline points="2,4 6,8 10,4" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Chevron down rotated 180 (open collapsible) -->
+    <symbol id="chevron-up" viewBox="0 0 12 12">
+      <polyline points="2,8 6,4 10,8" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- AlertTriangle icon -->
+    <symbol id="alert-triangle" viewBox="0 0 16 16">
+      <path d="M8 1.5 L14.5 13 L1.5 13 Z" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="8" y1="6.5" x2="8" y2="9.5" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="8" cy="11.5" r="0.6" fill="currentColor" stroke="none"/>
+    </symbol>
+  </defs>
+
+  <!-- ============================================================
+       SCENE LABEL HELPERS (scene separators)
+  ============================================================ -->
+
+  <!-- ============================================================
+       SHARED SIDEBAR COMPONENT
+       Sidebar: x=0, w=220, full height. Assistant nav item active.
+  ============================================================ -->
+
+  <!-- ===== SCENE 1: y=0, height=840 ===== -->
+  <g id="scene-1">
+
+    <!-- Page background -->
+    <rect x="0" y="0" width="1440" height="840" fill="#fafafa"/>
+    <rect x="220" y="0" width="1220" height="840" fill="#fafafa"/>
+
+    <!-- SIDEBAR -->
+    <g id="scene1-layer-sidebar">
+      <rect x="0" y="0" width="220" height="840" fill="#fafafa"/>
+      <line x1="220" y1="0" x2="220" y2="840" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Logomark + wordmark -->
+      <g transform="translate(16,14)">
+        <path d="M 18.071 5.929 A 10 10 0 1 0 18.071 18.071"
+              fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="18.071" cy="5.929" r="2.2" fill="#0d9488"/>
+        <circle cx="18.071" cy="18.071" r="1.6" fill="#0d9488"/>
+      </g>
+      <text x="46" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+      <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+      <!-- Nav: Sessions -->
+      <rect x="8" y="64" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,76)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 0 0 L 0 10 L 4 10 L 4 14 L 8 10 L 14 10 L 14 0 Z"/>
+      </g>
+      <text x="40" y="86" font-size="14" font-weight="400" fill="#71717a">Sessions</text>
+
+      <!-- Nav: Documents -->
+      <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,120)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 2 0 L 9 0 L 14 5 L 14 14 L 2 14 Z"/>
+        <path d="M 9 0 L 9 5 L 14 5"/>
+        <line x1="4" y1="8" x2="10" y2="8"/>
+        <line x1="4" y1="11" x2="8" y2="11"/>
+      </g>
+      <text x="40" y="130" font-size="14" font-weight="400" fill="#71717a">Documents</text>
+
+      <!-- Nav: Assistant — ACTIVE -->
+      <rect x="8" y="152" width="204" height="36" rx="6" fill="#f0fdfa"/>
+      <rect x="8" y="152" width="2" height="36" rx="1" fill="#0d9488"/>
+      <g transform="translate(19,164)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="6"/>
+        <line x1="7" y1="3" x2="7" y2="7"/>
+        <circle cx="7" cy="10" r="0.75" fill="#0d9488" stroke="none"/>
+      </g>
+      <text x="40" y="174" font-size="14" font-weight="500" fill="#0d9488">Assistant</text>
+
+      <!-- Nav: Settings -->
+      <rect x="8" y="196" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,208)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="2.5"/>
+        <path d="M 7 0 L 7 2 M 7 12 L 7 14 M 0 7 L 2 7 M 12 7 L 14 7 M 2.05 2.05 L 3.46 3.46 M 10.54 10.54 L 11.95 11.95 M 2.05 11.95 L 3.46 10.54 M 10.54 3.46 L 11.95 2.05"/>
+      </g>
+      <text x="40" y="218" font-size="14" font-weight="400" fill="#71717a">Settings</text>
+
+      <!-- Nav: Admin -->
+      <rect x="8" y="240" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,252)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="5" r="4"/>
+        <path d="M 0 14 C 0 11 3 9 7 9 C 11 9 14 11 14 14"/>
+      </g>
+      <text x="40" y="262" font-size="14" font-weight="400" fill="#71717a">Admin</text>
+
+      <!-- User footer -->
+      <line x1="0" y1="800" x2="220" y2="800" stroke="#e4e4e7" stroke-width="1"/>
+      <circle cx="30" cy="824" r="14" fill="#f0fdfa"/>
+      <text x="30" y="829" font-size="11" font-weight="600" fill="#0d9488" text-anchor="middle">A</text>
+      <text x="52" y="820" font-size="13" font-weight="500" fill="#18181b">admin</text>
+      <text x="52" y="834" font-size="11" fill="#71717a">Administrator</text>
+    </g>
+
+    <!-- HEADER AREA -->
+    <g id="scene1-layer-header">
+      <rect x="220" y="0" width="1220" height="840" fill="#fafafa"/>
+      <!-- Page title -->
+      <text x="318" y="42" font-size="24" font-weight="600" fill="#18181b">Assistant</text>
+
+      <!-- SERVICE CONTROL PANEL -->
+      <rect x="318" y="60" width="1104" height="56" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <!-- Running badge -->
+      <rect x="338" y="76" width="70" height="22" rx="11" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <circle cx="352" cy="87" r="3.5" fill="#16a34a"/>
+      <text x="360" y="91" font-size="11" font-weight="500" fill="#15803d">Running</text>
+      <!-- Channel pills -->
+      <text x="418" y="91" font-size="12" fill="#71717a">Channels:</text>
+      <rect x="480" y="77" width="72" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="516" y="91" font-size="11" font-weight="500" fill="#0d9488" text-anchor="middle">whatsapp</text>
+      <rect x="558" y="77" width="62" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="589" y="91" font-size="11" font-weight="500" fill="#0d9488" text-anchor="middle">telegram</text>
+      <!-- Stop button -->
+      <rect x="1310" y="73" width="88" height="30" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="1354" y="92" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle">Stop</text>
+    </g>
+
+    <!-- TAB BAR -->
+    <g id="scene1-tab-bar">
+      <!-- Tab bar background pill -->
+      <rect x="318" y="132" width="1104" height="36" rx="6" fill="#f4f4f5"/>
+
+      <!-- Tab: Chats -->
+      <rect x="322" y="134" width="70" height="32" rx="5" fill="none"/>
+      <text x="357" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Chats</text>
+
+      <!-- Tab: Scheduled -->
+      <rect x="394" y="134" width="82" height="32" rx="5" fill="none"/>
+      <text x="435" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Scheduled</text>
+
+      <!-- Tab: Deferred -->
+      <rect x="478" y="134" width="74" height="32" rx="5" fill="none"/>
+      <text x="515" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+
+      <!-- Tab: Contacts -->
+      <rect x="554" y="134" width="72" height="32" rx="5" fill="none"/>
+      <text x="590" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Contacts</text>
+
+      <!-- Tab: Knowledge -->
+      <rect x="628" y="134" width="80" height="32" rx="5" fill="none"/>
+      <text x="668" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Knowledge</text>
+
+      <!-- Tab: Guardrails -->
+      <rect x="710" y="134" width="82" height="32" rx="5" fill="none"/>
+      <text x="751" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Guardrails</text>
+
+      <!-- Tab: Campaigns -->
+      <rect x="794" y="134" width="82" height="32" rx="5" fill="none"/>
+      <text x="835" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Campaigns</text>
+
+      <!-- Tab: Workflows -->
+      <rect x="878" y="134" width="80" height="32" rx="5" fill="none"/>
+      <text x="918" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Workflows</text>
+
+      <!-- Tab: Testing — ACTIVE -->
+      <rect x="960" y="134" width="64" height="32" rx="5" fill="#ffffff"/>
+      <text x="992" y="154" font-size="13" font-weight="500" fill="#0d9488" text-anchor="middle">Testing</text>
+      <!-- Active underline -->
+      <line x1="966" y1="165" x2="1018" y2="165" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- SCENE 1 LABEL -->
+    <rect x="318" y="174" width="260" height="20" rx="4" fill="#f4f4f5"/>
+    <text x="326" y="188" font-size="11" fill="#71717a">Scene 1 — Form populated, outbound, advanced open</text>
+
+    <!-- TAB CONTENT: mt-4 below tab bar → y=136+36+16=188, content starts y=200 -->
+    <!-- Split grid: left 2fr (~410px), right 3fr (~616px), gap 24px -->
+    <!-- Content area: x=318 to x=1422 = 1104px -->
+    <!-- Left col: x=318, w=409 -->
+    <!-- Right col: x=318+409+24=751, w=653 -->
+
+    <g id="scene1-layer-content">
+
+      <!-- ===== LEFT PANE: FORM ===== -->
+      <g id="scene1-form">
+
+        <!-- Field: Channel -->
+        <text x="318" y="216" font-size="13" font-weight="500" fill="#18181b">Channel</text>
+        <!-- Select input -->
+        <rect x="318" y="221" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="244" font-size="14" fill="#18181b">WhatsApp</text>
+        <use href="#chevron-down" x="706" y="229" width="12" height="12"/>
+
+        <!-- Field: Chat ID -->
+        <!-- R-02: Chat ID updated to +441234567890@c.us -->
+        <text x="318" y="274" font-size="13" font-weight="500" fill="#18181b">Chat ID</text>
+        <rect x="318" y="279" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="302" font-size="14" fill="#18181b">+441234567890@c.us</text>
+        <!-- Help text -->
+        <text x="318" y="324" font-size="12" fill="#71717a">The channel-specific contact identifier (e.g. WhatsApp number or Telegram chat ID).</text>
+
+        <!-- Field: Direction -->
+        <text x="318" y="348" font-size="13" font-weight="500" fill="#18181b">Direction</text>
+        <rect x="318" y="353" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="376" font-size="14" fill="#18181b">Outbound</text>
+        <use href="#chevron-down" x="706" y="361" width="12" height="12"/>
+
+        <!-- Field: Message -->
+        <!-- R-02: Message textarea updated -->
+        <text x="318" y="406" font-size="13" font-weight="500" fill="#18181b">Message</text>
+        <rect x="318" y="411" width="409" height="80" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="432" font-size="14" fill="#18181b">Please check in with the customer about</text>
+        <text x="330" y="450" font-size="14" fill="#18181b">their outstanding invoice.</text>
+
+        <!-- Field: Operator Instructions (visible — outbound) -->
+        <!-- R-02: Operator instructions updated -->
+        <text x="318" y="508" font-size="13" font-weight="500" fill="#18181b">Operator instructions</text>
+        <rect x="318" y="513" width="409" height="64" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="534" font-size="14" fill="#18181b">Be professional and reference the invoice</text>
+        <text x="330" y="552" font-size="14" fill="#18181b">number if available.</text>
+        <!-- Help text -->
+        <text x="318" y="586" font-size="12" fill="#71717a">Instructions for the outbound operator persona.</text>
+
+        <!-- Persist Memory checkbox -->
+        <!-- R-01: Changed from checkbox-unchecked to checkbox-checked -->
+        <use href="#checkbox-checked" x="318" y="604" width="16" height="16"/>
+        <text x="342" y="616" font-size="13" font-weight="500" fill="#18181b">Persist memory</text>
+
+        <!-- Amber warning banner -->
+        <rect x="318" y="626" width="409" height="52" rx="6" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <rect x="318" y="626" width="3" height="52" rx="2" fill="#f59e0b"/>
+        <!-- AlertTriangle icon — amber -->
+        <g transform="translate(329,637)" fill="none" stroke="#b45309" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 1 L15 14 L1 14 Z"/>
+          <line x1="8" y1="6" x2="8" y2="9"/>
+          <circle cx="8" cy="11.5" r="0.8" fill="#b45309" stroke="none"/>
+        </g>
+        <text x="350" y="642" font-size="12" fill="#92400e">Warning: enabling this writes to live session</text>
+        <text x="350" y="657" font-size="12" fill="#92400e">memory for this chat. This cannot be undone.</text>
+        <!-- Note: amber-800 = #92400e -->
+
+        <!-- Advanced options Collapsible: OPEN -->
+        <!-- Trigger row -->
+        <g transform="translate(318,692)">
+          <use href="#chevron-up" x="0" y="0" width="12" height="12"/>
+          <text x="18" y="10" font-size="13" fill="#71717a">Advanced options</text>
+        </g>
+
+        <!-- Collapsible content: Sender Name + Sender ID -->
+        <!-- Sender Name -->
+        <!-- R-02: Sender name updated to Sales Bot -->
+        <text x="318" y="720" font-size="13" font-weight="500" fill="#18181b">Sender name</text>
+        <rect x="318" y="725" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="748" font-size="14" fill="#18181b">Sales Bot</text>
+        <text x="318" y="771" font-size="12" fill="#71717a">Display name shown in the simulated message. Defaults to "Simulator".</text>
+
+        <!-- Sender ID -->
+        <!-- R-02: Sender ID updated to salesbot -->
+        <text x="318" y="791" font-size="13" font-weight="500" fill="#18181b">Sender ID</text>
+        <rect x="318" y="796" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="819" font-size="14" fill="#18181b">salesbot</text>
+        <text x="318" y="843" font-size="12" fill="#71717a">Internal sender identifier. Defaults to "simulator".</text>
+
+        <!-- Submit button -->
+        <rect x="318" y="856" width="409" height="38" rx="6" fill="#0d9488"/>
+        <text x="522" y="879" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Run simulation</text>
+
+      </g>
+      <!-- END LEFT PANE -->
+
+      <!-- ===== RIGHT PANE: EMPTY STATE ===== -->
+      <g id="scene1-result-empty">
+        <!-- empty state text, centered in right column -->
+        <!-- right col: x=751, w=671 → center x=1086 -->
+        <text x="1086" y="540" font-size="14" fill="#71717a" text-anchor="middle">Run a simulation to see the pipeline response.</text>
+      </g>
+      <!-- END RIGHT PANE -->
+
+    </g>
+    <!-- END SCENE 1 CONTENT -->
+
+  </g>
+  <!-- END SCENE 1 -->
+
+  <!-- Scene separator -->
+  <rect x="0" y="900" width="1440" height="4" fill="#e4e4e7"/>
+  <text x="320" y="928" font-size="13" font-weight="600" fill="#71717a">— Scene 2: Guardrail-blocked result —</text>
+
+  <!-- ============================================================
+       SCENE 2: y=940, height=740
+  ============================================================ -->
+  <g id="scene-2" transform="translate(0,940)">
+
+    <!-- Page background -->
+    <rect x="0" y="0" width="1440" height="740" fill="#fafafa"/>
+
+    <!-- SIDEBAR -->
+    <g id="scene2-layer-sidebar">
+      <rect x="0" y="0" width="220" height="740" fill="#fafafa"/>
+      <line x1="220" y1="0" x2="220" y2="740" stroke="#e4e4e7" stroke-width="1"/>
+      <g transform="translate(16,14)">
+        <path d="M 18.071 5.929 A 10 10 0 1 0 18.071 18.071"
+              fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="18.071" cy="5.929" r="2.2" fill="#0d9488"/>
+        <circle cx="18.071" cy="18.071" r="1.6" fill="#0d9488"/>
+      </g>
+      <text x="46" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+      <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+      <rect x="8" y="64" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,76)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 0 0 L 0 10 L 4 10 L 4 14 L 8 10 L 14 10 L 14 0 Z"/>
+      </g>
+      <text x="40" y="86" font-size="14" font-weight="400" fill="#71717a">Sessions</text>
+
+      <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,120)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 2 0 L 9 0 L 14 5 L 14 14 L 2 14 Z"/>
+        <path d="M 9 0 L 9 5 L 14 5"/>
+        <line x1="4" y1="8" x2="10" y2="8"/>
+      </g>
+      <text x="40" y="130" font-size="14" font-weight="400" fill="#71717a">Documents</text>
+
+      <rect x="8" y="152" width="204" height="36" rx="6" fill="#f0fdfa"/>
+      <rect x="8" y="152" width="2" height="36" rx="1" fill="#0d9488"/>
+      <g transform="translate(19,164)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="6"/>
+        <line x1="7" y1="3" x2="7" y2="7"/>
+        <circle cx="7" cy="10" r="0.75" fill="#0d9488" stroke="none"/>
+      </g>
+      <text x="40" y="174" font-size="14" font-weight="500" fill="#0d9488">Assistant</text>
+
+      <rect x="8" y="196" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,208)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="2.5"/>
+        <path d="M 7 0 L 7 2 M 7 12 L 7 14 M 0 7 L 2 7 M 12 7 L 14 7 M 2.05 2.05 L 3.46 3.46 M 10.54 10.54 L 11.95 11.95 M 2.05 11.95 L 3.46 10.54 M 10.54 3.46 L 11.95 2.05"/>
+      </g>
+      <text x="40" y="218" font-size="14" font-weight="400" fill="#71717a">Settings</text>
+
+      <rect x="8" y="240" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,252)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="5" r="4"/>
+        <path d="M 0 14 C 0 11 3 9 7 9 C 11 9 14 11 14 14"/>
+      </g>
+      <text x="40" y="262" font-size="14" font-weight="400" fill="#71717a">Admin</text>
+
+      <line x1="0" y1="700" x2="220" y2="700" stroke="#e4e4e7" stroke-width="1"/>
+      <circle cx="30" cy="724" r="14" fill="#f0fdfa"/>
+      <text x="30" y="729" font-size="11" font-weight="600" fill="#0d9488" text-anchor="middle">A</text>
+      <text x="52" y="720" font-size="13" font-weight="500" fill="#18181b">admin</text>
+      <text x="52" y="734" font-size="11" fill="#71717a">Administrator</text>
+    </g>
+
+    <!-- HEADER + SERVICE PANEL -->
+    <g id="scene2-layer-header">
+      <text x="318" y="42" font-size="24" font-weight="600" fill="#18181b">Assistant</text>
+      <rect x="318" y="60" width="1104" height="56" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="338" y="76" width="70" height="22" rx="11" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <circle cx="352" cy="87" r="3.5" fill="#16a34a"/>
+      <text x="360" y="91" font-size="11" font-weight="500" fill="#15803d">Running</text>
+      <text x="418" y="91" font-size="12" fill="#71717a">Channels:</text>
+      <rect x="480" y="77" width="72" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="516" y="91" font-size="11" font-weight="500" fill="#0d9488" text-anchor="middle">whatsapp</text>
+      <rect x="558" y="77" width="62" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="589" y="91" font-size="11" font-weight="500" fill="#0d9488" text-anchor="middle">telegram</text>
+      <rect x="1310" y="73" width="88" height="30" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="1354" y="92" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle">Stop</text>
+    </g>
+
+    <!-- TAB BAR -->
+    <g id="scene2-tab-bar">
+      <rect x="318" y="132" width="1104" height="36" rx="6" fill="#f4f4f5"/>
+      <text x="357" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Chats</text>
+      <text x="435" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Scheduled</text>
+      <text x="515" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+      <text x="590" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Contacts</text>
+      <text x="668" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Knowledge</text>
+      <text x="751" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Guardrails</text>
+      <text x="835" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Campaigns</text>
+      <text x="918" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Workflows</text>
+      <!-- Testing active -->
+      <rect x="960" y="134" width="64" height="32" rx="5" fill="#ffffff"/>
+      <text x="992" y="154" font-size="13" font-weight="500" fill="#0d9488" text-anchor="middle">Testing</text>
+      <line x1="966" y1="165" x2="1018" y2="165" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- SCENE 2 CONTENT -->
+    <g id="scene2-layer-content">
+
+      <!-- ===== LEFT PANE: COMPACT FORM ===== -->
+      <g id="scene2-form">
+        <!-- Channel -->
+        <text x="318" y="202" font-size="13" font-weight="500" fill="#18181b">Channel</text>
+        <rect x="318" y="207" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="230" font-size="14" fill="#18181b">WhatsApp</text>
+        <use href="#chevron-down" x="706" y="215" width="12" height="12"/>
+
+        <!-- Chat ID -->
+        <text x="318" y="258" font-size="13" font-weight="500" fill="#18181b">Chat ID</text>
+        <rect x="318" y="263" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="286" font-size="14" fill="#18181b">+44 7911 123456</text>
+
+        <!-- Direction -->
+        <text x="318" y="316" font-size="13" font-weight="500" fill="#18181b">Direction</text>
+        <rect x="318" y="321" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="344" font-size="14" fill="#18181b">Inbound</text>
+        <use href="#chevron-down" x="706" y="329" width="12" height="12"/>
+
+        <!-- Message -->
+        <text x="318" y="374" font-size="13" font-weight="500" fill="#18181b">Message</text>
+        <rect x="318" y="379" width="409" height="80" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="400" font-size="14" fill="#18181b">What are your prices compared to</text>
+        <text x="330" y="418" font-size="14" fill="#18181b">competitors?</text>
+
+        <!-- Persist memory -->
+        <use href="#checkbox-unchecked" x="318" y="474" width="16" height="16"/>
+        <text x="342" y="486" font-size="13" font-weight="500" fill="#18181b">Persist memory</text>
+
+        <!-- Amber warning banner -->
+        <rect x="318" y="496" width="409" height="52" rx="6" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <rect x="318" y="496" width="3" height="52" rx="2" fill="#f59e0b"/>
+        <g transform="translate(329,507)" fill="none" stroke="#b45309" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 1 L15 14 L1 14 Z"/>
+          <line x1="8" y1="6" x2="8" y2="9"/>
+          <circle cx="8" cy="11.5" r="0.8" fill="#b45309" stroke="none"/>
+        </g>
+        <text x="350" y="512" font-size="12" fill="#92400e">When enabled, the simulation writes to live</text>
+        <text x="350" y="527" font-size="12" fill="#92400e">conversation memory. This cannot be undone.</text>
+
+        <!-- Advanced options: CLOSED -->
+        <g transform="translate(318,562)">
+          <use href="#chevron-down" x="0" y="0" width="12" height="12"/>
+          <text x="18" y="10" font-size="13" fill="#71717a">Advanced options</text>
+        </g>
+
+        <!-- Submit button -->
+        <rect x="318" y="584" width="409" height="38" rx="6" fill="#0d9488"/>
+        <text x="522" y="607" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Run simulation</text>
+      </g>
+
+      <!-- ===== RIGHT PANE: RESULT CARD — BLOCKED ===== -->
+      <!-- right col: x=751, w=671 (to x=1422) -->
+      <g id="scene2-result-blocked">
+        <rect x="751" y="185" width="671" height="456" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"
+              style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05))"/>
+
+        <!-- Section 1: Response area -->
+        <text x="775" y="220" font-size="14" font-style="italic" fill="#71717a">(No response — message was suppressed)</text>
+
+        <!-- Divider -->
+        <line x1="775" y1="242" x2="1398" y2="242" stroke="#e4e4e7" stroke-width="1"/>
+
+        <!-- Section 2: Badge row -->
+        <!-- Badge: Guardrail blocked — ACTIVE: bg-red-50 text-red-700 border-red-200 -->
+        <rect x="775" y="254" width="128" height="22" rx="11" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+        <text x="839" y="269" font-size="12" font-weight="500" fill="#b91c1c" text-anchor="middle">Guardrail blocked</text>
+
+        <!-- Badge: Suppressed — ACTIVE: bg-amber-50 text-amber-700 border-amber-200 -->
+        <rect x="909" y="254" width="86" height="22" rx="11" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <text x="952" y="269" font-size="12" font-weight="500" fill="#b45309" text-anchor="middle">Suppressed</text>
+
+        <!-- Badge: Deferred — INACTIVE: text-zinc-500 border-zinc-200 -->
+        <rect x="1001" y="254" width="72" height="22" rx="11" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="1037" y="269" font-size="12" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+
+        <!-- Badge: Memory persisted — INACTIVE -->
+        <rect x="1079" y="254" width="116" height="22" rx="11" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="1137" y="269" font-size="12" font-weight="500" fill="#71717a" text-anchor="middle">Memory persisted</text>
+
+        <!-- Section 3: Guardrail reason -->
+        <text x="775" y="302" font-size="11" font-weight="500" fill="#71717a" letter-spacing="0.06em">GUARDRAIL REASON</text>
+        <text x="775" y="322" font-size="14" fill="#18181b">Message matched prohibited topic: competitor pricing</text>
+
+        <!-- Divider before metadata -->
+        <line x1="775" y1="346" x2="1398" y2="346" stroke="#e4e4e7" stroke-width="1"/>
+
+        <!-- Section 4: Metadata footer -->
+        <text x="1398" y="366" font-size="12" fill="#71717a" text-anchor="end" font-variant-numeric="tabular-nums">312 ms</text>
+        <text x="775" y="380" font-size="12" font-family="'Geist Mono', 'ui-monospace', monospace" fill="#71717a">whatsapp::+44 7911 123456</text>
+      </g>
+
+    </g>
+  </g>
+  <!-- END SCENE 2 -->
+
+  <!-- Scene separator -->
+  <rect x="0" y="1700" width="1440" height="4" fill="#e4e4e7"/>
+  <text x="320" y="1728" font-size="13" font-weight="600" fill="#71717a">— Scene 3: Clean inbound result (all badges inactive) —</text>
+
+  <!-- ============================================================
+       SCENE 3: y=1740, height=720
+  ============================================================ -->
+  <g id="scene-3" transform="translate(0,1740)">
+
+    <!-- Page background -->
+    <rect x="0" y="0" width="1440" height="720" fill="#fafafa"/>
+
+    <!-- SIDEBAR -->
+    <g id="scene3-layer-sidebar">
+      <rect x="0" y="0" width="220" height="720" fill="#fafafa"/>
+      <line x1="220" y1="0" x2="220" y2="720" stroke="#e4e4e7" stroke-width="1"/>
+      <g transform="translate(16,14)">
+        <path d="M 18.071 5.929 A 10 10 0 1 0 18.071 18.071"
+              fill="none" stroke="#0d9488" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="18.071" cy="5.929" r="2.2" fill="#0d9488"/>
+        <circle cx="18.071" cy="18.071" r="1.6" fill="#0d9488"/>
+      </g>
+      <text x="46" y="30" font-size="18" font-weight="600" fill="#18181b">Cogtrix</text>
+      <line x1="0" y1="56" x2="220" y2="56" stroke="#e4e4e7" stroke-width="1"/>
+
+      <rect x="8" y="64" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,76)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 0 0 L 0 10 L 4 10 L 4 14 L 8 10 L 14 10 L 14 0 Z"/>
+      </g>
+      <text x="40" y="86" font-size="14" font-weight="400" fill="#71717a">Sessions</text>
+
+      <rect x="8" y="108" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,120)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 2 0 L 9 0 L 14 5 L 14 14 L 2 14 Z"/>
+        <path d="M 9 0 L 9 5 L 14 5"/>
+        <line x1="4" y1="8" x2="10" y2="8"/>
+      </g>
+      <text x="40" y="130" font-size="14" font-weight="400" fill="#71717a">Documents</text>
+
+      <rect x="8" y="152" width="204" height="36" rx="6" fill="#f0fdfa"/>
+      <rect x="8" y="152" width="2" height="36" rx="1" fill="#0d9488"/>
+      <g transform="translate(19,164)" fill="none" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="6"/>
+        <line x1="7" y1="3" x2="7" y2="7"/>
+        <circle cx="7" cy="10" r="0.75" fill="#0d9488" stroke="none"/>
+      </g>
+      <text x="40" y="174" font-size="14" font-weight="500" fill="#0d9488">Assistant</text>
+
+      <rect x="8" y="196" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,208)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="7" r="2.5"/>
+        <path d="M 7 0 L 7 2 M 7 12 L 7 14 M 0 7 L 2 7 M 12 7 L 14 7 M 2.05 2.05 L 3.46 3.46 M 10.54 10.54 L 11.95 11.95 M 2.05 11.95 L 3.46 10.54 M 10.54 3.46 L 11.95 2.05"/>
+      </g>
+      <text x="40" y="218" font-size="14" font-weight="400" fill="#71717a">Settings</text>
+
+      <rect x="8" y="240" width="204" height="36" rx="6" fill="none"/>
+      <g transform="translate(19,252)" fill="none" stroke="#71717a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7" cy="5" r="4"/>
+        <path d="M 0 14 C 0 11 3 9 7 9 C 11 9 14 11 14 14"/>
+      </g>
+      <text x="40" y="262" font-size="14" font-weight="400" fill="#71717a">Admin</text>
+
+      <line x1="0" y1="680" x2="220" y2="680" stroke="#e4e4e7" stroke-width="1"/>
+      <circle cx="30" cy="704" r="14" fill="#f0fdfa"/>
+      <text x="30" y="709" font-size="11" font-weight="600" fill="#0d9488" text-anchor="middle">A</text>
+      <text x="52" y="700" font-size="13" font-weight="500" fill="#18181b">admin</text>
+      <text x="52" y="714" font-size="11" fill="#71717a">Administrator</text>
+    </g>
+
+    <!-- HEADER + SERVICE PANEL -->
+    <g id="scene3-layer-header">
+      <text x="318" y="42" font-size="24" font-weight="600" fill="#18181b">Assistant</text>
+      <rect x="318" y="60" width="1104" height="56" rx="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <rect x="338" y="76" width="70" height="22" rx="11" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+      <circle cx="352" cy="87" r="3.5" fill="#16a34a"/>
+      <text x="360" y="91" font-size="11" font-weight="500" fill="#15803d">Running</text>
+      <text x="418" y="91" font-size="12" fill="#71717a">Channels:</text>
+      <rect x="480" y="77" width="72" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="516" y="91" font-size="11" font-weight="500" fill="#0d9488" text-anchor="middle">whatsapp</text>
+      <rect x="558" y="77" width="62" height="20" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="589" y="91" font-size="11" font-weight="500" fill="#0d9488" text-anchor="middle">telegram</text>
+      <rect x="1310" y="73" width="88" height="30" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+      <text x="1354" y="92" font-size="13" font-weight="500" fill="#18181b" text-anchor="middle">Stop</text>
+    </g>
+
+    <!-- TAB BAR -->
+    <g id="scene3-tab-bar">
+      <rect x="318" y="132" width="1104" height="36" rx="6" fill="#f4f4f5"/>
+      <text x="357" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Chats</text>
+      <text x="435" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Scheduled</text>
+      <text x="515" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+      <text x="590" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Contacts</text>
+      <text x="668" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Knowledge</text>
+      <text x="751" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Guardrails</text>
+      <text x="835" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Campaigns</text>
+      <text x="918" y="154" font-size="13" font-weight="500" fill="#71717a" text-anchor="middle">Workflows</text>
+      <rect x="960" y="134" width="64" height="32" rx="5" fill="#ffffff"/>
+      <text x="992" y="154" font-size="13" font-weight="500" fill="#0d9488" text-anchor="middle">Testing</text>
+      <line x1="966" y1="165" x2="1018" y2="165" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- SCENE 3 CONTENT -->
+    <g id="scene3-layer-content">
+
+      <!-- ===== LEFT PANE: COMPACT FORM (inbound, Telegram) ===== -->
+      <!-- R-03: Channel = Telegram, Chat ID = 123456789 -->
+      <g id="scene3-form">
+        <text x="318" y="202" font-size="13" font-weight="500" fill="#18181b">Channel</text>
+        <rect x="318" y="207" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="230" font-size="14" fill="#18181b">Telegram</text>
+        <use href="#chevron-down" x="706" y="215" width="12" height="12"/>
+
+        <text x="318" y="258" font-size="13" font-weight="500" fill="#18181b">Chat ID</text>
+        <rect x="318" y="263" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="286" font-size="14" fill="#18181b">123456789</text>
+
+        <text x="318" y="316" font-size="13" font-weight="500" fill="#18181b">Direction</text>
+        <rect x="318" y="321" width="409" height="36" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="344" font-size="14" fill="#18181b">Inbound</text>
+        <use href="#chevron-down" x="706" y="329" width="12" height="12"/>
+
+        <text x="318" y="374" font-size="13" font-weight="500" fill="#18181b">Message</text>
+        <rect x="318" y="379" width="409" height="80" rx="6" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="330" y="400" font-size="14" fill="#18181b">Hi! Can you help me track my recent</text>
+        <text x="330" y="418" font-size="14" fill="#18181b">order?</text>
+
+        <use href="#checkbox-unchecked" x="318" y="474" width="16" height="16"/>
+        <text x="342" y="486" font-size="13" font-weight="500" fill="#18181b">Persist memory</text>
+
+        <rect x="318" y="496" width="409" height="52" rx="6" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+        <rect x="318" y="496" width="3" height="52" rx="2" fill="#f59e0b"/>
+        <g transform="translate(329,507)" fill="none" stroke="#b45309" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 1 L15 14 L1 14 Z"/>
+          <line x1="8" y1="6" x2="8" y2="9"/>
+          <circle cx="8" cy="11.5" r="0.8" fill="#b45309" stroke="none"/>
+        </g>
+        <text x="350" y="512" font-size="12" fill="#92400e">When enabled, the simulation writes to live</text>
+        <text x="350" y="527" font-size="12" fill="#92400e">conversation memory. This cannot be undone.</text>
+
+        <g transform="translate(318,562)">
+          <use href="#chevron-down" x="0" y="0" width="12" height="12"/>
+          <text x="18" y="10" font-size="13" fill="#71717a">Advanced options</text>
+        </g>
+
+        <rect x="318" y="584" width="409" height="38" rx="6" fill="#0d9488"/>
+        <text x="522" y="607" font-size="14" font-weight="500" fill="#ffffff" text-anchor="middle">Run simulation</text>
+      </g>
+
+      <!-- ===== RIGHT PANE: RESULT CARD — CLEAN ===== -->
+      <g id="scene3-result-clean">
+        <rect x="751" y="185" width="671" height="390" rx="8" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"
+              style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05))"/>
+
+        <!-- Section 1: Response prose -->
+        <text x="775" y="218" font-size="16" fill="#18181b">Hi! Of course, I&#39;d be happy to help. Could you please</text>
+        <text x="775" y="242" font-size="16" fill="#18181b">share your order number so I can look it up for you?</text>
+
+        <!-- Divider -->
+        <line x1="775" y1="264" x2="1398" y2="264" stroke="#e4e4e7" stroke-width="1"/>
+
+        <!-- Section 2: Badge row — all INACTIVE -->
+        <!-- Badge: Guardrail blocked — INACTIVE -->
+        <rect x="775" y="276" width="128" height="22" rx="11" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="839" y="291" font-size="12" font-weight="500" fill="#71717a" text-anchor="middle">Guardrail blocked</text>
+
+        <!-- Badge: Suppressed — INACTIVE -->
+        <rect x="909" y="276" width="86" height="22" rx="11" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="952" y="291" font-size="12" font-weight="500" fill="#71717a" text-anchor="middle">Suppressed</text>
+
+        <!-- Badge: Deferred — INACTIVE -->
+        <rect x="1001" y="276" width="72" height="22" rx="11" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="1037" y="291" font-size="12" font-weight="500" fill="#71717a" text-anchor="middle">Deferred</text>
+
+        <!-- Badge: Memory persisted — INACTIVE -->
+        <rect x="1079" y="276" width="116" height="22" rx="11" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+        <text x="1137" y="291" font-size="12" font-weight="500" fill="#71717a" text-anchor="middle">Memory persisted</text>
+
+        <!-- No guardrail reason section (all inactive) -->
+
+        <!-- Divider before metadata -->
+        <line x1="775" y1="318" x2="1398" y2="318" stroke="#e4e4e7" stroke-width="1"/>
+
+        <!-- Section 4: Metadata footer -->
+        <!-- R-03: duration = 1,847 ms; session key = telegram_123456789 -->
+        <text x="1398" y="338" font-size="12" fill="#71717a" text-anchor="end" font-variant-numeric="tabular-nums">1,847 ms</text>
+        <text x="775" y="352" font-size="12" font-family="'Geist Mono', 'ui-monospace', monospace" fill="#71717a">telegram_123456789</text>
+      </g>
+
+    </g>
+  </g>
+  <!-- END SCENE 3 -->
+
+</svg>

@@ -60,6 +60,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Testing tab sprint (2026-03-27)
+
+#### Added (Testing tab sprint 2026-03-27)
+- **Assistant › Testing tab** (admin-only): simulate endpoint integration — run full agent pipeline without real channel delivery; results show response, suppressed/deferred/guardrail-blocked/memory-persisted status badges, guardrail reason, and duration
+
 ### UI ConsistencyForge — holistic UI audit (2026-03-27)
 
 #### Fixed (UI ConsistencyForge 2026-03-27)

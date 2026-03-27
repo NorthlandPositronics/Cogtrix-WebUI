@@ -683,6 +683,34 @@ export interface ScheduledMessageEditRequest {
   text?: string | null;          // max 4096 chars
   send_at?: string | null;       // ISO 8601 UTC
 }
+
+export type SimulateDirection = 'inbound' | 'outbound';
+
+/** POST /api/v1/assistant/simulate — admin only */
+export interface SimulateRequest {
+  channel: string;               // e.g. 'whatsapp', 'telegram'
+  chat_id: string;               // target chat identifier
+  message: string;               // message text to inject into the pipeline
+  direction?: SimulateDirection; // default: 'inbound'
+  instructions?: string | null;  // operator instructions (outbound simulation)
+  sender_name?: string;          // display name of the simulated sender
+  sender_id?: string;            // identifier of the simulated sender
+  persist?: boolean;             // whether to persist memory after the run; default false
+}
+
+export interface SimulateOut {
+  channel: string;
+  chat_id: string;
+  session_key: string;
+  direction: SimulateDirection;
+  response: string;              // generated agent response text
+  suppressed: boolean;           // true if the guardrail suppressed the response
+  deferred: boolean;             // true if the pipeline deferred processing
+  blocked_by_guardrails: boolean;
+  guardrail_reason: string | null;
+  duration_ms: number;
+  memory_persisted: boolean;
+}
 ```
 
 ### 3.10 User management types
@@ -1347,6 +1375,7 @@ function handleApiError(error: APIError): void {
 | PATCH | /api/v1/assistant/campaigns/{id} | admin | 200 | Update campaign |
 | DELETE | /api/v1/assistant/campaigns/{id} | admin | 200 | Delete campaign |
 | POST | /api/v1/assistant/campaigns/{id}/launch | admin | 200 | Launch campaign |
+| POST | /api/v1/assistant/simulate | admin | 200 | Run full pipeline simulation without channel delivery |
 
 **Error codes for assistant endpoints:**
 - `ASSISTANT_ALREADY_RUNNING` (409) — `POST /start` when already running and `force_restart=false`
