@@ -2,7 +2,7 @@
 
 Audience: React developers building the Cogtrix web frontend
 API version: v1
-Last updated: 2026-03-24
+Last updated: 2026-03-27
 
 Related documents:
 - `docs/api/openapi.yaml` / `openapi.json` — full OpenAPI 3.1 schema, authoritative source for request/response shapes

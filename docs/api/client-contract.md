@@ -2,7 +2,7 @@
 
 Audience: React frontend developers (`web_coder` agent)
 API version: v1
-Last updated: 2026-03-24
+Last updated: 2026-03-27
 
 ---
 

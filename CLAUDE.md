@@ -67,45 +67,59 @@ src/
 │   ├── Sidebar.tsx             # Navigation sidebar (props-based, no direct store access)
 │   ├── SidebarLogo.tsx         # Inline SVG C-mark logomark rendered in the sidebar header
 │   ├── AgentStateBadge.tsx     # State badge (idle/thinking/...)
-│   ├── SessionCard.tsx         # Session list card
+│   ├── SessionCard.tsx         # Session list card (also exports SessionRow for list view)
 │   ├── ConfirmDialog.tsx       # Generic confirm dialog
 │   ├── InfiniteScrollSentinel.tsx  # IntersectionObserver scroll trigger
 │   ├── ErrorBoundary.tsx       # Route-level error boundary
 │   ├── MarkdownComponents.tsx  # Shared ReactMarkdown component map + remark/rehype plugin arrays
 │   ├── PageSkeleton.tsx        # Suspense fallback skeleton
 │   ├── PageHeader.tsx          # Shared page header
-│   └── Toaster.tsx             # Sonner toast provider wrapper
+│   ├── Toaster.tsx             # Sonner toast provider wrapper
+│   ├── ViolationBadge.tsx      # Guardrail violation type badge
+│   └── YamlBlock.tsx           # Dark YAML preview with copy + download (Light SyntaxHighlighter)
 ├── pages/
 │   ├── login.tsx               # /login and /register (single file, route-determined)
 │   ├── not-found.tsx           # 404
 │   ├── layout/                 # Authenticated layout components
 │   │   └── AppShell.tsx        # Authenticated layout with sidebar
-│   ├── sessions/               # /sessions — session list dashboard + NewSessionDialog
-│   │   └── index.tsx
+│   ├── sessions/               # /sessions — session list dashboard
+│   │   ├── index.tsx
+│   │   ├── NewSessionDialog.tsx        # New session creation modal
+│   │   ├── SessionActionDialog.tsx     # 3-option remove dialog (archive / delete permanently)
+│   │   └── SessionBulkBar.tsx          # Fixed bottom toolbar for bulk selection operations
 │   ├── session/                # /sessions/:id — re-exports SessionPage from chat/
 │   │   └── index.tsx
 │   ├── settings/               # /settings + sub-components
-│   │   └── index.tsx
-│   ├── admin/                  # /admin — LiveLogViewer, SystemInfoCard, UserManagementPanel
-│   │   └── index.tsx
-│   ├── assistant/              # /assistant — AssistantChatList, CampaignsPanel, ChatHistoryDrawer, ContactList, DeferredRecordTable, GuardrailsPanel, KnowledgePanel, OutboundDialog, ScheduledMessageTable, ServiceControlPanel, WorkflowsPanel
+│   │   ├── index.tsx
+│   │   ├── ApiKeyList.tsx              # API key management tab
+│   │   ├── ConfigFlagsForm.tsx         # Boolean config flag toggles
+│   │   ├── McpAddServerDialog.tsx      # MCP server add dialog (501 stub)
+│   │   ├── McpServerList.tsx           # MCP server list with restart
+│   │   ├── ProviderList.tsx            # Provider + model management with CRUD
+│   │   └── SetupWizard.tsx             # Multi-step YAML config wizard
+│   ├── admin/                  # /admin
+│   │   ├── index.tsx
+│   │   ├── LiveLogViewer.tsx           # Live log stream viewer (WS /ws/v1/logs)
+│   │   ├── SystemInfoCard.tsx          # System info display
+│   │   └── UserManagementPanel.tsx     # Admin user CRUD
+│   ├── assistant/              # /assistant — AssistantChatList, CampaignsPanel, ChatHistoryDrawer, ContactList, DeferredRecordTable, GuardrailsPanel, KnowledgePanel, OutboundDialog, ScheduledMessageTable, ServiceControlPanel, SimulatorPanel, WorkflowsPanel
 │   │   └── index.tsx
 │   ├── documents/              # /documents + DocumentCard, DocumentUploadDialog, SemanticSearchBar
 │   │   └── index.tsx
-│   └── chat/                   # Chat UI sub-components (SessionPage, MessageList, StatusBar, …)
+│   └── chat/                   # Chat UI sub-components (SessionPage, MessageList, StatusBar, MessageBubble, StreamingMessageBubble, TypingIndicator, ToolConfirmationModal, ToolsSidebar, MemoryPanel, …)
 └── hooks/                      # Custom React hooks grouped by domain
     ├── chat/                   # useSessionSocket, useSessionQuery, useMessagesQuery, useMemoryQuery, useToolsQuery
     ├── assistant/              # useAssistantChatsQuery, useAssistantStatusQuery, useCampaignsQuery, …
     ├── admin/                  # useLogSocket, useSystemInfoQuery, useUsersQuery
     ├── settings/               # useApiKeysQuery, useMcpServersQuery, useProvidersQuery
-    └── shared/                 # useConfigQuery, useModelsQuery, useMediaQuery, useLiveUptime, useDocumentsQuery, useSessionsQuery
+    └── shared/                 # useConfigQuery, useModelsQuery, useMediaQuery, useLiveUptime, useDocumentsQuery, useSessionsQuery, useSound
 ```
 
 ## Key Patterns
 
 ### API Client
 
-All REST calls go through `src/lib/api/client.ts`. The `api` object provides typed `get`, `post`, `put`, `patch`, `delete` methods. Every response is unwrapped from the `APIResponse<T>` envelope — callers receive `T` directly or get an `ApiError` thrown.
+All REST calls go through `src/lib/api/client.ts`. The `api` object provides typed `get`, `post`, `put`, `patch`, `delete`, and `upload` methods. Every response is unwrapped from the `APIResponse<T>` envelope — callers receive `T` directly or get an `ApiError` thrown.
 
 Token refresh is automatic: on 401 with `TOKEN_EXPIRED`, the client refreshes the access token and retries the request. Concurrent refresh attempts are deduplicated.
 
