@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.10](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.9...v0.1.10) (2026-03-27)
+
+
+### Bug Fixes
+
+* **ci:** add Docker Hub auth to avoid anonymous pull rate limit ([9af7e34](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/9af7e346098aebc1f0f9ba98c2f001d39d81433b))
+* **ci:** fix CD pipeline — Docker Hub auth + release trigger ([f793e9d](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/f793e9deb22242e5dce4cf6b0441ea884f6a8852))
+
+
+### Reverts
+
+* remove Docker Hub auth steps (not needed) ([a3b809e](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/a3b809ebc0f15701eb8fb274f9f62bdc626e1ae3))
+
 ## [0.1.9](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.8...v0.1.9) (2026-03-27)
 
 
