@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.9](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.8...v0.1.9) (2026-03-27)
+
+
+### Bug Fixes
+
+* **ci:** remove continue-on-error from GHCR publish; add on:release trigger ([#23](https://github.com/NorthlandPositronics/Cogtrix-WebUI/issues/23)) ([be70687](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/be70687f0ae077df6ec4f98248199f3fd1bcd9bb)), closes [#22](https://github.com/NorthlandPositronics/Cogtrix-WebUI/issues/22)
+
 ## [0.1.8](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.7...v0.1.8) (2026-03-27)
 
 
