@@ -1,6 +1,11 @@
 name: Release – Docker Build & Publish
 
 on:
+  # Fires automatically when release-please publishes a GitHub Release (creates the tag).
+  # This is the primary trigger — no manual dispatch needed in normal flow.
+  release:
+    types: [published]
+  # Manual fallback: re-run for a specific tag (e.g. after a failed automatic run).
   workflow_dispatch:
     inputs:
       tag:
@@ -15,7 +20,8 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  RELEASE_TAG: ${{ inputs.tag }}
+  # On release event use the published tag; on manual dispatch use the input.
+  RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
 
 jobs:
   # ─────────────────────────────────────────────────────────────

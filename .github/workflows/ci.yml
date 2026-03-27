@@ -200,7 +200,6 @@ jobs:
   publish:
     name: Publish (${{ matrix.arch }})
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    continue-on-error: true   # advisory until GHCR org package-write permission is confirmed
     runs-on: ${{ matrix.runner }}
     permissions:
       contents: read
@@ -240,7 +239,6 @@ jobs:
     name: Publish manifest
     needs: [publish]
     if: ${{ !cancelled() && needs.publish.result != 'skipped' }}
-    continue-on-error: true   # advisory until GHCR org package-write permission is confirmed
     runs-on: ubuntu-latest
     permissions:
       packages: write
