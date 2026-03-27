@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.8](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.7...v0.1.8) (2026-03-27)
+
+
+### Features
+
+* **assistant:** admin-only Testing tab — simulate endpoint UI ([#18](https://github.com/NorthlandPositronics/Cogtrix-WebUI/issues/18)) ([9ceab6f](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/9ceab6f32747fbec80705eadad1a95a0ef832d06))
+
 ## [Unreleased] (2026-03-27)
 
 ### Added
