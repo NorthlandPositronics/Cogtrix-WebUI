@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useUIStore } from "@/lib/stores/ui-store";
+import { cn } from "@/lib/utils";
 import { Sidebar } from "@/components/Sidebar";
 import { SidebarLogo } from "@/components/SidebarLogo";
 import { Button } from "@/components/ui/button";
@@ -65,8 +66,10 @@ export function AppShell() {
     <div className="flex h-screen overflow-hidden">
       {/* Desktop sidebar — always visible on lg+, collapsible to 48px icon rail */}
       <aside
-        className="bg-sidebar hidden shrink-0 flex-col border-r border-zinc-200 transition-[width] duration-200 ease-in-out lg:flex"
-        style={{ width: sidebarCollapsed ? "48px" : "220px" }}
+        className={cn(
+          "bg-sidebar hidden shrink-0 flex-col border-r border-zinc-200 transition-[width] duration-200 ease-in-out lg:flex",
+          sidebarCollapsed ? "w-12" : "w-[220px]",
+        )}
         aria-label="Application sidebar"
       >
         <Sidebar

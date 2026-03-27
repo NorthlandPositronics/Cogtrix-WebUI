@@ -101,6 +101,37 @@ export interface OutboundResponse {
 }
 
 // ---------------------------------------------------------------------------
+// Pipeline simulator (admin-only)
+// ---------------------------------------------------------------------------
+
+export type SimulateDirection = "inbound" | "outbound";
+
+export interface SimulateRequest {
+  channel: string;
+  chat_id: string;
+  message: string;
+  direction?: SimulateDirection;
+  instructions?: string | null;
+  sender_name?: string;
+  sender_id?: string;
+  persist?: boolean;
+}
+
+export interface SimulateOut {
+  channel: string;
+  chat_id: string;
+  session_key: string;
+  direction: SimulateDirection;
+  response: string;
+  suppressed: boolean;
+  deferred: boolean;
+  blocked_by_guardrails: boolean;
+  guardrail_reason: string | null;
+  duration_ms: number;
+  memory_persisted: boolean;
+}
+
+// ---------------------------------------------------------------------------
 // Campaigns
 // ---------------------------------------------------------------------------
 

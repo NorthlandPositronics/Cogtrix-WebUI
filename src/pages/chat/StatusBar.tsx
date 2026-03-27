@@ -110,7 +110,7 @@ export function StatusBar() {
         </div>
         <button
           onClick={() => setExpanded((v) => !v)}
-          className="ml-1 flex h-6 w-6 items-center justify-center rounded text-zinc-500 hover:text-zinc-600 focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="focus-visible:ring-ring ml-1 flex h-6 w-6 items-center justify-center rounded text-zinc-500 hover:text-zinc-600 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           aria-label={expanded ? "Collapse tool history" : "Expand tool history"}
           aria-expanded={expanded}
         >

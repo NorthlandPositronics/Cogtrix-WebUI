@@ -6,9 +6,9 @@ export function NotFoundPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-zinc-50 px-4 text-center">
       <FileQuestion className="h-12 w-12 text-zinc-400" strokeWidth={1.5} aria-hidden="true" />
-      <p className="text-2xl font-bold text-zinc-900">404</p>
+      <p className="text-3xl font-bold text-zinc-900">404</p>
       <div className="space-y-2">
-        <h1 className="text-xl font-medium text-zinc-900">Page not found</h1>
+        <h1 className="text-xl text-zinc-500">Page not found</h1>
         <p className="max-w-sm text-center text-sm text-zinc-500">
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>

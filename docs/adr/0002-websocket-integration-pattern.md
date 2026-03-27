@@ -3,6 +3,12 @@
 **Date**: 2026-03-05
 **Status**: Accepted
 
+> **Path note (2026-03-27)**: File paths referenced throughout this ADR reflect the state at the time of the decision (2026-03-05). The project was later restructured. Current canonical paths:
+> - `src/lib/ws/session-socket.ts` → `src/lib/api/ws/session-socket.ts`
+> - `src/lib/ws/log-socket.ts` → `src/lib/api/ws/log-socket.ts`
+> - `src/hooks/useSessionSocket.ts` → `src/hooks/chat/useSessionSocket.ts`
+> - `src/hooks/useLogSocket.ts` → `src/hooks/admin/useLogSocket.ts`
+
 ---
 
 ## Context

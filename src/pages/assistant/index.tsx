@@ -15,6 +15,8 @@ const KnowledgePanel = lazy(() => import("./KnowledgePanel"));
 const GuardrailsPanel = lazy(() => import("./GuardrailsPanel"));
 const CampaignsPanel = lazy(() => import("./CampaignsPanel"));
 const WorkflowsPanel = lazy(() => import("./WorkflowsPanel"));
+// Testing tab is admin-only — loaded lazily to avoid bundling simulator code for non-admins
+const SimulatorPanel = lazy(() => import("./SimulatorPanel"));
 
 function TabSkeleton() {
   return (
@@ -70,6 +72,12 @@ export function AssistantPage() {
               <TabsTrigger value="workflows" disabled={!serviceRunning} data-cy="tab-workflows">
                 Workflows
               </TabsTrigger>
+              {/* Testing tab is admin-only and deliberately NOT gated on serviceRunning — see ADR-0010 §Constrains */}
+              {isAdmin && (
+                <TabsTrigger value="testing" data-cy="tab-testing">
+                  Testing
+                </TabsTrigger>
+              )}
             </TabsList>
           </div>
           {!serviceRunning && (
@@ -122,6 +130,13 @@ export function AssistantPage() {
               <WorkflowsPanel />
             </Suspense>
           </TabsContent>
+          {isAdmin && (
+            <TabsContent value="testing" className="mt-4">
+              <Suspense fallback={<TabSkeleton />}>
+                <SimulatorPanel />
+              </Suspense>
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </div>
