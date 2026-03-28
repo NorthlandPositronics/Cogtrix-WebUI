@@ -241,7 +241,7 @@ export function SetupWizard() {
 
   function handleReject() {
     if (!step) return;
-    advanceMutation.mutate({ wizardId: step.wizard_id, body: { data: { accept: false } } });
+    advanceMutation.mutate({ wizardId: step.wizard_id, body: { answer: "Please revise the configuration." } });
   }
 
   function handleCancel() {
