@@ -105,7 +105,7 @@ export const useStreamingStore = create<StreamingState>((set) => ({
         durationMs: null,
       };
       const prevLog = state.statusLog.length >= 100 ? state.statusLog.slice(-99) : state.statusLog;
-      return { toolActivities: next, hasActiveTool: true, statusLog: [...prevLog, entry] };
+      return { toolActivities: next, hasActiveTool: true, statusLog: [...prevLog, entry], streamingBuffer: "" };
     }),
 
   updateToolEnd: (toolCallId, durationMs, error) =>
