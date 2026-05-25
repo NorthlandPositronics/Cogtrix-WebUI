@@ -1,5 +1,5 @@
 # Stage 1 — Build
-FROM node:25.8-alpine AS build
+FROM node:26.2-alpine AS build
 RUN npm install -g pnpm@10.30.3 --no-update-notifier
 WORKDIR /app
 
