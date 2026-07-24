@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -21,6 +21,18 @@ import { api } from "@/lib/api/client";
 import { keys } from "@/lib/api/keys";
 import { useSessionsQuery } from "@/hooks/shared/useSessionsQuery";
 import { cn } from "@/lib/utils";
+
+function reportBulkResult(results: PromiseSettledResult<unknown>[], total: number, verb: string) {
+  const failed = results.filter((r) => r.status === "rejected").length;
+  const ok = total - failed;
+  if (failed === 0) {
+    toast.success(`${ok} session${ok === 1 ? "" : "s"} ${verb}`);
+  } else if (ok === 0) {
+    toast.error(`Sessions could not be ${verb}`);
+  } else {
+    toast.warning(`${ok} ${verb}, ${failed} failed`);
+  }
+}
 
 function SessionCardSkeleton() {
   return (
@@ -113,33 +125,41 @@ export function SessionsPage() {
     },
   });
 
+  // Bulk ops use allSettled so a single failure doesn't abandon the successful
+  // deletes: always reconcile the cache and clear the selection, then report the
+  // real success/failure split.
   const bulkArchiveMutation = useMutation({
     mutationFn: (ids: string[]) =>
-      Promise.all(ids.map((id) => api.delete<null>(`/sessions/${id}`))),
-    onSuccess: (_data, ids) => {
+      Promise.allSettled(ids.map((id) => api.delete<null>(`/sessions/${id}`))),
+    onSuccess: (results, ids) => reportBulkResult(results, ids.length, "archived"),
+    onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: keys.sessions.all });
       setSelectedIds(new Set());
-      toast.success(`${ids.length} session${ids.length === 1 ? "" : "s"} archived`);
-    },
-    onError: () => {
-      toast.error("Some sessions could not be archived");
     },
   });
 
   const bulkDeleteMutation = useMutation({
     mutationFn: (ids: string[]) =>
-      Promise.all(ids.map((id) => api.delete<null>(`/sessions/${id}?permanent=true`))),
-    onSuccess: (_data, ids) => {
+      Promise.allSettled(ids.map((id) => api.delete<null>(`/sessions/${id}?permanent=true`))),
+    onSuccess: (results, ids) => reportBulkResult(results, ids.length, "permanently deleted"),
+    onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: keys.sessions.all });
       setSelectedIds(new Set());
-      toast.success(`${ids.length} session${ids.length === 1 ? "" : "s"} permanently deleted`);
-    },
-    onError: () => {
-      toast.error("Some sessions could not be deleted");
     },
   });
 
-  const handleDelete = useCallback((id: string, name: string) => setActionTarget({ id, name }), []);
+  // Stable id-only handler: the call sites previously wrapped this in an inline
+  // `(id) => handleDelete(id, s.name)` closure, giving every memoized card/row a
+  // fresh onDelete identity and re-rendering the whole list on each checkbox
+  // toggle. Read the name from a ref so the callback stays stable across renders.
+  const sessionsRef = useRef(sessions);
+  useEffect(() => {
+    sessionsRef.current = sessions;
+  }, [sessions]);
+  const handleDelete = useCallback((id: string) => {
+    const name = sessionsRef.current.find((s) => s.id === id)?.name ?? "";
+    setActionTarget({ id, name });
+  }, []);
 
   const handleUnarchive = useCallback(
     (id: string) => unarchiveMutation.mutate(id),
@@ -249,7 +269,7 @@ export function SessionsPage() {
                   <SessionCard
                     key={s.id}
                     session={s}
-                    onDelete={(id) => handleDelete(id, s.name)}
+                    onDelete={handleDelete}
                     onUnarchive={handleUnarchive}
                     models={models}
                     onEditModel={handleEditModel}
@@ -321,7 +341,7 @@ export function SessionsPage() {
                       <SessionRow
                         key={s.id}
                         session={s}
-                        onDelete={(id) => handleDelete(id, s.name)}
+                        onDelete={handleDelete}
                         onUnarchive={handleUnarchive}
                         models={models}
                         onEditModel={handleEditModel}

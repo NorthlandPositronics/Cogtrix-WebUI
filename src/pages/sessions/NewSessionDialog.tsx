@@ -88,9 +88,16 @@ export function NewSessionDialog({ triggerCy }: { triggerCy?: string } = {}) {
     const model = toApiValue(form.model);
     const memoryMode = toApiValue(form.memoryMode) as MemoryMode | undefined;
     const systemPrompt = form.systemPrompt.trim() || null;
-    const maxStepsRaw = parseInt(form.maxSteps, 10);
+    // Number(), not parseInt(): <input type="number"> accepts exponent notation
+    // and parseInt("1e3") silently yields 1.
+    const maxStepsRaw = Number(form.maxSteps);
     const maxSteps =
-      !isNaN(maxStepsRaw) && maxStepsRaw >= 1 && maxStepsRaw <= 200 ? maxStepsRaw : null;
+      form.maxSteps !== "" &&
+      Number.isInteger(maxStepsRaw) &&
+      maxStepsRaw >= 1 &&
+      maxStepsRaw <= 200
+        ? maxStepsRaw
+        : null;
     const contextCompression = form.contextCompression;
 
     const hasConfig =

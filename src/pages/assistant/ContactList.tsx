@@ -60,7 +60,7 @@ function ChannelIcon({ channel }: { channel: string }) {
 export function ContactList() {
   const { data: contacts, isLoading, isError, refetch } = useContactsQuery();
 
-  return isError ? (
+  return isError && !contacts ? (
     <div className="flex flex-col items-center gap-3 py-16 text-center">
       <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
       <p className="text-sm text-red-600">Failed to load contacts.</p>

@@ -47,6 +47,7 @@ function ConnectionStatusDot({ status }: { status: string }) {
   return (
     <span
       className="flex items-center gap-1.5 text-xs text-zinc-500"
+      data-cy="connection-status"
       role="status"
       title={label}
       aria-label={label}
@@ -63,6 +64,7 @@ export function SessionHeader({ session }: SessionHeaderProps) {
   const [nameError, setNameError] = useState<string | null>(null);
   const [clearHistoryOpen, setClearHistoryOpen] = useState(false);
   const [keepLast, setKeepLast] = useState("0");
+  const [keepLastError, setKeepLastError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
@@ -101,6 +103,9 @@ export function SessionHeader({ session }: SessionHeaderProps) {
       api.patch<SessionOut>(`/sessions/${session.id}`, { config }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: keys.sessions.detail(session.id) });
+      // sessions.list is a sibling key, not a child of detail — without this the
+      // session card on /sessions keeps showing the old model for up to 5 min.
+      void queryClient.invalidateQueries({ queryKey: keys.sessions.all });
       toast.success("Settings saved");
     },
     onError: (err) => {
@@ -129,8 +134,17 @@ export function SessionHeader({ session }: SessionHeaderProps) {
   }
 
   function handleClearHistoryConfirm() {
-    const n = parseInt(keepLast, 10);
-    clearHistoryMutation.mutate(isNaN(n) || n < 0 ? 0 : n);
+    // 0 means "delete everything", so an unparseable field must NOT fall back to
+    // it — clearing the input and confirming would irreversibly wipe the whole
+    // history. Number() (not parseInt) because <input type="number"> accepts
+    // exponent notation, and parseInt("1e2") silently yields 1.
+    const n = Number(keepLast);
+    if (!Number.isInteger(n) || n < 0) {
+      setKeepLastError("Enter a whole number of messages to keep (0 clears all).");
+      return;
+    }
+    setKeepLastError(null);
+    clearHistoryMutation.mutate(n);
   }
 
   function handleMemoryClick() {
@@ -162,6 +176,11 @@ export function SessionHeader({ session }: SessionHeaderProps) {
   }
 
   function commitEdit() {
+    // Wired to both Enter and onBlur. Disabling the focused input mid-flight
+    // makes the browser fire blur, which re-entered here and issued a second
+    // identical PATCH — the duplicate can come back SESSION_NAME_DUPLICATE and
+    // show a rename error for a rename that actually succeeded.
+    if (renameMutation.isPending) return;
     const trimmed = draftName.trim();
     if (!trimmed || trimmed === session.name) {
       setEditing(false);
@@ -316,10 +335,20 @@ export function SessionHeader({ session }: SessionHeaderProps) {
               min={0}
               step={1}
               value={keepLast}
-              onChange={(e) => setKeepLast(e.target.value)}
+              onChange={(e) => {
+                setKeepLast(e.target.value);
+                setKeepLastError(null);
+              }}
               disabled={clearHistoryMutation.isPending}
+              aria-invalid={keepLastError !== null}
+              aria-describedby={keepLastError ? "keep-last-error" : undefined}
               className="min-h-11 w-32"
             />
+            {keepLastError && (
+              <p id="keep-last-error" className="mt-1.5 text-sm text-red-600">
+                {keepLastError}
+              </p>
+            )}
           </div>
           <DialogFooter>
             <Button

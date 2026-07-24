@@ -33,16 +33,30 @@ export class ApiError extends Error {
     this.details = error.details;
   }
 
-  /** Extract field-level validation errors when code is VALIDATION_ERROR. */
+  /**
+   * Extract field-level validation errors when code is VALIDATION_ERROR.
+   *
+   * The backend nests errors for nested models — `config.max_steps` arrives as
+   * `{ config: { max_steps: [...] } }`. Those are flattened to dotted keys
+   * ("config.max_steps"); a non-recursive read would drop them silently.
+   */
   getFieldErrors(): Record<string, string[]> {
     const result: Record<string, string[]> = {};
     const fields = (this.details as ValidationDetails | null)?.fields;
     if (!fields) return result;
-    for (const [name, errs] of Object.entries(fields)) {
-      if (Array.isArray(errs)) {
-        result[name] = errs.map((e) => e.message);
+
+    const walk = (node: unknown, path: string): void => {
+      if (Array.isArray(node)) {
+        result[path] = (node as FieldError[]).map((e) => e.message);
+        return;
       }
-    }
+      if (node && typeof node === "object") {
+        for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+          walk(value, path ? `${path}.${key}` : key);
+        }
+      }
+    };
+    walk(fields, "");
     return result;
   }
 }

@@ -10,14 +10,16 @@ class MockWebSocket {
 
   readyState = MockWebSocket.CONNECTING;
   url: string;
+  protocols: string | string[] | undefined;
   onopen: ((event: Event) => void) | null = null;
   onclose: ((event: CloseEvent) => void) | null = null;
   onmessage: ((event: MessageEvent) => void) | null = null;
   onerror: ((event: Event) => void) | null = null;
   sentMessages: string[] = [];
 
-  constructor(url: string) {
+  constructor(url: string, protocols?: string | string[]) {
     this.url = url;
+    this.protocols = protocols;
   }
 
   send(data: string) {
@@ -54,8 +56,8 @@ beforeAll(() => {
   vi.stubGlobal(
     "WebSocket",
     class extends MockWebSocket {
-      constructor(url: string) {
-        super(url);
+      constructor(url: string, protocols?: string | string[]) {
+        super(url, protocols);
         trackWebSocket(this);
       }
     },
@@ -115,7 +117,7 @@ describe("SessionSocket", () => {
     expect(lastCreatedWs).toBeNull();
   });
 
-  it("connects with token and session id in URL", () => {
+  it("connects with the session id in the URL and the token as a subprotocol", () => {
     const handlers = createHandlers();
     const socket = new SessionSocket("session-1", handlers);
 
@@ -123,7 +125,10 @@ describe("SessionSocket", () => {
 
     expect(lastCreatedWs).not.toBeNull();
     expect(lastCreatedWs!.url).toContain("session-1");
-    expect(lastCreatedWs!.url).toContain("token=test-token");
+    // The token travels via Sec-WebSocket-Protocol (["bearer", <jwt>]), not the
+    // query string — keeps the JWT out of URLs, logs, and browser history.
+    expect(lastCreatedWs!.url).not.toContain("token=");
+    expect(lastCreatedWs!.protocols).toEqual(["bearer", "test-token"]);
   });
 
   it("calls onOpen when connection opens", () => {

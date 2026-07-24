@@ -64,10 +64,15 @@ function ShellBlock({ children, language }: { children: ReactNode; language?: st
 
   function handleCopy() {
     const text = extractText(children);
-    void navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    // A rejected write (insecure context, denied permission) must not become an
+    // unhandled rejection — leave the button unflipped so it reads as "not copied".
+    void navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => setCopied(false));
   }
 
   return (
@@ -100,10 +105,15 @@ function CodeBlock({ children, language }: { children: ReactNode; language?: str
 
   function handleCopy() {
     const text = extractText(children);
-    void navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    // A rejected write (insecure context, denied permission) must not become an
+    // unhandled rejection — leave the button unflipped so it reads as "not copied".
+    void navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => setCopied(false));
   }
 
   return (
@@ -230,7 +240,10 @@ export const markdownComponents: Components = {
     return <CodeBlock language={language}>{children}</CodeBlock>;
   },
   code({ children, className }) {
-    const isInline = !className;
+    // A fenced block's <code> carries a trailing newline; inline code never does.
+    // Without that check a language-less ``` fence (which also has no className)
+    // was treated as inline and rendered as a pill nested inside the block <pre>.
+    const isInline = !className && !String(children).includes("\n");
     if (isInline) {
       return (
         <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-sm text-zinc-900">

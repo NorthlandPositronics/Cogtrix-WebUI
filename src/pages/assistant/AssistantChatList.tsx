@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState, useEffect, useRef } from "react";
 import { AlertTriangle, Lock, MessageSquare } from "lucide-react";
 import { useAssistantChatsQuery } from "@/hooks/assistant/useAssistantChatsQuery";
@@ -23,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ChatHistoryDrawer } from "./ChatHistoryDrawer";
 
 function formatAbsoluteTime(isoString: string): string {
-  const d = new Date(isoString);
+  const d = parseServerDate(isoString);
   return d.toLocaleDateString() + " " + d.toLocaleTimeString();
 }
 
@@ -60,6 +61,13 @@ export function AssistantChatList() {
   const { playInboundChat } = useSound();
   // Track session keys seen in previous polls; null means not yet initialised (skip first population)
   const seenChatKeysRef = useRef<Set<string> | null>(null);
+
+  // Changing the filter loads a different chat set, so the previous filter's keys
+  // are not a valid baseline — re-prime on the next load instead of treating the
+  // new filter's chats as newly-arrived (which played a spurious inbound sound).
+  useEffect(() => {
+    seenChatKeysRef.current = null;
+  }, [channelFilter]);
 
   useEffect(() => {
     if (!chats) return;
@@ -113,7 +121,7 @@ export function AssistantChatList() {
         </div>
       </div>
 
-      {isError ? (
+      {isError && !chats ? (
         <div className="flex flex-col items-center gap-3 py-16 text-center">
           <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
           <p className="text-sm text-red-600">Failed to load chats.</p>

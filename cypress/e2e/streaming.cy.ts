@@ -151,13 +151,13 @@ describe("Streaming & WebSocket", () => {
       );
     });
 
-    it("streaming cursor is visible during stream and hidden after done", () => {
+    it("streaming bubble is visible during stream and gone after done", () => {
       cy.then(() => {
         injectMessage("agent_state", { state: "writing" });
         injectMessage("token", { text: "Response text", final: false });
       });
 
-      cy.get("[data-cy='streaming-cursor']", { timeout: 10000 }).should("exist");
+      cy.get("[data-cy='streaming-message']", { timeout: 10000 }).should("exist");
 
       cy.then(() => {
         injectMessage("done", {
@@ -171,7 +171,7 @@ describe("Streaming & WebSocket", () => {
         injectMessage("agent_state", { state: "idle" });
       });
 
-      cy.get("[data-cy='streaming-cursor']").should("not.exist");
+      cy.get("[data-cy='streaming-message']").should("not.exist");
     });
   });
 
@@ -305,15 +305,17 @@ describe("Streaming & WebSocket", () => {
         injectMessage("token", { text: "Partial response...", final: false });
       });
 
-      cy.get("[data-cy='streaming-cursor']", { timeout: 10000 }).should("exist");
+      cy.get("[data-cy='streaming-message']", { timeout: 10000 }).should("exist");
 
       cy.then(() => {
         mockWs.readyState = 3;
         mockWs.onclose?.({ code: 1006 } as CloseEvent);
       });
 
-      // Connection status should reflect disconnection
-      cy.get("[role='status']", { timeout: 10000 }).should("exist");
+      // Connection status should reflect disconnection. Target the status dot
+      // specifically — `[role='status']` also matches the streaming bubble, the
+      // typing indicator and the agent-state badge, so it would pass vacuously.
+      cy.get("[data-cy='connection-status']", { timeout: 10000 }).should("exist");
     });
 
     it("sends cancel message when stop button is clicked during streaming", () => {
@@ -322,7 +324,7 @@ describe("Streaming & WebSocket", () => {
         injectMessage("token", { text: "Generating...", final: false });
       });
 
-      cy.get("[data-cy='streaming-cursor']", { timeout: 10000 }).should("exist");
+      cy.get("[data-cy='streaming-message']", { timeout: 10000 }).should("exist");
       cy.get("[data-cy='cancel-generation']").should("be.visible").click();
 
       cy.wrap(null, { timeout: 5000 }).should(() => {

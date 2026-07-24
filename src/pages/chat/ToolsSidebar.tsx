@@ -224,11 +224,15 @@ export function ToolsSidebar({ sessionId, asSheet = false }: ToolsSidebarProps) 
     },
   });
 
+  // Depend on the stable `.mutate`, not the whole mutation result (new object
+  // every render), so this callback's identity holds and the ToolRow memo keeps
+  // working while filtering.
+  const { mutate: mutateStatus } = statusMutation;
   const handleStatusChange = useCallback(
     (name: string, from: TriPosition, to: TriPosition, status: ToolStatus) => {
-      statusMutation.mutate(buildAction(name, from, to, status));
+      mutateStatus(buildAction(name, from, to, status));
     },
-    [statusMutation],
+    [mutateStatus],
   );
 
   const filtered = tools
@@ -265,7 +269,7 @@ export function ToolsSidebar({ sessionId, asSheet = false }: ToolsSidebarProps) 
 
   const toolList = (
     <div className="flex-1 overflow-y-auto">
-      {isError ? (
+      {isError && !tools ? (
         <div className="flex flex-col items-center gap-3 p-4 py-8 text-center">
           <p className="text-sm text-red-600">Failed to load tools.</p>
           <Button variant="outline" size="sm" onClick={() => void refetch()}>

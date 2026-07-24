@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { FileText, Trash2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ function formatFileSize(bytes: number): string {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
+  return parseServerDate(iso).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
     day: "numeric",

@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2, ShieldOff, Ban } from "lucide-react";
@@ -22,7 +23,7 @@ import { useGuardrailsQuery } from "@/hooks/assistant/useGuardrailsQuery";
 
 function formatTimestamp(iso: string): string {
   try {
-    return new Date(iso).toLocaleString("en-US", {
+    return parseServerDate(iso).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
@@ -68,7 +69,7 @@ export function GuardrailsPanel() {
     );
   }
 
-  if (isError) {
+  if (isError && !data) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
         <p className="text-sm text-red-600">Failed to load guardrails data.</p>

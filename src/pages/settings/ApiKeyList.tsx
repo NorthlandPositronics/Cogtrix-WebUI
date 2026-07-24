@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState, type FormEvent } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -30,7 +31,7 @@ import {
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "—";
-  return new Date(dateStr).toLocaleDateString(undefined, {
+  return parseServerDate(dateStr).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -45,9 +46,16 @@ function CreatedKeyDisplay({ apiKey }: CreatedKeyDisplayProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(apiKey);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // This is the one and only time the key is shown, so a failed copy must be
+    // visible rather than an unhandled rejection that leaves the button silent.
+    try {
+      await navigator.clipboard.writeText(apiKey);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+      toast.error("Couldn't copy — select the key and copy it manually.");
+    }
   }
 
   return (
@@ -102,7 +110,11 @@ function CreateKeyDialog({ onCreated }: CreateKeyDialogProps) {
     e.preventDefault();
     const body: APIKeyCreateRequest = {
       label: label.trim(),
-      expires_in_days: expiresInDays ? parseInt(expiresInDays, 10) : null,
+      // Number(), not parseInt(): <input type="number"> accepts exponent
+      // notation, and parseInt("1e3") yields 1 — a key meant to last ~3 years
+      // would silently expire tomorrow. Non-integers fall back to "never".
+      expires_in_days:
+        expiresInDays && Number.isInteger(Number(expiresInDays)) ? Number(expiresInDays) : null,
     };
     createMutation.mutate(body);
   }
@@ -277,7 +289,7 @@ export function ApiKeyList() {
     );
   }
 
-  if (isError) {
+  if (isError && !apiKeys) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
         <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />

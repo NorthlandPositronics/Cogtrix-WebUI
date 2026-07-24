@@ -68,8 +68,11 @@ async function parseJson<R>(res: Response): Promise<APIResponse<R>> {
   try {
     return JSON.parse(text) as APIResponse<R>;
   } catch {
-    // For 500s with non-JSON bodies, surface the raw response so the real
-    // error is visible rather than a generic "server unavailable" message.
+    // Non-JSON body — surface the real content, tag-stripped and truncated.
+    // A reverse proxy can emit an HTML page below 500 too (e.g. nginx 413 when
+    // an upload exceeds client_max_body_size), so the preview must be used on
+    // both branches; passing raw `text` through put a whole HTML document in a
+    // toast.
     const preview = text
       .replace(/<[^>]*>/g, " ")
       .replace(/\s+/g, " ")
@@ -77,12 +80,9 @@ async function parseJson<R>(res: Response): Promise<APIResponse<R>> {
       .slice(0, 300);
     throw new ApiError({
       code: "NETWORK_ERROR",
-      message:
-        res.status >= 500
-          ? preview
-            ? `Server error (${res.status}): ${preview}`
-            : "Server is unavailable. Please try again later."
-          : text,
+      message: preview
+        ? `Server error (${res.status}): ${preview}`
+        : "Server is unavailable. Please try again later.",
     });
   }
 }
@@ -90,6 +90,9 @@ async function parseJson<R>(res: Response): Promise<APIResponse<R>> {
 export async function request<T>(
   path: string,
   opts: RequestInit & { timeoutMs?: number } = {},
+  // Internal: set on the single retry after a token refresh so a repeat 401
+  // can't trigger an endless refresh→retry loop.
+  alreadyRefreshed = false,
 ): Promise<T> {
   const url = `${API_V1}${path}`;
   const isFormData = opts.body instanceof FormData;
@@ -97,10 +100,22 @@ export async function request<T>(
 
   const { timeoutMs, ...fetchOpts } = opts;
   const controller = new AbortController();
-  const timer = timeoutMs ? setTimeout(() => controller.abort(), timeoutMs) : null;
-  // Merge caller-supplied signal with our timeout signal
+  let timedOut = false;
+  const timer = timeoutMs
+    ? setTimeout(() => {
+        timedOut = true;
+        controller.abort();
+      }, timeoutMs)
+    : null;
+  // Merge caller-supplied signal with our timeout signal. An already-aborted
+  // signal never fires the listener, so honour it up front instead of issuing a
+  // request the caller has already cancelled.
   if (opts.signal) {
-    opts.signal.addEventListener("abort", () => controller.abort());
+    if (opts.signal.aborted) {
+      if (timer) clearTimeout(timer);
+      throw new ApiError({ code: "NETWORK_ERROR", message: "Request was cancelled." });
+    }
+    opts.signal.addEventListener("abort", () => controller.abort(), { once: true });
   }
 
   let res: Response;
@@ -115,7 +130,9 @@ export async function request<T>(
     if (err instanceof DOMException && err.name === "AbortError") {
       throw new ApiError({
         code: "NETWORK_ERROR",
-        message: "Request timed out — the server is taking too long to respond.",
+        message: timedOut
+          ? "Request timed out — the server is taking too long to respond."
+          : "Request was cancelled.",
       });
     }
     throw new ApiError({
@@ -132,24 +149,39 @@ export async function request<T>(
 
   if (res.status === 401) {
     const body = await parseJson<null>(res);
-    if (body.error?.code === "TOKEN_EXPIRED") {
+    if (body.error?.code === "TOKEN_EXPIRED" && !alreadyRefreshed) {
       await refreshAccessToken();
-      const retryHeaders = isFormData ? authHeadersNoContentType() : authHeaders();
-      const retry = await fetch(url, { ...opts, headers: { ...retryHeaders, ...opts.headers } });
-      if (retry.status === 429) {
-        handleRateLimit(retry);
-        throw new ApiError({ code: "RATE_LIMITED", message: "Rate limited" });
-      }
-      const retryBody = await parseJson<T>(retry);
-      if (retryBody.error) throw new ApiError(retryBody.error);
-      return retryBody.data as T;
+      // Retry once through the full request path so the retry gets its own
+      // timeout, abort handling, rate-limit/204 checks, and envelope parsing —
+      // rather than a hand-rolled fetch that silently drops the timeout.
+      return request<T>(path, opts, true);
     }
     if (body.error) throw new ApiError(body.error);
     throw new Error("Unauthorized");
   }
 
+  // 204 No Content (e.g. DELETE /mcp/servers/{name}) has an empty body — no
+  // envelope to parse. Return undefined rather than choking parseJson on "".
+  if (res.status === 204) return undefined as T;
+
   const body = await parseJson<T>(res);
   if (body.error) throw new ApiError(body.error);
+  // Only 429/401/204 are checked above; every other non-2xx used to fall through
+  // as a successful `undefined` whenever the body lacked an `error` key. That
+  // happens for any response that doesn't reach the envelope-wrapping handler —
+  // FastAPI emits `{"detail": ...}` for unmatched routes (404), wrong verbs (405)
+  // and request validation (422) — so a 404 was indistinguishable from an empty
+  // result, and destructive mutations reported success without doing anything.
+  if (!res.ok) {
+    const detail = (body as unknown as { detail?: unknown }).detail;
+    throw new ApiError({
+      code: `HTTP_${res.status}`,
+      message:
+        typeof detail === "string" && detail
+          ? detail
+          : res.statusText || `Request failed (${res.status})`,
+    });
+  }
   return body.data as T;
 }
 

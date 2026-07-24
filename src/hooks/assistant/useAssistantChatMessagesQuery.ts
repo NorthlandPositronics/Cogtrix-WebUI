@@ -8,7 +8,9 @@ export function useAssistantChatMessagesQuery(chatKey: string | null) {
   return useQuery({
     queryKey: keys.assistant.chatMessages(chatKey ?? ""),
     queryFn: async () => {
-      const page = await api.get<CursorPage<MessageOut>>(`/assistant/chats/${chatKey}/messages`);
+      const page = await api.get<CursorPage<MessageOut>>(
+        `/assistant/chats/${encodeURIComponent(chatKey!)}/messages`,
+      );
       return page.items;
     },
     enabled: chatKey !== null,

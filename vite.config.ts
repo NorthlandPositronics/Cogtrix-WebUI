@@ -29,5 +29,10 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     css: false,
+    // Reset mocks between tests. Several suites share a stubGlobal'd fetch mock
+    // and queue responses with mockResolvedValueOnce; without this, an
+    // unconsumed queued response leaks into the next test and fails it far from
+    // the real cause.
+    mockReset: true,
   },
 });

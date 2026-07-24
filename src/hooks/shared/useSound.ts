@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useUIStore } from "@/lib/stores/ui-store";
 
 // Module-level singleton — not recreated on re-renders or remounts
@@ -44,6 +45,13 @@ function playTone(
 
   osc.start(ctx.currentTime + startOffset);
   osc.stop(ctx.currentTime + startOffset + duration);
+  // Release the graph once the tone ends — the AudioContext is a long-lived
+  // module singleton, so without this the destination's input list grows for
+  // every chime played over the life of the tab.
+  osc.onended = () => {
+    osc.disconnect();
+    gainNode.disconnect();
+  };
 }
 
 export interface SoundHook {
@@ -56,52 +64,58 @@ export interface SoundHook {
 export function useSound(): SoundHook {
   const soundEnabled = useUIStore((s) => s.soundEnabled);
 
-  function playResponseComplete(): void {
+  // Stable identities keyed on soundEnabled — consumers list these in effect
+  // deps (SessionPage, AssistantChatList), so fresh identities each render made
+  // those effects re-run every render.
+  const playResponseComplete = useCallback(() => {
     if (!soundEnabled) return;
     const ctx = getAudioContext();
     if (!ctx) return;
-    void resumeIfSuspended(ctx).then(() => {
-      // EVT-001: Two-note ascending chime, major second interval
-      // First note: ~1200 Hz, second note: ~1350 Hz (major second up)
-      // Total ~220 ms, gain 0.25
-      playTone(ctx, 1200, 0.25, 0, 0.12);
-      playTone(ctx, 1350, 0.25, 0.1, 0.12);
-    });
-  }
+    void resumeIfSuspended(ctx)
+      .then(() => {
+        // EVT-001: Two-note ascending chime, major second interval
+        playTone(ctx, 1200, 0.25, 0, 0.12);
+        playTone(ctx, 1350, 0.25, 0.1, 0.12);
+      })
+      .catch(() => {});
+  }, [soundEnabled]);
 
-  function playError(): void {
+  const playError = useCallback(() => {
     if (!soundEnabled) return;
     const ctx = getAudioContext();
     if (!ctx) return;
-    void resumeIfSuspended(ctx).then(() => {
-      // EVT-002: Two descending tones, slightly lower than EVT-001
-      // First note: ~900 Hz, second note: ~780 Hz (minor second down)
-      // Total ~220 ms, gain 0.30
-      playTone(ctx, 900, 0.3, 0, 0.12);
-      playTone(ctx, 780, 0.3, 0.1, 0.12);
-    });
-  }
+    void resumeIfSuspended(ctx)
+      .then(() => {
+        // EVT-002: Two descending tones, slightly lower than EVT-001
+        playTone(ctx, 900, 0.3, 0, 0.12);
+        playTone(ctx, 780, 0.3, 0.1, 0.12);
+      })
+      .catch(() => {});
+  }, [soundEnabled]);
 
-  function playInboundChat(): void {
+  const playInboundChat = useCallback(() => {
     if (!soundEnabled) return;
     const ctx = getAudioContext();
     if (!ctx) return;
-    void resumeIfSuspended(ctx).then(() => {
-      // EVT-003: Single low-pitched soft tone, ~150 ms
-      // Lower frequency to distinguish from EVT-001, gain 0.20
-      playTone(ctx, 660, 0.2, 0, 0.15);
-    });
-  }
+    void resumeIfSuspended(ctx)
+      .then(() => {
+        // EVT-003: Single low-pitched soft tone, ~150 ms
+        playTone(ctx, 660, 0.2, 0, 0.15);
+      })
+      .catch(() => {});
+  }, [soundEnabled]);
 
-  function playDestructiveConfirm(): void {
+  const playDestructiveConfirm = useCallback(() => {
     if (!soundEnabled) return;
     const ctx = getAudioContext();
     if (!ctx) return;
-    void resumeIfSuspended(ctx).then(() => {
-      // EVT-004: Single mid-pitched short click, ~80 ms, no decay tail
-      playTone(ctx, 800, 0.2, 0, 0.08);
-    });
-  }
+    void resumeIfSuspended(ctx)
+      .then(() => {
+        // EVT-004: Single mid-pitched short click, ~80 ms, no decay tail
+        playTone(ctx, 800, 0.2, 0, 0.08);
+      })
+      .catch(() => {});
+  }, [soundEnabled]);
 
   return { playResponseComplete, playError, playInboundChat, playDestructiveConfirm };
 }

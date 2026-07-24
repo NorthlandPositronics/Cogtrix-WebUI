@@ -27,7 +27,7 @@ export function ChatHistoryDrawer({ chatKey, displayName, onClose }: ChatHistory
                 <Skeleton className="h-10 w-full" />
               </div>
             ))
-          ) : isError ? (
+          ) : isError && !messages ? (
             <div className="flex flex-col items-center gap-3 py-8 text-center">
               <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
               <p className="text-sm text-red-600">Failed to load chat history.</p>

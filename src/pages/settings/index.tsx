@@ -56,7 +56,7 @@ export function SettingsPage() {
 
           <TabsContent value="providers" className="mt-4">
             <Suspense fallback={<TabSkeleton />}>
-              <ProviderList onRequestWizard={() => setActiveTab("wizard")} />
+              <ProviderList />
             </Suspense>
           </TabsContent>
 
