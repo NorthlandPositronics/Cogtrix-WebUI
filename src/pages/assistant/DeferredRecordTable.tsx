@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -30,7 +31,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 function formatDateTime(isoString: string): string {
-  return new Date(isoString).toLocaleString(undefined, {
+  return parseServerDate(isoString).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -90,7 +91,7 @@ export function DeferredRecordTable() {
         </Select>
       </div>
 
-      {isError ? (
+      {isError && !deferred ? (
         <div className="flex flex-col items-center gap-3 py-16 text-center">
           <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
           <p className="text-sm text-red-600">Failed to load deferred records.</p>

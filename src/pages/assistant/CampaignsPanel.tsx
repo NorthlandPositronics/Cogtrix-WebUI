@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -66,7 +67,7 @@ import { Textarea } from "@/components/ui/textarea";
 // ---------------------------------------------------------------------------
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return parseServerDate(iso).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -194,14 +195,28 @@ function CreateCampaignDialog({ open, onOpenChange, onCreated }: CreateDialogPro
       goal: form.goal.trim(),
       instructions: form.instructions.trim(),
       targets,
-      max_follow_ups: parseInt(form.maxFollowUps, 10) || 3,
-      follow_up_interval_hours: parseInt(form.followUpIntervalHours, 10) || 24,
+      // `|| 3` would silently rewrite a deliberate 0 (initial message, no
+      // follow-ups) to 3 — fall back only when the field isn't a number.
+      max_follow_ups: Number.isNaN(parseInt(form.maxFollowUps, 10))
+        ? 3
+        : parseInt(form.maxFollowUps, 10),
+      follow_up_interval_hours: Number.isNaN(parseInt(form.followUpIntervalHours, 10))
+        ? 24
+        : parseInt(form.followUpIntervalHours, 10),
       auto_launch: form.autoLaunch,
     });
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        // Reset on close so an abandoned draft doesn't reappear (one click from
+        // being submitted) the next time the dialog is opened.
+        if (!next) setForm(EMPTY_FORM);
+        onOpenChange(next);
+      }}
+    >
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Create Campaign</DialogTitle>
@@ -781,7 +796,7 @@ export function CampaignsPanel() {
           </Select>
         </div>
 
-        {isError ? (
+        {isError && !data ? (
           <div className="flex flex-col items-center gap-3 py-16 text-center">
             <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
             <p className="text-sm text-red-600">Failed to load campaigns.</p>

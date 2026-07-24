@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -65,7 +66,7 @@ export function McpServerList() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const restartMutation = useMutation({
-    mutationFn: (name: string) => api.post(`/mcp/servers/${name}/restart`),
+    mutationFn: (name: string) => api.post(`/mcp/servers/${encodeURIComponent(name)}/restart`),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: keys.mcpServers() });
       toast.success("MCP server restarted");
@@ -76,7 +77,7 @@ export function McpServerList() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (name: string) => api.delete(`/mcp/servers/${name}`),
+    mutationFn: (name: string) => api.delete(`/mcp/servers/${encodeURIComponent(name)}`),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: keys.mcpServers() });
       toast.success("MCP server removed");
@@ -99,7 +100,7 @@ export function McpServerList() {
     );
   }
 
-  if (isError) {
+  if (isError && !servers) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
         <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
@@ -164,7 +165,7 @@ export function McpServerList() {
                       <StatusBadge status={server.status} />
                       {server.connected_at != null && (
                         <p className="mt-0.5 text-xs text-zinc-500">
-                          {new Date(server.connected_at).toLocaleString()}
+                          {parseServerDate(server.connected_at).toLocaleString()}
                         </p>
                       )}
                       {server.error && (

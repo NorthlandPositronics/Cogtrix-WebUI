@@ -95,9 +95,14 @@ function LoginForm() {
             disabled={isLoading}
             required
             aria-invalid={!!fieldErrors.username}
+            aria-describedby={fieldErrors.username ? "login-username-error" : undefined}
             className={fieldErrors.username ? "border-red-600" : ""}
           />
-          {fieldErrors.username && <p className="text-sm text-red-600">{fieldErrors.username}</p>}
+          {fieldErrors.username && (
+            <p id="login-username-error" className="text-sm text-red-600">
+              {fieldErrors.username}
+            </p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -113,9 +118,14 @@ function LoginForm() {
             disabled={isLoading}
             required
             aria-invalid={!!fieldErrors.password}
+            aria-describedby={fieldErrors.password ? "login-password-error" : undefined}
             className={fieldErrors.password ? "border-red-600" : ""}
           />
-          {fieldErrors.password && <p className="text-sm text-red-600">{fieldErrors.password}</p>}
+          {fieldErrors.password && (
+            <p id="login-password-error" className="text-sm text-red-600">
+              {fieldErrors.password}
+            </p>
+          )}
         </div>
 
         <Button type="submit" size="lg" disabled={isLoading} className="mt-6 w-full">
@@ -202,13 +212,17 @@ function RegisterForm() {
             maxLength={64}
             pattern="[a-zA-Z0-9_\-]+"
             aria-invalid={!!fieldErrors.username}
-            aria-describedby="username-hint"
+            aria-describedby={fieldErrors.username ? "reg-username-error" : "username-hint"}
             className={fieldErrors.username ? "border-red-600" : ""}
           />
           <p id="username-hint" className="text-xs text-zinc-500">
             3–64 characters: letters, digits, hyphens, underscores
           </p>
-          {fieldErrors.username && <p className="text-sm text-red-600">{fieldErrors.username}</p>}
+          {fieldErrors.username && (
+            <p id="reg-username-error" className="text-sm text-red-600">
+              {fieldErrors.username}
+            </p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -224,9 +238,14 @@ function RegisterForm() {
             disabled={isLoading}
             required
             aria-invalid={!!fieldErrors.email}
+            aria-describedby={fieldErrors.email ? "reg-email-error" : undefined}
             className={fieldErrors.email ? "border-red-600" : ""}
           />
-          {fieldErrors.email && <p className="text-sm text-red-600">{fieldErrors.email}</p>}
+          {fieldErrors.email && (
+            <p id="reg-email-error" className="text-sm text-red-600">
+              {fieldErrors.email}
+            </p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -244,13 +263,17 @@ function RegisterForm() {
             minLength={8}
             maxLength={128}
             aria-invalid={!!fieldErrors.password}
-            aria-describedby="password-hint"
+            aria-describedby={fieldErrors.password ? "reg-password-error" : "password-hint"}
             className={fieldErrors.password ? "border-red-600" : ""}
           />
           <p id="password-hint" className="text-xs text-zinc-500">
             8–128 characters, with uppercase, lowercase, digit, and special character
           </p>
-          {fieldErrors.password && <p className="text-sm text-red-600">{fieldErrors.password}</p>}
+          {fieldErrors.password && (
+            <p id="reg-password-error" className="text-sm text-red-600">
+              {fieldErrors.password}
+            </p>
+          )}
         </div>
 
         <Button type="submit" size="lg" disabled={isLoading} className="mt-6 w-full">

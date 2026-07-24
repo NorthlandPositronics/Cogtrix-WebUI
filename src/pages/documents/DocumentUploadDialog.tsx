@@ -42,7 +42,10 @@ export function DocumentUploadDialog({ open, onOpenChange }: DocumentUploadDialo
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: keys.documents.list() });
       toast.success("Document uploaded successfully");
-      handleClose();
+      // Must NOT go through handleClose(): query-core dispatches the success
+      // state only AFTER running onSuccess, so `isPending` is still true here and
+      // handleClose's in-flight guard would swallow the close.
+      resetAndClose();
     },
     onError: (error) => {
       const message = error instanceof ApiError ? error.message : "Upload failed";
@@ -58,7 +61,11 @@ export function DocumentUploadDialog({ open, onOpenChange }: DocumentUploadDialo
       return;
     }
 
-    const ext = "." + file.name.split(".").pop()?.toLowerCase();
+    // `split(".").pop()` returns the whole filename when there is no dot, so a
+    // file literally named "pdf" was accepted as ".pdf" — and "Makefile" was
+    // rejected as ".makefile". Use the last dot, and only when it isn't leading.
+    const dot = file.name.lastIndexOf(".");
+    const ext = dot > 0 ? file.name.slice(dot).toLowerCase() : "";
     const isAcceptedType = ACCEPTED_TYPES.includes(ext) || ACCEPTED_MIME.includes(file.type);
     if (!isAcceptedType) {
       setValidationError("Only PDF, TXT, and Markdown files are accepted.");
@@ -100,12 +107,21 @@ export function DocumentUploadDialog({ open, onOpenChange }: DocumentUploadDialo
     uploadMutation.mutate(selectedFile);
   }
 
-  function handleClose() {
+  /** Unconditional teardown — safe to call from the mutation's own callbacks. */
+  function resetAndClose() {
     setSelectedFile(null);
     setValidationError(null);
     setDragOver(false);
     uploadMutation.reset();
     onOpenChange(false);
+  }
+
+  /** User-initiated dismissal (Escape / outside-click / Cancel). Escape and
+   *  outside-click route here too, so without this guard the dialog could be
+   *  dismissed mid-upload even though the Cancel button is disabled. */
+  function handleClose() {
+    if (uploadMutation.isPending) return;
+    resetAndClose();
   }
 
   const isUploading = uploadMutation.isPending;

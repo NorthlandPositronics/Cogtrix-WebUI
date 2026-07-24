@@ -58,6 +58,21 @@ export function ToolConfirmationModal({ onConfirm }: ToolConfirmationModalProps)
   const confirming =
     lastConfirmationId !== null && lastConfirmationId === pendingConfirmation?.confirmation_id;
 
+  // Clear the in-flight lock whenever the prompt opens, closes, or is replaced.
+  // The lock is an identity comparison that never expires on its own, so if the
+  // server re-issues the SAME confirmation_id — e.g. after a reconnect dropped
+  // the first answer — every button would render disabled on a dialog that
+  // blocks Escape and outside-click, leaving the app stuck until a page reload.
+  // Comparing against the last *seen* id (rather than only on open) also covers
+  // the close-then-reopen-same-id path.
+  const openedId = pendingConfirmation?.confirmation_id ?? null;
+  const [seenOpenId, setSeenOpenId] = useState<string | null>(null);
+  if (openedId !== seenOpenId) {
+    setSeenOpenId(openedId);
+    setLastConfirmationId(null);
+    setActiveAction(null);
+  }
+
   function handleAction(action: ToolConfirmPayload["action"]) {
     if (!pendingConfirmation || confirming) return;
     setLastConfirmationId(pendingConfirmation.confirmation_id);

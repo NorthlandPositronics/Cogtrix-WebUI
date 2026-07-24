@@ -366,6 +366,15 @@ font-mono, text-sm, leading-relaxed
 bg-zinc-50, border border-zinc-200, rounded-md, p-3
 ```
 
+**Shell/terminal blocks** — code fences with language `bash`, `sh`, `shell`, `zsh`, `fish`, `console`, `terminal`, `output`, `powershell`, `cmd`, `batch` use a dark terminal surface to visually distinguish command/output from regular code:
+
+```
+font-mono, text-sm, leading-relaxed, text-zinc-100
+bg-zinc-900 body, bg-zinc-800 header, border border-zinc-700, rounded-md
+```
+
+Implemented as `ShellBlock` in `src/components/MarkdownComponents.tsx`. Shares copy-button header pattern with `CodeBlock` and `YamlBlock`.
+
 ---
 
 ## 3. Spacing

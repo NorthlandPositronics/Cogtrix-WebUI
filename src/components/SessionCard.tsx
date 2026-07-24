@@ -1,4 +1,4 @@
-import { memo, type MouseEvent, type KeyboardEvent } from "react";
+import { memo, useState, type MouseEvent, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArchiveRestore, CheckCircle2, ChevronDown, Trash2 } from "lucide-react";
 import { AgentStateBadge } from "@/components/AgentStateBadge";
@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, parseServerDate } from "@/lib/utils";
 import type { SessionOut } from "@/lib/api/types/session";
 import type { ModelOut } from "@/lib/api/types/config";
 
@@ -32,7 +32,7 @@ interface SessionRowProps {
 }
 
 function formatRelativeTime(isoString: string): string {
-  const date = new Date(isoString);
+  const date = parseServerDate(isoString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffSeconds = Math.floor(diffMs / 1000);
@@ -64,8 +64,13 @@ function ModelPopover({
   models,
   onEditModel,
 }: ModelPopoverProps) {
+  // Controlled + close-on-select: the option buttons had no pending gate, so a
+  // second click before the first PATCH resolved issued two concurrent
+  // /sessions/{id} updates whose apply order decided the winner. Closing on
+  // select makes a second selection from the same popover impossible.
+  const [open, setOpen] = useState(false);
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button
           className="focus-visible:ring-ring -mx-1 flex items-center gap-1 rounded px-1 text-sm text-zinc-500 hover:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
@@ -90,6 +95,7 @@ function ModelPopover({
                 if (m.alias !== currentModel) {
                   onEditModel(sessionId, m.alias);
                 }
+                setOpen(false);
               }}
               aria-pressed={m.alias === currentModel}
             >

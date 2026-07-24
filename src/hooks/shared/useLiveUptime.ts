@@ -1,4 +1,4 @@
-import { useMemo, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { formatUptime } from "@/lib/utils";
 
 let tick = 0;
@@ -28,11 +28,15 @@ function getSnapshot(): number {
 
 export function useLiveUptime(baseSeconds: number | undefined, dataUpdatedAt: number): string {
   const currentTick = useSyncExternalStore(subscribe, getSnapshot);
-  // Capture the tick value when dataUpdatedAt changes (i.e. when fresh data arrives).
-  // dataUpdatedAt is intentionally the only dep — tick is read as a side effect to snapshot it.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const anchorTick = useMemo(() => tick, [dataUpdatedAt]);
+  // Anchor the tick at the moment fresh data arrived. useMemo must NOT be used
+  // here: React may discard a memo and recompute it for unchanged deps, which
+  // would re-anchor to "now" and make the displayed uptime jump backward toward
+  // baseSeconds. This is the documented adjust-state-when-props-change pattern.
+  const [anchor, setAnchor] = useState({ updatedAt: dataUpdatedAt, tick: currentTick });
+  if (anchor.updatedAt !== dataUpdatedAt) {
+    setAnchor({ updatedAt: dataUpdatedAt, tick: currentTick });
+  }
 
   if (baseSeconds === undefined) return "—";
-  return formatUptime(baseSeconds + Math.max(0, currentTick - anchorTick));
+  return formatUptime(baseSeconds + Math.max(0, currentTick - anchor.tick));
 }

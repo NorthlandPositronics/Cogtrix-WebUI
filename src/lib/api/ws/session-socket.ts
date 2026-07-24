@@ -18,6 +18,10 @@ import type { AgentState } from "../types/session";
 
 export interface SessionSocketHandlers {
   onToken: (text: string, isFinal: boolean) => void;
+  /** Server discarded the in-progress final answer (opt-in stream_final_answer);
+   *  the client must clear its streaming buffer. Optional — only fired when the
+   *  server sends a `discard_pending` frame. */
+  onDiscardPending?: () => void;
   onToolStart: (tool: string, toolCallId: string, input: Record<string, unknown>) => void;
   onToolEnd: (tool: string, toolCallId: string, durationMs: number, error: string | null) => void;
   onToolConfirmRequest: (payload: ToolConfirmRequestPayload) => void;
@@ -42,6 +46,7 @@ const HEALTH_POLL_INTERVAL_MS = 5_000;
 
 const VALID_SERVER_MESSAGE_TYPES: readonly string[] = [
   "token",
+  "discard_pending",
   "tool_start",
   "tool_end",
   "tool_confirm_request",
@@ -61,6 +66,7 @@ export class SessionSocket {
   private healthPollTimer: ReturnType<typeof setInterval> | null = null;
   private intentionallyClosed = false;
   private reconnectAttempts = 0;
+  private healthProbeInFlight = false;
 
   constructor(
     private readonly sessionId: string,
@@ -76,8 +82,15 @@ export class SessionSocket {
       return;
     }
 
-    const url = `${WS_V1}/sessions/${this.sessionId}?token=${encodeURIComponent(token)}&last_seq=${this._lastSeq}`;
-    this.ws = new WebSocket(url);
+    // Tear down any existing socket first. connect() is re-entrant (two health
+    // probes can resolve in the same tick, or a reconnect can race a manual
+    // connect); without this the previous socket is orphaned — its ping timer
+    // reference is overwritten so it can never be cleared, and its handlers keep
+    // writing into the shared streaming store.
+    this.teardownSocket();
+
+    const url = `${WS_V1}/sessions/${this.sessionId}?last_seq=${this._lastSeq}`;
+    this.ws = new WebSocket(url, ["bearer", token]);
 
     this.ws.onopen = () => {
       this.reconnectAttempts = 0;
@@ -94,30 +107,45 @@ export class SessionSocket {
       } catch {
         return; // Malformed message — ignore
       }
+      // Seq tracking runs BEFORE the type check so an unrecognised but
+      // seq-bearing frame (e.g. a server message type this client version
+      // doesn't know) still consumes its sequence slot. Dropping it before
+      // advancing _lastSeq would leave the counter stale, making the next
+      // frame look like a forward gap and triggering a needless
+      // close/reconnect loop.
+      if (typeof msg.seq === "number") {
+        if (this._lastSeq >= 0) {
+          if (msg.seq <= this._lastSeq) {
+            // Already-processed message (replay deduplication) — backend resends
+            // from last_seq inclusive on reconnect, so skip without closing.
+            return;
+          }
+          if (msg.seq !== this._lastSeq + 1) {
+            // True forward gap — close and reconnect so the server replays from
+            // last_seq. Do NOT update _lastSeq so replay starts from the correct
+            // position.
+            this.ws?.close();
+            return;
+          }
+        }
+        this._lastSeq = msg.seq;
+      }
       if (!VALID_SERVER_MESSAGE_TYPES.includes(msg.type as string)) {
-        return; // Unknown type — ignore to guard against spoofed/unexpected messages
+        // Unknown type — its seq slot is already consumed above; nothing to route.
+        return;
       }
-      if (this._lastSeq >= 0) {
-        if (msg.seq <= this._lastSeq) {
-          // Already-processed message (replay deduplication) — backend resends
-          // from last_seq inclusive on reconnect, so skip without closing.
-          return;
-        }
-        if (msg.seq !== this._lastSeq + 1) {
-          // True forward gap — close and reconnect so the server replays from
-          // last_seq. Do NOT update _lastSeq so replay starts from the correct
-          // position.
-          this.ws?.close();
-          return;
-        }
-      }
-      this._lastSeq = msg.seq;
       this.routeMessage(msg);
     };
 
     this.ws.onclose = (event: CloseEvent) => {
       this.clearPingTimer();
       if (this.intentionallyClosed) return;
+
+      // Publish the generic "disconnected" status FIRST: the branches below set
+      // more specific statuses (reconnecting / server-restarting) and running
+      // this afterwards would immediately overwrite them with "closed", so the
+      // user never saw the reconnecting indicator during a recoverable drop.
+      this.handlers.onDisconnect();
 
       switch (event.code) {
         case 4000:
@@ -143,8 +171,6 @@ export class SessionSocket {
           this.scheduleReconnect();
           break;
       }
-
-      this.handlers.onDisconnect();
     };
 
     this.ws.onerror = () => {
@@ -155,10 +181,26 @@ export class SessionSocket {
   disconnect(): void {
     this.intentionallyClosed = true;
     this.clearReconnectTimer();
-    this.clearPingTimer();
     this.clearHealthPoll();
-    this.ws?.close(1000);
+    this.teardownSocket();
+  }
+
+  /** Detach handlers BEFORE closing, then drop the socket. Frames already sitting
+   *  in the receive buffer are still dispatched during the closing handshake, and
+   *  the handlers write into a single global streaming store that isn't keyed by
+   *  session — so a closing socket could otherwise inject the previous session's
+   *  tokens into the one the user just opened. */
+  private teardownSocket(): void {
+    this.clearPingTimer();
+    const ws = this.ws;
     this.ws = null;
+    if (ws) {
+      ws.onopen = null;
+      ws.onmessage = null;
+      ws.onclose = null;
+      ws.onerror = null;
+      ws.close(1000);
+    }
   }
 
   sendMessage(text: string, mode: "normal" | "think" | "delegate" = "normal"): void {
@@ -166,8 +208,15 @@ export class SessionSocket {
     this.send({ type: "user_message", payload: payload as unknown as Record<string, unknown> });
   }
 
-  confirmTool(confirmationId: string, action: ToolConfirmPayload["action"]): void {
-    this.send({ type: "tool_confirm", payload: { confirmation_id: confirmationId, action } });
+  /** @returns false when the socket wasn't OPEN, so the caller can keep the
+   *  confirmation prompt open instead of pretending the answer was delivered.
+   *  The frame is NOT recoverable on reconnect — _lastSeq has already advanced
+   *  past the tool_confirm_request, so the server replay won't re-send it. */
+  confirmTool(confirmationId: string, action: ToolConfirmPayload["action"]): boolean {
+    return this.send({
+      type: "tool_confirm",
+      payload: { confirmation_id: confirmationId, action },
+    });
   }
 
   cancel(): void {
@@ -182,10 +231,13 @@ export class SessionSocket {
     return this._lastSeq;
   }
 
-  private send(msg: ClientMessage): void {
+  /** @returns false when the socket wasn't OPEN and the frame was dropped. */
+  private send(msg: ClientMessage): boolean {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(msg));
+      return true;
     }
+    return false;
   }
 
   private routeMessage(msg: ServerMessage): void {
@@ -195,6 +247,9 @@ export class SessionSocket {
         this.handlers.onToken(p.text, p.final);
         break;
       }
+      case "discard_pending":
+        this.handlers.onDiscardPending?.();
+        break;
       case "tool_start": {
         const p = msg.payload as ToolStartPayload;
         this.handlers.onToolStart(p.tool_name, p.tool_call_id, p.input);
@@ -232,12 +287,25 @@ export class SessionSocket {
     if (!this.checkHealth) return;
     this.clearHealthPoll();
     this.healthPollTimer = setInterval(() => {
-      void this.checkHealth!().then((healthy) => {
-        if (healthy) {
-          this.clearHealthPoll();
-          this.connect();
-        }
-      });
+      // The probe has no timeout, so it can outlive the poll interval. Without
+      // this guard several stack up while the backend boots and then all resolve
+      // together, each calling connect().
+      if (this.healthProbeInFlight) return;
+      this.healthProbeInFlight = true;
+      void this.checkHealth!()
+        .then((healthy) => {
+          // disconnect() cannot cancel an in-flight probe, so re-check here —
+          // otherwise a probe resolving after teardown resurrects a socket for a
+          // session the user already left, with nothing left to close it.
+          if (this.intentionallyClosed) return;
+          if (healthy) {
+            this.clearHealthPoll();
+            this.connect();
+          }
+        })
+        .finally(() => {
+          this.healthProbeInFlight = false;
+        });
     }, HEALTH_POLL_INTERVAL_MS);
   }
 

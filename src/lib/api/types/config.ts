@@ -1,6 +1,12 @@
+/** Provider types this UI has first-class handling (labels, default models) for. */
+export type KnownProviderType = "openai" | "ollama" | "anthropic" | "google";
+
 export interface ProviderOut {
   name: string;
-  type: "openai" | "ollama" | "anthropic" | "google";
+  /** Open string on the wire — the backend field is a plain `str`, so a response
+   *  may carry a provider type this UI version doesn't know. Narrow with a
+   *  `in PROVIDER_LABELS` check before using it as a `KnownProviderType`. */
+  type: KnownProviderType | (string & {});
   base_url: string | null;
   has_api_key: boolean;
 }
@@ -17,7 +23,8 @@ export interface ProviderHealthOut {
 export interface ProviderCreateRequest {
   /** Unique alias: 1–64 chars, pattern ^[a-zA-Z0-9][a-zA-Z0-9_-]*$ */
   name: string;
-  type: "openai" | "ollama" | "anthropic" | "google";
+  /** Deliberately narrow on the request side — we only create providers this UI supports. */
+  type: KnownProviderType;
   base_url?: string | null;
   api_key?: string | null;
 }

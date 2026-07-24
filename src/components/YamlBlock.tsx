@@ -17,10 +17,15 @@ export function YamlBlock({ code, filename = "cogtrix.yaml" }: YamlBlockProps) {
   const anchorRef = useRef<HTMLAnchorElement>(null);
 
   function handleCopy() {
-    void navigator.clipboard.writeText(code).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
+    // A rejected write (insecure context, denied permission) must not become an
+    // unhandled rejection — leave the button unflipped so it reads as "not copied".
+    void navigator.clipboard
+      .writeText(code)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      })
+      .catch(() => setCopied(false));
   }
 
   function handleDownload() {
@@ -31,7 +36,9 @@ export function YamlBlock({ code, filename = "cogtrix.yaml" }: YamlBlockProps) {
       anchorRef.current.download = filename;
       anchorRef.current.click();
     }
-    URL.revokeObjectURL(url);
+    // Revoking in the same tick can invalidate the blob before the browser has
+    // started reading it — Firefox/Safari then silently download nothing.
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
   return (

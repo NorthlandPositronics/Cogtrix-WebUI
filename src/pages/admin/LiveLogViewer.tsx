@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ import { api } from "@/lib/api/client";
 import { keys } from "@/lib/api/keys";
 import { useConfigQuery } from "@/hooks/shared/useConfigQuery";
 import type { LogLevel } from "@/lib/api/ws/log-socket";
-import { useLogViewerStore, MAX_LOG_LINES } from "@/lib/stores/log-viewer-store";
+import { useLogViewerStore, MAX_LOG_LINES, type LogEntry } from "@/lib/stores/log-viewer-store";
 import type { LogConnectionStatus } from "@/lib/stores/log-viewer-store";
 import { useLogSocket } from "@/hooks/admin/useLogSocket";
 
@@ -30,19 +30,6 @@ const LEVEL_BADGE_CLASSES: Record<LogLevel, string> = {
   CRITICAL: "bg-red-100 text-red-900 border-red-300",
 };
 
-function formatTimestamp(raw: string): string {
-  const normalized = raw.replace(",", ".");
-  const d = new Date(normalized);
-  if (!isNaN(d.getTime())) {
-    return d.toLocaleTimeString("en-US", { hour12: false });
-  }
-  const epoch = Number(raw);
-  if (!isNaN(epoch) && epoch > 1e9) {
-    return new Date(epoch * 1000).toLocaleTimeString("en-US", { hour12: false });
-  }
-  return raw;
-}
-
 function LogLevelBadge({ level }: { level: string }) {
   const cls = LEVEL_BADGE_CLASSES[level as LogLevel] ?? "bg-zinc-100 text-zinc-600";
   return (
@@ -51,6 +38,19 @@ function LogLevelBadge({ level }: { level: string }) {
     </Badge>
   );
 }
+
+// Memoized so appending one line doesn't re-render (and re-format) all 500 rows
+// under a busy stream. `line` is a stable object once appended.
+const LogRow = memo(function LogRow({ line }: { line: LogEntry }) {
+  return (
+    <div className="flex items-start gap-2 py-0.5">
+      <span className="shrink-0 text-zinc-500">{line.displayTime}</span>
+      <LogLevelBadge level={line.level} />
+      <span className="shrink-0 text-zinc-500">{line.logger}</span>
+      <span className="min-w-0 break-all text-zinc-900">{line.message}</span>
+    </div>
+  );
+});
 
 function connBadgeClass(status: LogConnectionStatus): string {
   if (status === "connected") return "bg-green-50 text-green-700 border-green-200";
@@ -66,10 +66,15 @@ export function LiveLogViewer() {
 
   const level = useLogViewerStore((s) => s.level);
   const storeSetLevel = useLogViewerStore((s) => s.setLevel);
+  const userDisconnected = useLogViewerStore((s) => s.userDisconnected);
+  const setUserDisconnected = useLogViewerStore((s) => s.setUserDisconnected);
   const { connect, disconnect } = useLogSocket();
 
   useEffect(() => {
-    if (connState === "disconnected") {
+    // This component unmounts whenever the admin switches tabs, so auto-connect
+    // must not undo an explicit Disconnect — `userDisconnected` carries that
+    // intent across remounts.
+    if (connState === "disconnected" && !userDisconnected) {
       connect(level);
     }
     return () => {
@@ -82,9 +87,14 @@ export function LiveLogViewer() {
   const queryClient = useQueryClient();
   const debugMutation = useMutation({
     mutationFn: (enabled: boolean) =>
-      api.post("/system/debug", { debug: enabled, verbose: enabled || null }),
+      // `verbose` must be a real boolean: the backend only writes cfg.verbose when
+      // the field is non-null, so sending null on disable left verbose logging on.
+      api.post("/system/debug", { debug: enabled, verbose: enabled }),
     onSuccess: (_data, enabled) => {
       void queryClient.invalidateQueries({ queryKey: keys.config() });
+      // SystemInfoOut reports debug/verbose too, and the System tab is served
+      // from cache on switch — without this it shows the pre-toggle state.
+      void queryClient.invalidateQueries({ queryKey: keys.systemInfo() });
       toast.success(enabled ? "Debug + verbose logging enabled" : "Debug logging disabled");
     },
     onError: () => {
@@ -112,7 +122,10 @@ export function LiveLogViewer() {
     (newLevel: string) => {
       const lvl = newLevel as LogLevel;
       storeSetLevel(lvl);
-      if (connState === "connected") {
+      // Also reconnect while "connecting": the socket is already being opened at
+      // the previous level, so skipping here would stream that level while the
+      // Select shows the new one.
+      if (connState === "connected" || connState === "connecting") {
         connect(lvl);
       }
     },
@@ -121,11 +134,13 @@ export function LiveLogViewer() {
 
   const handleToggleConnection = useCallback(() => {
     if (connState === "connected" || connState === "connecting") {
+      setUserDisconnected(true);
       disconnect();
     } else {
+      setUserDisconnected(false);
       connect(level);
     }
-  }, [connState, disconnect, connect, level]);
+  }, [connState, disconnect, connect, level, setUserDisconnected]);
 
   const connectionLabel =
     connState === "connected"
@@ -216,14 +231,7 @@ export function LiveLogViewer() {
                     : "Click Connect to start streaming logs."}
             </p>
           ) : (
-            lines.map((line) => (
-              <div key={line.key} className="flex items-start gap-2 py-0.5">
-                <span className="shrink-0 text-zinc-500">{formatTimestamp(line.timestamp)}</span>
-                <LogLevelBadge level={line.level} />
-                <span className="shrink-0 text-zinc-500">{line.logger}</span>
-                <span className="min-w-0 break-all text-zinc-900">{line.message}</span>
-              </div>
-            ))
+            lines.map((line) => <LogRow key={line.key} line={line} />)
           )}
         </div>
         {lines.length === MAX_LOG_LINES && (

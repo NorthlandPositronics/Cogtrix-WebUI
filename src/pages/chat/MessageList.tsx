@@ -96,7 +96,12 @@ export function MessageList({
     );
   }
 
-  if (isError) {
+  // Only take over the pane when there is genuinely nothing to show. In v5
+  // `isError` is also true when a BACKGROUND refetch fails while cached data is
+  // still present — and useSessionSocket invalidates this query after every
+  // turn — so a bare `isError` check replaced an entire live conversation with
+  // an error screen, making the user think their history was lost.
+  if (isError && messages.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="flex flex-col items-center gap-3">

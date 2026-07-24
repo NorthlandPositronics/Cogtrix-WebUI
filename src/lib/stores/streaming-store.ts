@@ -5,7 +5,12 @@ import type { MessageMode } from "@/lib/api/types/message";
 export type { ToolActivity };
 
 export interface StatusEntry {
+  /** Unique per log entry (React key). NOT the tool_call_id: the same
+   *  tool_call_id can legitimately arrive twice (provider retry, or a
+   *  tool_start replayed on a fresh socket whose _lastSeq reset to -1). */
   id: string;
+  /** The invocation this entry belongs to; matched by updateToolEnd. */
+  toolCallId: string;
   timestamp: number;
   tool: string;
   done: boolean;
@@ -34,6 +39,9 @@ interface StreamingState {
   setConnectionStatus: (status: StreamingState["connectionStatus"]) => void;
   setCurrentMode: (mode: MessageMode | null) => void;
   clearStatusLog: () => void;
+  /** Drop the in-progress streamed answer without touching tool/agent state —
+   *  used when the server sends `discard_pending` (regenerated final answer). */
+  clearStreamingBuffer: () => void;
   reset: () => void;
 }
 
@@ -49,6 +57,8 @@ const initialState = {
 
 let pendingTokens = "";
 let rafId: ReturnType<typeof requestAnimationFrame> | null = null;
+/** Monotonic suffix so repeated tool_call_ids still get unique React keys. */
+let statusEntrySeq = 0;
 
 function flushTokens() {
   rafId = null;
@@ -85,6 +95,14 @@ export const useStreamingStore = create<StreamingState>((set) => ({
 
   addToolStart: (tool, toolCallId, input) =>
     set((state) => {
+      // Discard any pre-tool reasoning: clearing streamingBuffer isn't enough —
+      // a scheduled RAF flush would otherwise resurrect buffered pendingTokens
+      // into the post-tool answer bubble.
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      pendingTokens = "";
       const next = new Map(state.toolActivities);
       const now = Date.now();
       next.set(toolCallId, {
@@ -97,7 +115,8 @@ export const useStreamingStore = create<StreamingState>((set) => ({
         done: false,
       });
       const entry: StatusEntry = {
-        id: toolCallId,
+        id: `${toolCallId}-${(statusEntrySeq += 1)}`,
+        toolCallId,
         timestamp: now,
         tool,
         done: false,
@@ -105,7 +124,12 @@ export const useStreamingStore = create<StreamingState>((set) => ({
         durationMs: null,
       };
       const prevLog = state.statusLog.length >= 100 ? state.statusLog.slice(-99) : state.statusLog;
-      return { toolActivities: next, hasActiveTool: true, statusLog: [...prevLog, entry] };
+      return {
+        toolActivities: next,
+        hasActiveTool: true,
+        statusLog: [...prevLog, entry],
+        streamingBuffer: "",
+      };
     }),
 
   updateToolEnd: (toolCallId, durationMs, error) =>
@@ -121,9 +145,23 @@ export const useStreamingStore = create<StreamingState>((set) => ({
           break;
         }
       }
-      const statusLog = state.statusLog.map((e) =>
-        e.id === toolCallId ? { ...e, done: true, error, durationMs } : e,
-      );
+      // Settle only the most recent un-done entry for this invocation. Matching
+      // every entry with the id would mark a repeated tool_call_id's earlier
+      // entry done too, overwriting its real duration.
+      let target = -1;
+      for (let i = state.statusLog.length - 1; i >= 0; i--) {
+        const entry = state.statusLog[i];
+        if (entry && entry.toolCallId === toolCallId && !entry.done) {
+          target = i;
+          break;
+        }
+      }
+      const statusLog =
+        target === -1
+          ? state.statusLog
+          : state.statusLog.map((e, i) =>
+              i === target ? { ...e, done: true, error, durationMs } : e,
+            );
       return { toolActivities: next, hasActiveTool, statusLog };
     }),
 
@@ -132,6 +170,15 @@ export const useStreamingStore = create<StreamingState>((set) => ({
   setCurrentMode: (mode) => set({ currentMode: mode }),
 
   clearStatusLog: () => set({ statusLog: [] }),
+
+  clearStreamingBuffer: () => {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    pendingTokens = "";
+    set({ streamingBuffer: "" });
+  },
 
   reset: () => {
     if (rafId !== null) {
@@ -143,6 +190,14 @@ export const useStreamingStore = create<StreamingState>((set) => ({
       ...initialState,
       toolActivities: new Map<string, ToolActivity>(),
       connectionStatus: state.connectionStatus,
+      // Settle any tool still marked running: it never received a tool_end
+      // (turn was cancelled, errored, or timed out), so StatusBar would show a
+      // perpetual "running" spinner. Keep the persisted history, just finalize it.
+      statusLog: state.statusLog.some((e) => !e.done)
+        ? state.statusLog.map((e) =>
+            e.done ? e : { ...e, done: true, error: e.error ?? "aborted" },
+          )
+        : state.statusLog,
     }));
   },
 }));

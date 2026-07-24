@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { AlertTriangle, ChevronDown, Loader2 } from "lucide-react";
 import { api } from "@/lib/api/client";
+import { keys } from "@/lib/api/keys";
 import { ApiError } from "@/lib/api/types";
 import type { SimulateRequest, SimulateOut } from "@/lib/api/types";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -30,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export function SimulatorPanel() {
   const isAdmin = useAuthStore((s) => s.isAdmin);
+  const queryClient = useQueryClient();
 
   const [channel, setChannel] = useState<string>("whatsapp");
   const [direction, setDirection] = useState<"inbound" | "outbound">("inbound");
@@ -44,6 +46,16 @@ export function SimulatorPanel() {
 
   const simulateMutation = useMutation({
     mutationFn: (req: SimulateRequest) => api.post<SimulateOut>("/assistant/simulate", req),
+    onSuccess: (data) => {
+      // With "Persist memory" on, the simulation writes to live conversation
+      // memory — so the Chats tab and any open history drawer are now stale.
+      void queryClient.invalidateQueries({ queryKey: keys.assistant.chats() });
+      if (data.session_key) {
+        void queryClient.invalidateQueries({
+          queryKey: keys.assistant.chatMessages(data.session_key),
+        });
+      }
+    },
     onError: (err) => {
       if (err instanceof ApiError && err.code === "VALIDATION_ERROR") {
         const fields = err.getFieldErrors();
@@ -311,10 +323,13 @@ export function SimulatorPanel() {
               )}
             </div>
 
-            {/* Status badge row */}
+            {/* Status badge row. Each flag's on/off state is conveyed by color,
+                so it's mirrored into aria-label — otherwise all four read
+                identically to a screen reader regardless of what actually fired. */}
             <div className="flex flex-wrap gap-2 border-t border-zinc-200 pt-4">
               <Badge
                 variant="outline"
+                aria-label={`Guardrail blocked: ${data.blocked_by_guardrails ? "yes" : "no"}`}
                 className={
                   data.blocked_by_guardrails
                     ? "border-red-200 bg-red-50 text-red-700"
@@ -325,6 +340,7 @@ export function SimulatorPanel() {
               </Badge>
               <Badge
                 variant="outline"
+                aria-label={`Suppressed: ${data.suppressed ? "yes" : "no"}`}
                 className={
                   data.suppressed
                     ? "border-amber-200 bg-amber-50 text-amber-700"
@@ -335,6 +351,7 @@ export function SimulatorPanel() {
               </Badge>
               <Badge
                 variant="outline"
+                aria-label={`Deferred: ${data.deferred ? "yes" : "no"}`}
                 className={
                   data.deferred
                     ? "border-blue-200 bg-blue-50 text-blue-700"
@@ -345,6 +362,7 @@ export function SimulatorPanel() {
               </Badge>
               <Badge
                 variant="outline"
+                aria-label={`Memory persisted: ${data.memory_persisted ? "yes" : "no"}`}
                 className={
                   data.memory_persisted
                     ? "border-teal-200 bg-teal-50 text-teal-700"
