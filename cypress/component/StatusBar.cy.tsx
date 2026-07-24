@@ -7,6 +7,10 @@ import { mountWithProviders } from "../support/mount";
 function makeEntry(overrides: Partial<StatusEntry> = {}): StatusEntry {
   return {
     id: "call-001",
+    // toolCallId is distinct from id: `id` is the React key (unique per entry,
+    // suffixed so a repeated tool_call_id still gets a unique key), toolCallId is
+    // what updateToolEnd matches on. The real store never emits an entry without it.
+    toolCallId: "call-001",
     timestamp: Date.now(),
     tool: "search_web",
     done: false,

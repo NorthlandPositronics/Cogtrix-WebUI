@@ -37,6 +37,9 @@ interface LogViewerState {
   setUserDisconnected: (value: boolean) => void;
   appendLine: (payload: LogLinePayload) => void;
   clearLines: () => void;
+  /** Full reset. Called on login/logout so buffered admin log lines from one
+   *  session don't carry over to the next user on the same tab. */
+  reset: () => void;
 }
 
 export const useLogViewerStore = create<LogViewerState>((set) => ({
@@ -68,4 +71,13 @@ export const useLogViewerStore = create<LogViewerState>((set) => ({
   },
 
   clearLines: () => set({ lines: [], nextLineKey: 0 }),
+
+  reset: () =>
+    set({
+      level: "DEBUG",
+      lines: [],
+      nextLineKey: 0,
+      connectionStatus: "disconnected",
+      userDisconnected: false,
+    }),
 }));

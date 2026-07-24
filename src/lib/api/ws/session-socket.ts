@@ -67,6 +67,11 @@ export class SessionSocket {
   private intentionallyClosed = false;
   private reconnectAttempts = 0;
   private healthProbeInFlight = false;
+  // True after we closed for a forward gap and are awaiting the server's replay.
+  // If the next connection STILL shows a gap, the replay buffer expired and we
+  // resync instead of re-closing (prevents a reconnect livelock). Persists across
+  // the reconnect on purpose; cleared once any frame is accepted.
+  private awaitingGapReplay = false;
 
   constructor(
     private readonly sessionId: string,
@@ -121,13 +126,24 @@ export class SessionSocket {
             return;
           }
           if (msg.seq !== this._lastSeq + 1) {
-            // True forward gap — close and reconnect so the server replays from
-            // last_seq. Do NOT update _lastSeq so replay starts from the correct
-            // position.
-            this.ws?.close();
-            return;
+            // Forward gap. First time: close so the server replays from last_seq
+            // on reconnect (do NOT advance _lastSeq, so replay resumes correctly).
+            // But if we ALREADY closed for a gap and reconnected and the gap is
+            // STILL here, the server's replay buffer has expired — per the WS
+            // protocol it then sends current state only, at a seq beyond
+            // last_seq+1. Closing again would livelock forever (and onopen resets
+            // reconnectAttempts, so the circuit breaker never trips). Resync
+            // instead: adopt the server's seq and let the onOpen REST refetch
+            // fill the history hole.
+            if (!this.awaitingGapReplay) {
+              this.awaitingGapReplay = true;
+              this.ws?.close();
+              return;
+            }
           }
         }
+        // In-order frame, or a resync after an unfillable gap: accept it.
+        this.awaitingGapReplay = false;
         this._lastSeq = msg.seq;
       }
       if (!VALID_SERVER_MESSAGE_TYPES.includes(msg.type as string)) {

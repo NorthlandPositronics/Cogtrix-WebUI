@@ -171,4 +171,47 @@ describe("api convenience methods", () => {
     const [, opts] = mockFetch.mock.calls[0]!;
     expect(opts.method).toBe("DELETE");
   });
+
+  // Non-2xx responses whose body has no envelope `error` key (FastAPI emits
+  // `{"detail": ...}` for 404/405/422). These used to resolve as a successful
+  // `undefined`, so a destructive mutation reported success without doing anything.
+  it("throws on a 404 with a FastAPI {detail} body", async () => {
+    const res = {
+      ok: false,
+      status: 404,
+      text: () => Promise.resolve(JSON.stringify({ detail: "Not Found" })),
+      headers: new Headers(),
+    } as unknown as Response;
+    mockFetch.mockResolvedValueOnce(res);
+
+    await expect(request("/sessions/missing")).rejects.toMatchObject({
+      code: "HTTP_404",
+      message: "Not Found",
+    });
+  });
+
+  it("throws on a 422 whose detail is not a string (falls back to statusText)", async () => {
+    const res = {
+      ok: false,
+      status: 422,
+      statusText: "Unprocessable Entity",
+      text: () => Promise.resolve(JSON.stringify({ detail: [{ loc: ["body"], msg: "bad" }] })),
+      headers: new Headers(),
+    } as unknown as Response;
+    mockFetch.mockResolvedValueOnce(res);
+
+    await expect(request("/sessions")).rejects.toMatchObject({ code: "HTTP_422" });
+  });
+
+  it("returns undefined for a 204 No Content", async () => {
+    const res = {
+      ok: true,
+      status: 204,
+      text: () => Promise.resolve(""),
+      headers: new Headers(),
+    } as unknown as Response;
+    mockFetch.mockResolvedValueOnce(res);
+
+    await expect(request("/mcp/servers/x")).resolves.toBeUndefined();
+  });
 });
