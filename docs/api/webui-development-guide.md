@@ -5,9 +5,10 @@ API version: v1
 Last updated: 2026-03-27
 
 Related documents:
-- `docs/api/openapi.yaml` / `openapi.json` — full OpenAPI 3.1 schema, authoritative source for request/response shapes
-- `docs/api/client-contract.md` — TypeScript types and API client patterns (start here for code)
-- `docs/api/websocket-protocol.md` — WebSocket message types, lifecycle diagrams, and reconnection strategy
+- `docs/API/OVERVIEW.md` — API orientation, quick start, environment variables (start here if new to the API)
+- Live OpenAPI 3.1 schema at `/api/v1/openapi.json` (Swagger UI at `/api/v1/docs`) — authoritative source for request/response shapes
+- `docs/API/CLIENT_CONTRACT.md` — TypeScript types and API client patterns (start here for code)
+- `docs/API/WEBSOCKET_PROTOCOL.md` — WebSocket message types, lifecycle diagrams, and reconnection strategy
 
 ---
 
@@ -22,8 +23,8 @@ Related documents:
 | Migrations | Alembic |
 | Auth | JWT bearer tokens (access + refresh) |
 | Real-time | WebSocket (native FastAPI) |
-| Agent orchestration | LangGraph `StateGraph` (`src/orchestration/`) |
-| Memory | Hybrid sliding window + incremental summary + optional vector recall (`src/memory/`) |
+| Agent orchestration | LangGraph `StateGraph` (`cogtrix_core/orchestration/`) |
+| Memory | Hybrid sliding window + incremental summary + optional vector recall (`cogtrix_core/memory/`) |
 
 ### Frontend target
 
@@ -45,11 +46,11 @@ The API uses JWT bearer tokens. Two tokens are issued on login:
 - **Access token** — short-lived (default 1 hour), sent as `Authorization: Bearer <token>` on every REST request
 - **Refresh token** — long-lived (default 30 days), used only to obtain a new access token when the old one expires
 
-For WebSocket connections, the browser `WebSocket` API does not allow custom headers. Pass the access token as a query parameter:
-
-```
-ws://host/ws/v1/sessions/{id}?token=<access_token>
-```
+For WebSocket connections, the browser `WebSocket` API does not allow custom headers.
+Route through a reverse proxy that injects the ``Authorization`` header (e.g., from a
+query param or HttpOnly cookie), or use a dedicated auth endpoint that sets an HttpOnly
+session cookie accepted by the backend. The session WebSocket no longer accepts
+``?token=`` (removed in #1128 to prevent token exposure in access logs).
 
 ### API versioning
 
@@ -68,7 +69,7 @@ VITE_API_BASE_URL=http://localhost:8000
 VITE_WS_BASE_URL=ws://localhost:8000
 ```
 
-The client-contract file (`docs/api/client-contract.md`, Section 1) shows how these are consumed in `src/lib/api/config.ts`.
+`CLIENT_CONTRACT.md` (Section 1) shows how these are consumed in `src/lib/api/config.ts`.
 
 ### Backend setup
 
@@ -80,7 +81,7 @@ export COGTRIX_JWT_SECRET=$(openssl rand -hex 32)
 uv run python -m alembic upgrade head
 
 # Start the API server with hot reload
-uv run uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn cogtrix_core.api.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The first user to call `POST /api/v1/auth/register` is automatically granted the `admin` role. This uses an atomic `INSERT…SELECT` so concurrent registration requests cannot both receive admin.
@@ -122,6 +123,7 @@ This section maps every significant API surface to a frontend page and its prima
 | List sessions (paginated) | `GET /api/v1/sessions` |
 | Create new session | `POST /api/v1/sessions` |
 | Archive session | `DELETE /api/v1/sessions/{id}` |
+| Restore archived session | `POST /api/v1/sessions/{id}/restore` |
 
 **Key behaviours:**
 - Use cursor-based pagination (`next_cursor` / `cursor` query parameter). See Section 4.3 for the infinite-scroll pattern.
@@ -158,7 +160,7 @@ The `mode` field controls the reasoning pipeline:
 
 #### Real-time streaming
 
-Connect to `ws://host/ws/v1/sessions/{id}?token=<access_token>` once when the user opens a session and keep the connection alive. See Section 4.2 for the full streaming flow and Section 4.4 for reconnection.
+Connect to `ws://host/ws/v1/sessions/{id}` with the token in the ``Authorization`` header (injected by a reverse proxy or via cookie — see Section 1.2 Authentication). Keep the connection alive. See Section 4.2 for the full streaming flow and Section 4.4 for reconnection.
 
 Events to handle:
 
@@ -255,7 +257,9 @@ Each `ToolSummary` has a `status` field: `active`, `pinned`, `on_demand`, `disab
 | Reload config from disk | `POST /api/v1/config/reload` | admin |
 | List providers | `GET /api/v1/config/providers` | bearer |
 | Get provider details | `GET /api/v1/config/providers/{name}` | bearer |
-| Switch active provider (deprecated) | `POST /api/v1/config/provider` | admin | **Returns 410 GONE** — use `POST /api/v1/config/model` instead |
+| Add provider | `POST /api/v1/config/providers` | admin |
+| Update provider | `PATCH /api/v1/config/providers/{name}` | admin |
+| Delete provider | `DELETE /api/v1/config/providers/{name}` | admin |
 | Provider health check | `POST /api/v1/config/providers/{name}/health` | bearer |
 | List models | `GET /api/v1/config/models` | bearer |
 | Switch active model | `POST /api/v1/config/model` | admin |
@@ -306,7 +310,14 @@ Restrict this page to users with `role: 'admin'`.
 | Update user role | `PATCH /api/v1/users/{id}` |
 | Delete user | `DELETE /api/v1/users/{id}` |
 
-The live log stream (`/ws/v1/logs`) emits `log_line` messages. **Note:** log stream messages are plain JSON objects -- they are NOT wrapped in the standard `ServerMessage` envelope (no `session_id`, `seq`, or `ts` fields). Each message is `{ type: "log_line", level, logger, message, timestamp }`. Connect with a minimum level filter (`DEBUG`, `INFO`, `WARNING`, `ERROR`). Same keepalive rules apply: ping every 30 seconds, connection dropped after 90 seconds of silence. The log stream uses a plain text `"ping"` string for keepalive (not the `ClientMessage` JSON envelope used by session WebSockets).
+The live log stream (`/ws/v1/logs`) emits `log_line` messages. **Note:** log stream messages are
+plain JSON objects -- they are NOT wrapped in the standard `ServerMessage` envelope (no
+`session_id`, `seq`, or `ts` fields). Each message is `{ type: "log_line", level, logger, message,
+timestamp }`. Connect with a minimum level filter (`DEBUG`, `INFO`, `WARNING`, `ERROR`). Keepalive
+rules for the log stream: ping every 30 seconds, connection dropped after 90 seconds of silence
+(hardcoded for log stream; separate from the 300-second session WebSocket timeout). The log stream
+uses a plain text `"ping"` string for keepalive (not the `ClientMessage` JSON envelope used by
+session WebSockets).
 
 **User management** — all four `/api/v1/users` endpoints require admin role. The create endpoint validates `EmailStr`, username pattern `^[a-zA-Z0-9_-]+$` (3–64 chars), password min 8 chars, and role `user` or `admin`. The first registered user is automatically elected as admin via an atomic DB operation.
 
@@ -339,13 +350,8 @@ Relevant only when the Cogtrix instance is running in `--assistant` mode (headle
 | Update campaign | `PATCH /api/v1/assistant/campaigns/{id}` | admin |
 | Delete campaign | `DELETE /api/v1/assistant/campaigns/{id}` | admin |
 | Launch campaign | `POST /api/v1/assistant/campaigns/{id}/launch` | admin |
-| Run pipeline simulation | `POST /api/v1/assistant/simulate` | admin |
 
 The assistant maintains per-chat memory isolation. Each `(channel, chat_id)` pair has its own conversation history that is never shared with other chats.
-
-#### Testing tab (admin-only)
-
-`SimulatorPanel` (`src/pages/assistant/SimulatorPanel.tsx`) is a 9th tab on the Assistant dashboard, rendered only when `isAdmin` is `true` (guarded by a `useAuthStore` check that returns `null` for non-admin users). It lets operators inject a message into the full assistant pipeline without delivering anything to a real channel. The form collects `channel`, `chat_id`, `message`, and optional `direction`, `sender_name`, `sender_id`, and `persist` fields, then calls `POST /api/v1/assistant/simulate` via a TanStack Query `useMutation`. The `SimulateOut` response is displayed inline: the response text is rendered through `ReactMarkdown`, and `suppressed`, `deferred`, `blocked_by_guardrails`, and `memory_persisted` boolean flags are shown as status badges. When `blocked_by_guardrails` is `true`, the `guardrail_reason` string is rendered in an alert. `duration_ms` is shown as a footer metric.
 
 `POST /api/v1/assistant/stop` is an async operation — the server wraps blocking shutdown calls with `asyncio.to_thread` to avoid blocking the event loop. The UI should show a "stopping..." indicator and poll `GET /api/v1/assistant/status` until `running` becomes `false`.
 
@@ -437,7 +443,7 @@ async function refreshAccessToken(): Promise<void> {
 }
 ```
 
-The full request function with retry logic is shown in `docs/api/client-contract.md`, Section 2.3.
+The full request function with retry logic is shown in `docs/API/CLIENT_CONTRACT.md`, Section 2.3.
 
 ---
 
@@ -450,7 +456,9 @@ This is the primary real-time interaction pattern. Follow these steps in order:
 Connect when the user opens a session. Keep the connection alive across multiple turns. Use `last_seq` on reconnect for message replay:
 
 ```typescript
-const url = `${WS_V1}/sessions/${sessionId}?token=${token}&last_seq=${lastSeq}`;
+// The reverse proxy injects the Authorization header from a cookie/query param.
+// Do NOT use ?token= — the session WebSocket no longer supports it (see #1128).
+const url = `${WS_V1}/sessions/${sessionId}?last_seq=${lastSeq}`;
 const ws = new WebSocket(url);
 ```
 
@@ -475,7 +483,7 @@ On `tool_confirm_request`: open a blocking modal with the tool name, `message`, 
 
 On `done`: finalise the response bubble. Display token stats from the payload (`input_tokens`, `output_tokens`, `duration_ms`, `tool_calls`). Reset the streaming buffer. Update the session's `state` to `idle`.
 
-The `SessionSocket` class in `docs/api/client-contract.md`, Section 4, provides a complete working implementation.
+The `SessionSocket` class in `docs/API/CLIENT_CONTRACT.md`, Section 4, provides a complete working implementation.
 
 ---
 
@@ -496,7 +504,7 @@ To load the next page, pass the `next_cursor` value as the `cursor` query parame
 
 For message history (infinite scroll upward), load older pages as the user scrolls toward the top of the list. Prepend items to the existing list.
 
-The `useInfiniteList` hook pattern is shown in `docs/api/client-contract.md`, Section 5.
+The `useInfiniteList` hook pattern is shown in `docs/API/CLIENT_CONTRACT.md`, Section 5.
 
 TanStack Query (`useInfiniteQuery`) integrates directly with this pattern:
 
@@ -523,7 +531,7 @@ The `seq` field on every server message enables gap-free reconnection:
 5. After a successful reconnect, also fetch missing messages via `GET /api/v1/sessions/{id}/messages` to fill any gap beyond the server's replay buffer.
 6. Stop retrying after 10 consecutive failures. Show the user an explicit error with a manual reconnect button.
 
-Full reconnection strategy is documented in `docs/api/websocket-protocol.md`, Section 7.
+Full reconnection strategy is documented in `docs/API/WEBSOCKET_PROTOCOL.md`, Section 7.
 
 ---
 
@@ -551,8 +559,7 @@ interface APIError {
 | 404 | `*_NOT_FOUND` | Show inline "Not found" message |
 | 409 | `*_ALREADY_*` | Show "Already exists" toast |
 | 422 | `VALIDATION_ERROR` | Show field-level validation errors |
-| 429 | `RATE_LIMITED` (planned) | Show a countdown and retry automatically |
-| 503 | `PROVIDER_UNREACHABLE` | Show an "LLM provider is offline" banner |
+| 422 | `PROVIDER_UNREACHABLE` | Show an "LLM provider is offline" banner |
 | 500 | `INTERNAL_ERROR` | Show generic toast; log `meta.request_id` for support |
 
 **WebSocket close code handling:**
@@ -566,7 +573,7 @@ interface APIError {
 | 1001 | Server shutting down / replaced by new connection | Show "Server is restarting", poll `/api/v1/health/ready` |
 | 1011 | Internal server error | Show error, attempt reconnect |
 
-The error display pattern from `docs/api/client-contract.md`, Section 6, shows a concrete `handleApiError()` implementation.
+The error display pattern from `docs/API/CLIENT_CONTRACT.md`, Section 6, shows a concrete `handleApiError()` implementation.
 
 ---
 
@@ -580,7 +587,7 @@ Use a React context (not a global module) to hold the token pair and the current
 - `user: UserOut | null` — populated by `GET /auth/me` after login
 - `isAdmin: boolean` — derived from `user.role === 'admin'`
 
-Store the access token in memory. Use an HttpOnly cookie for the refresh token where possible to limit XSS exposure. See `docs/api/client-contract.md`, Section 2.2, for the in-memory token store pattern.
+Store the access token in memory. Use an HttpOnly cookie for the refresh token where possible to limit XSS exposure. See `docs/API/CLIENT_CONTRACT.md`, Section 2.2, for the in-memory token store pattern.
 
 ### Session list
 
@@ -598,7 +605,7 @@ Encapsulate the WebSocket lifecycle in a custom hook (`useSessionSocket`). The h
 - Expose `sendMessage()` and `confirmTool()` methods
 - Expose a `state` value (`connecting`, `open`, `reconnecting`, `closed`)
 
-The `SessionSocket` class in `docs/api/client-contract.md`, Section 4, can be wrapped directly in this hook.
+The `SessionSocket` class in `docs/API/CLIENT_CONTRACT.md`, Section 4, can be wrapped directly in this hook.
 
 ### Tool confirmation
 
@@ -641,6 +648,7 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | GET | `/api/v1/sessions/{id}` | bearer | Session page |
 | PATCH | `/api/v1/sessions/{id}` | bearer | Session page |
 | DELETE | `/api/v1/sessions/{id}` | bearer | Dashboard |
+| POST | `/api/v1/sessions/{id}/restore` | bearer | Dashboard (archived sessions) |
 
 ### Messages
 
@@ -649,7 +657,7 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | POST | `/api/v1/sessions/{id}/messages` | bearer | Session page |
 | GET | `/api/v1/sessions/{id}/messages` | bearer | Session page |
 | DELETE | `/api/v1/sessions/{id}/messages` | bearer | Session page |
-| WS | `/ws/v1/sessions/{id}` | token= param | Session page |
+| WS | `/ws/v1/sessions/{id}` | bearer (header or `bearer` subprotocol) | Session page |
 
 ### Memory
 
@@ -677,7 +685,9 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | POST | `/api/v1/config/reload` | admin | Settings |
 | GET | `/api/v1/config/providers` | bearer | Settings |
 | GET | `/api/v1/config/providers/{name}` | bearer | Settings |
-| POST | `/api/v1/config/provider` | admin | Settings | **410 GONE** — use POST /config/model |
+| POST | `/api/v1/config/providers` | admin | Settings | Add a new provider at runtime |
+| PATCH | `/api/v1/config/providers/{name}` | admin | Settings | Update provider connection details |
+| DELETE | `/api/v1/config/providers/{name}` | admin | Settings | Remove a provider |
 | POST | `/api/v1/config/providers/{name}/health` | bearer | Settings |
 | GET | `/api/v1/config/models` | bearer | Settings |
 | POST | `/api/v1/config/model` | admin | Settings |
@@ -722,7 +732,6 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | PATCH | `/api/v1/assistant/campaigns/{id}` | admin | Assistant dashboard |
 | DELETE | `/api/v1/assistant/campaigns/{id}` | admin | Assistant dashboard |
 | POST | `/api/v1/assistant/campaigns/{id}/launch` | admin | Assistant dashboard |
-| POST | `/api/v1/assistant/simulate` | admin | Assistant dashboard (Testing tab) |
 
 ### RAG / Documents
 
@@ -776,8 +785,8 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | Type | Key payload fields | When emitted |
 |------|--------------------|-------------|
 | `token` | `text: string`, `final: boolean` | Once per output token during generation; `final` is `true` when emitting the final response (after all tool calls complete), `false` during preamble text |
-| `tool_start` | `tool`, `tool_call_id`, `input` | When the agent invokes a tool |
-| `tool_end` | `tool`, `tool_call_id`, `duration_ms`, `error` | When a tool returns |
+| `tool_start` | `tool_name`, `tool_call_id`, `input` | When the agent invokes a tool |
+| `tool_end` | `tool_name`, `tool_call_id`, `duration_ms`, `error` | When a tool returns |
 | `tool_confirm_request` | `confirmation_id`, `tool`, `parameters`, `message` | Tool requires user approval; agent blocked until response |
 | `agent_state` | `state` (idle / thinking / analyzing / researching / deep_thinking / writing / delegating / done / error) | On each state transition |
 | `memory_update` | `mode`, `tokens_used`, `summarized` | After background summarization or compression |
@@ -795,7 +804,7 @@ Fetch config via `GET /api/v1/config` on the settings page mount. Use TanStack Q
 | `ping` | (empty) | Keepalive; send every 30 seconds |
 | `cancel` | (empty) | Abort the in-progress agent turn |
 
-All messages use the JSON envelope described in `docs/api/websocket-protocol.md`, Section 3. Server messages include `session_id`, `seq`, and `ts` fields. Client messages include only `type` and `payload`.
+All messages use the JSON envelope described in `docs/API/WEBSOCKET_PROTOCOL.md`, Section 3. Server messages include `session_id`, `seq`, and `ts` fields. Client messages include only `type` and `payload`.
 
 ---
 
@@ -841,7 +850,7 @@ The WebSocket connection uses the access token provided at connect time. If the 
 
 ## 9. TypeScript File Layout
 
-The client-contract document defines the canonical file layout. A brief summary:
+`CLIENT_CONTRACT.md` defines the canonical file layout. A brief summary:
 
 ```
 src/lib/api/
@@ -861,4 +870,4 @@ src/lib/api/
     websocket.ts     — ServerMessage, ClientMessage, all payload types
 ```
 
-Full type definitions are in `docs/api/client-contract.md`, Section 3.
+Full type definitions are in `docs/API/CLIENT_CONTRACT.md`, Section 3.

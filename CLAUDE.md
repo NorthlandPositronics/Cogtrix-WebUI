@@ -154,12 +154,17 @@ pnpm dlx shadcn@latest add button    # adds src/components/ui/button.tsx
 
 ## API Contract
 
-The backend API is documented in `docs/api/`:
+The backend API is documented in `docs/api/` — these are synced copies of the
+authoritative backend docs (`Cogtrix/docs/API/`); re-sync when the backend updates them:
 
+- `overview.md` — API orientation, quick start, authentication model
 - `client-contract.md` — TypeScript types and API client patterns
 - `webui-development-guide.md` — page-by-page integration guide
 - `websocket-protocol.md` — WebSocket message types and lifecycle
-- `openapi.yaml` / `openapi.json` — OpenAPI 3.1 schema (65 REST endpoints + 2 WebSocket streams)
+
+The OpenAPI schema is served live at `GET /api/v1/openapi.json` — that is authoritative.
+The previously-committed static `openapi.yaml`/`openapi.json` were removed (they drifted;
+the backend dropped its static spec in favour of the live endpoint, #2455).
 
 ## Environment Variables
 

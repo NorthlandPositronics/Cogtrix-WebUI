@@ -4,6 +4,11 @@ Version: v1
 Endpoint: `ws://host/ws/v1/sessions/{session_id}`
 Log stream: `ws://host/ws/v1/logs`
 
+Related documents:
+- `docs/API/OVERVIEW.md` — API orientation, quick start, authentication model
+- `docs/API/CLIENT_CONTRACT.md` — TypeScript types and full WebSocket usage example (`SessionSocket` class)
+- `docs/API/WEBUI_DEVELOPMENT_GUIDE.md` — React integration patterns for streaming
+
 ---
 
 ## 1. Overview
@@ -20,21 +25,63 @@ All other operations use the REST API.
 
 ## 2. Authentication
 
-The JWT bearer token must be provided on connection. Two methods are supported:
+The JWT bearer token (or `cgx_live_` API key) may be provided via either of
+two paths. Both reach the same downstream validation pipeline; pick whichever
+matches your client environment.
 
-**Method 1 — Authorization header (preferred):**
+### 2.1 Authorization header — CLI / SDK clients
+
 ```
 Authorization: Bearer <jwt>
 ```
 
-**Method 2 — Query parameter (browser WebSocket API fallback):**
+Case-insensitive on the scheme (``bearer``/``Bearer``/``BEARER`` all accepted).
+This is the canonical path for CLI tools, server-side SDKs, and any HTTP
+client that can set custom request headers on the WebSocket upgrade.
+
+### 2.2 Sec-WebSocket-Protocol — browser clients (#1887)
+
 ```
-ws://host/ws/v1/sessions/{id}?token=<jwt>
+Sec-WebSocket-Protocol: bearer, <jwt>
 ```
 
-If the token is missing, malformed, or invalid the server closes the connection with:
-- Close code `4001` — unauthorized
-- Close code `4003` — forbidden (valid token but wrong role/ownership)
+The browser `WebSocket` constructor does not allow setting custom headers
+on the upgrade request; the only browser-portable way to attach auth to
+a WebSocket connection is the `protocols` argument:
+
+```js
+const ws = new WebSocket(url, ["bearer", token]);
+```
+
+The server extracts the second list element as the token when the first
+is `bearer` (case-insensitive). Per RFC 6455 the server echoes the
+selected subprotocol back on accept (`Sec-WebSocket-Protocol: bearer`) —
+without that echo Chromium / Firefox close the connection client-side
+with 1002 (Protocol error).
+
+When **both** paths are present, the `Authorization` header wins; no
+subprotocol is echoed in the response.
+
+#### Operator note — handshake-header logging
+
+The `Sec-WebSocket-Protocol` header is logged by some reverse proxies
+that do not redact it the way `Authorization` is conventionally
+redacted (nginx `$http_sec_websocket_protocol`, for example, is
+captured by default in many configurations). TLS protects the value
+in transit; this concern is **server-side logging only**.
+
+If your ingress logs handshake headers, add a redaction rule for
+`Sec-WebSocket-Protocol` containing `bearer,` — or strip the header
+from access logs entirely. Authorization-header path clients are
+unaffected.
+
+### 2.3 Close codes
+
+If the token is missing, malformed, or invalid the server closes with:
+
+- Close code `4001` — unauthorized (missing token, invalid token, revoked API key, inactive user)
+- Close code `4003` — forbidden (valid token but wrong role / ownership)
+- Close code `4004` — session not found (auth succeeded, no such session id)
 
 ---
 
@@ -59,7 +106,7 @@ All messages in both directions use this JSON envelope:
 | type       | string | Message type discriminator (see Section 4) |
 | session_id | string | UUID v4 of the session this message belongs to |
 | payload    | object | Type-specific payload (see Section 4) |
-| seq        | int    | Monotonically increasing per-connection sequence number |
+| seq        | int    | Monotonically increasing **per-session** sequence number — preserved across reconnects, never reset (see Section 7) |
 | ts         | string | ISO 8601 UTC server timestamp |
 
 ### Client → Server
@@ -100,6 +147,39 @@ The frontend appends `text` to the response buffer.
 | text          | string | Incremental token text |
 | final         | bool   | `true` when this token is part of the **final response** (after all tool calls complete). `false` during preamble text before tool calls. Use this to distinguish intermediate reasoning from the actual answer. Only meaningful when `tool_call_count > 0`; `false` until the first tool call is seen. |
 
+**Streaming of the post-tool final answer (#2251 / #2264).** By default, the
+post-tool **final** answer is *not* streamed token-by-token — it is delivered as a
+single `token` frame (`final: true`) at turn end. This avoids a double-render when
+the server's verification-recovery loop discards a fully-generated answer and
+regenerates it. A client that handles the [`discard_pending`](#discard_pending--drop-the-in-progress-answer)
+frame (below) can opt in to **live** final-answer streaming by setting
+`stream_final_answer: true` on the send-message request
+(`POST /api/v1/sessions/{id}/messages`); the server then streams `final: true`
+tokens incrementally and emits `discard_pending` when it supersedes a partial.
+
+---
+
+#### `discard_pending` — Drop the In-Progress Answer
+
+Emitted only when the client opted in via `stream_final_answer: true` (#2264).
+Signals that the final-answer tokens streamed so far this turn were **discarded**
+by server-side verification-recovery and a fresh generation will stream next. The
+client MUST **clear its in-progress assistant buffer** on this frame; at most one
+is sent before the surviving generation streams. The turn-ending `done` frame text
+remains authoritative — reconcile the rendered text against it.
+
+```json
+{
+  "type": "discard_pending",
+  "session_id": "3f2504e0-4f89-11d3-9a0c-0305e82c3301",
+  "payload": {},
+  "seq": 51,
+  "ts": "2026-03-04T12:34:56.789Z"
+}
+```
+
+(No payload fields.)
+
 ---
 
 #### `tool_start` — Tool Execution Began
@@ -111,7 +191,7 @@ Emitted when the agent invokes a tool.
   "type": "tool_start",
   "session_id": "3f2504e0-4f89-11d3-9a0c-0305e82c3301",
   "payload": {
-    "tool": "web_search",
+    "tool_name": "web_search",
     "tool_call_id": "call_abc123",
     "input": {
       "query": "climate policy 2025"
@@ -124,7 +204,7 @@ Emitted when the agent invokes a tool.
 
 | Payload field | Type   | Description |
 |---------------|--------|-------------|
-| tool          | string | Tool name |
+| tool_name     | string | Tool name |
 | tool_call_id  | string | Unique invocation ID (links to tool_end) |
 | input         | object | Arguments passed to the tool |
 
@@ -139,7 +219,7 @@ Emitted when a tool returns (success or error).
   "type": "tool_end",
   "session_id": "3f2504e0-4f89-11d3-9a0c-0305e82c3301",
   "payload": {
-    "tool": "web_search",
+    "tool_name": "web_search",
     "tool_call_id": "call_abc123",
     "duration_ms": 340,
     "error": null
@@ -151,7 +231,7 @@ Emitted when a tool returns (success or error).
 
 | Payload field | Type        | Description |
 |---------------|-------------|-------------|
-| tool          | string      | Tool name |
+| tool_name     | string      | Tool name |
 | tool_call_id  | string      | Unique invocation ID (matches tool_start) |
 | duration_ms   | int         | Execution time in milliseconds |
 | error         | string/null | Error description on failure; null on success |
@@ -297,22 +377,23 @@ Always the last message for a turn.
     "input_tokens": 1420,
     "output_tokens": 380,
     "duration_ms": 4200,
-    "tool_calls": 3
+    "tool_calls": 3,
+    "text": "The capital of France is Paris."
   },
   "seq": 49,
   "ts": "2026-03-04T12:34:59.200Z"
 }
 ```
 
-| Payload field | Type        | Description |
-|---------------|-------------|-------------|
-| message_id    | string      | UUID of the AI message created |
-| total_tokens  | int         | Total tokens for this turn |
-| input_tokens  | int         | Input tokens |
-| output_tokens | int         | Output tokens |
-| duration_ms   | int         | Wall-clock turn duration in milliseconds |
-| tool_calls    | int         | Number of tool invocations |
-| text          | string/null | Final response content after post-processing. In think and delegate modes this may differ from the tokens that were streamed during the initial agent run — the think pipeline rewrites the initial response. Frontends should prefer this field over the streaming buffer when committing the message to cache. |
+| Payload field | Type   | Description |
+|---------------|--------|-------------|
+| message_id    | string | UUID of the AI message created |
+| total_tokens  | int    | Total tokens for this turn |
+| input_tokens  | int    | Input tokens |
+| output_tokens | int    | Output tokens |
+| duration_ms   | int    | Wall-clock turn duration in milliseconds |
+| tool_calls    | int    | Number of tool invocations |
+| text          | string | Full assembled agent response text for this turn |
 
 ---
 
@@ -498,12 +579,20 @@ If the agent raises an unrecoverable exception during a turn:
 
 ## 7. Reconnection Strategy
 
+`seq` is **per-session monotonic**: the server preserves the counter across
+reconnects and never resets it, so replayed and post-reconnect live frames
+share one strictly increasing sequence. A client can therefore keep a single
+persistent high-water mark and safely discard any `seq <= last_seen` as an
+already-processed replay.
+
 The `seq` field enables the frontend to detect dropped messages and recover:
 
-1. Store `last_seen_seq` in memory (reset to -1 on new page load).
+1. Store `last_seen_seq` in memory (reset to -1 on new page load — **not** on reconnect).
 2. On reconnect, send `?last_seq=<last_seen_seq>` as a query parameter.
 3. The server replays buffered messages with `seq > last_seq` (buffer kept 30 s post-disconnect).
 4. If `last_seq` is too old (buffer expired), the server sends the current state only.
+5. Post-reconnect live frames continue **above** the high-water mark, so they are
+   never mistaken for replays.
 
 Recommended reconnect strategy:
 - Immediate reconnect on first disconnect.
