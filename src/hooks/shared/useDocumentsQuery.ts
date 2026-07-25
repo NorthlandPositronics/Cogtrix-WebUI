@@ -15,8 +15,11 @@ export function useDocumentsQuery() {
     getNextPageParam: (lastPage: CursorPage<DocumentOut>) => lastPage.next_cursor ?? undefined,
     initialPageParam: null as string | null,
     refetchInterval: (query) => {
+      // Poll only while something is genuinely in progress. chunk_count === 0 was
+      // used as a proxy, but that's also the resting state of failed and empty
+      // documents — so the list re-fetched forever. status is the real signal.
       const hasProcessing = query.state.data?.pages.some((page) =>
-        page.items.some((doc) => doc.chunk_count === 0),
+        page.items.some((doc) => doc.status === "pending" || doc.status === "processing"),
       );
       return hasProcessing ? 15_000 : false;
     },

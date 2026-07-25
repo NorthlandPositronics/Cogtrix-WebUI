@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FileText, Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -24,6 +24,14 @@ export function DocumentsPage() {
 
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage, status, refetch } =
     useDocumentsQuery();
+
+  // Guard the sentinel: without the in-flight check a page whose fetch keeps
+  // failing re-fires on every intersection callback.
+  const handleIntersect = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => api.delete(`/rag/documents/${id}`),
@@ -66,7 +74,7 @@ export function DocumentsPage() {
           </div>
         )}
 
-        {status === "error" && (
+        {status === "error" && documents.length === 0 && (
           <div className="flex flex-col items-center gap-3 py-12 text-center">
             <p className="text-sm text-red-600">Failed to load documents.</p>
             <Button variant="outline" size="sm" onClick={() => void refetch()}>
@@ -107,7 +115,7 @@ export function DocumentsPage() {
         )}
 
         {hasNextPage && (
-          <InfiniteScrollSentinel onIntersect={fetchNextPage} loading={isFetchingNextPage} />
+          <InfiniteScrollSentinel onIntersect={handleIntersect} loading={isFetchingNextPage} />
         )}
 
         {isAdmin && <DocumentUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} />}

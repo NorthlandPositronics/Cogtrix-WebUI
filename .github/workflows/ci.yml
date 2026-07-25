@@ -36,11 +36,11 @@ jobs:
         run: echo "Release Please PR — code quality already validated on the 'next' branch."
       - name: Checkout code
         if: github.event_name != 'pull_request_target'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up pnpm
         if: github.event_name != 'pull_request_target'
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node.js
         if: github.event_name != 'pull_request_target'
@@ -100,11 +100,11 @@ jobs:
         run: echo "Release Please PR — unit tests already validated on the 'next' branch."
       - name: Checkout code
         if: github.event_name != 'pull_request_target'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up pnpm
         if: github.event_name != 'pull_request_target'
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node.js
         if: github.event_name != 'pull_request_target'
@@ -128,12 +128,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # ── OSV-scanner — scans pnpm-lock.yaml for known CVEs ──
       - name: OSV-scanner (dependency CVEs)
         id: osv
-        uses: google/osv-scanner-action/osv-scanner-action@v2.3.3
+        uses: google/osv-scanner-action/osv-scanner-action@v2.3.8
         continue-on-error: true          # advisory — don't block PRs yet
         with:
           scan-args: |-
@@ -141,7 +141,7 @@ jobs:
 
       # ── pnpm audit ──
       - name: Set up pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -185,7 +185,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build image
         run: docker build -f docker/Dockerfile -t cogtrix-webui:ci .
@@ -213,7 +213,7 @@ jobs:
             arch: arm64
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Lowercase image name
         run: |

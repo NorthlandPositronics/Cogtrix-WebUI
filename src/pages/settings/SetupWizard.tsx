@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AlertTriangle, CheckCircle2, Loader2, Wand2, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -7,6 +7,8 @@ import { api } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/types/common";
 import type { WizardStartRequest, WizardStepRequest, WizardStepOut } from "@/lib/api/types/config";
 import { useConfigQuery } from "@/hooks/shared/useConfigQuery";
+import { useWizardStore } from "@/lib/stores/wizard-store";
+import { keys } from "@/lib/api/keys";
 import {
   markdownComponents,
   REMARK_PLUGINS,
@@ -36,7 +38,6 @@ function stripProtocolLines(text: string): string {
     .trim();
 }
 
-type WizardState = "idle" | "active" | "complete" | "error";
 type ProviderType = "ollama" | "openai" | "anthropic" | "google";
 
 const PROVIDER_LABELS: Record<ProviderType, string> = {
@@ -69,13 +70,20 @@ interface LlmFormState {
 }
 
 export function SetupWizard() {
-  const [wizardState, setWizardState] = useState<WizardState>("idle");
-  const [step, setStep] = useState<WizardStepOut | null>(null);
-  const [answer, setAnswer] = useState("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Persisted in a store so the run survives the Radix tab unmount on tab switch.
+  const wizardState = useWizardStore((s) => s.wizardState);
+  const setWizardState = useWizardStore((s) => s.setWizardState);
+  const step = useWizardStore((s) => s.step);
+  const setStep = useWizardStore((s) => s.setStep);
+  const answer = useWizardStore((s) => s.answer);
+  const setAnswer = useWizardStore((s) => s.setAnswer);
+  const errorMessage = useWizardStore((s) => s.errorMessage);
+  const setErrorMessage = useWizardStore((s) => s.setErrorMessage);
   const [slowHint, setSlowHint] = useState(false);
   const slowHintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const queryClient = useQueryClient();
 
   // Query current config to pre-fill Step 0 form
   const { data: currentConfig } = useConfigQuery({
@@ -93,13 +101,20 @@ export function SetupWizard() {
           ? (firstProvider.type as ProviderType)
           : "openai";
       const activeModel = currentConfig?.models.find((m) => m.is_active);
+      // Only adopt the active model when it actually belongs to this provider —
+      // otherwise we'd pre-fill e.g. provider "ollama" with an OpenAI model and
+      // the Step-0 connection probe would fail confusingly.
+      const modelForProvider =
+        activeModel && activeModel.provider === firstProvider.name
+          ? activeModel.model_name
+          : DEFAULT_MODELS[pt];
       return {
         providerType: pt,
         providerName: firstProvider.name,
         apiKey: "",
         hasExistingKey: firstProvider.has_api_key,
         baseUrl: firstProvider.base_url ?? "",
-        model: activeModel?.model_name ?? DEFAULT_MODELS[pt],
+        model: modelForProvider,
       };
     }
     return {
@@ -171,6 +186,12 @@ export function SetupWizard() {
       setAnswer("");
       if (data.complete) {
         setWizardState("complete");
+        // The wizard has persisted providers/models/active-model to the backend.
+        // Sibling Settings tabs cache these with a 5-minute staleTime, so without
+        // this they'd show the pre-wizard config until it expires or a reload.
+        void queryClient.invalidateQueries({ queryKey: keys.config() });
+        void queryClient.invalidateQueries({ queryKey: keys.providers() });
+        void queryClient.invalidateQueries({ queryKey: keys.models() });
       }
     },
     onError: (err) => {
@@ -195,6 +216,13 @@ export function SetupWizard() {
     },
     onError: () => {
       toast.error("Failed to cancel wizard");
+      // The X button is the only way out of the active wizard view, so leaving
+      // wizardState "active" here would trap the user. The server-side wizard is
+      // either already gone (restart) or will time out, so reset locally anyway.
+      setWizardState("idle");
+      setStep(null);
+      setAnswer("");
+      setErrorMessage(null);
     },
   });
 
@@ -241,7 +269,10 @@ export function SetupWizard() {
 
   function handleReject() {
     if (!step) return;
-    advanceMutation.mutate({ wizardId: step.wizard_id, body: { data: { accept: false } } });
+    advanceMutation.mutate({
+      wizardId: step.wizard_id,
+      body: { answer: "Please revise the configuration." },
+    });
   }
 
   function handleCancel() {
@@ -262,7 +293,11 @@ export function SetupWizard() {
 
   const isPending =
     startMutation.isPending || advanceMutation.isPending || cancelMutation.isPending;
-  const progressPercent = step ? Math.round((step.step / step.total_steps) * 100) : 0;
+  // total_steps is 0 until the LLM has planned the run, so guard the division —
+  // otherwise the header renders a literal "NaN%" (or "Infinity%") next to
+  // "Step 0 of 0".
+  const progressPercent =
+    step && step.total_steps > 0 ? Math.round((step.step / step.total_steps) * 100) : 0;
 
   if (wizardState === "idle") {
     return (

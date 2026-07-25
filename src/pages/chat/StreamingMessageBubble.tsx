@@ -31,10 +31,11 @@ export function StreamingMessageBubble() {
     <div
       className="flex justify-start"
       ref={endRef}
-      role="status"
-      aria-live="polite"
-      aria-atomic="false"
-      aria-label="Assistant response"
+      data-cy="streaming-message"
+      // No aria-live here: ReactMarkdown rebuilds the subtree on every batched
+      // token, so a live region re-announced the growing message continuously.
+      // The settled MessageBubble provides a single announcement at turn end.
+      aria-hidden="true"
     >
       <div className="max-w-[75%]">
         <div className="rounded-2xl rounded-bl-sm border border-zinc-200 bg-white px-4 py-3 text-zinc-900 shadow-sm">
@@ -46,11 +47,6 @@ export function StreamingMessageBubble() {
             >
               {streamingBuffer}
             </ReactMarkdown>
-            <span
-              className="streaming-cursor ml-0.5 inline-block h-4 w-0.5 bg-zinc-900 align-middle motion-reduce:hidden"
-              data-cy="streaming-cursor"
-              aria-hidden="true"
-            />
           </div>
         </div>
       </div>

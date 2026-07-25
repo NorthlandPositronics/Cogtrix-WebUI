@@ -3,6 +3,7 @@ import type { ToolConfirmAction } from "./message";
 
 export type ServerMessageType =
   | "token"
+  | "discard_pending"
   | "tool_start"
   | "tool_end"
   | "tool_confirm_request"

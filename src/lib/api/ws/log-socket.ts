@@ -12,12 +12,24 @@ export interface LogSocketHandlers {
 }
 
 const PING_INTERVAL_MS = 30_000;
+// The server answers every ping with a pong and drops connections silent for 90 s,
+// so no INBOUND frame at all for this long means the socket is half-dead (server
+// vanished without a close frame, or the token expired mid-stream). Keyed on any
+// inbound frame rather than on log lines — a quiet log is perfectly normal and
+// must not be mistaken for a dead connection.
+const LIVENESS_TIMEOUT_MS = 90_000;
+// If the upgrade never completes (server accepts TCP but never upgrades) no
+// event fires at all, so status would stay "connecting" forever — and the UI
+// disables its only control in that state, leaving no way to cancel or retry.
+const CONNECT_TIMEOUT_MS = 10_000;
 
 // No reconnect logic — log streaming is stateless and user-controlled via the UI connect button.
 export class LogSocket {
   private ws: WebSocket | null = null;
   private pingTimer: ReturnType<typeof setInterval> | null = null;
   private errorOccurred = false;
+  private lastInboundAt = 0;
+  private connectTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private readonly handlers: LogSocketHandlers) {}
 
@@ -33,8 +45,19 @@ export class LogSocket {
     const url = `${WS_V1}/logs?token=${encodeURIComponent(token)}&level=${level}`;
     this.ws = new WebSocket(url);
 
+    this.connectTimer = setTimeout(() => {
+      this.connectTimer = null;
+      this.handleDeadConnection();
+    }, CONNECT_TIMEOUT_MS);
+
     this.ws.onopen = () => {
+      this.clearConnectTimer();
+      this.lastInboundAt = Date.now();
       this.pingTimer = setInterval(() => {
+        if (Date.now() - this.lastInboundAt > LIVENESS_TIMEOUT_MS) {
+          this.handleDeadConnection();
+          return;
+        }
         if (this.ws?.readyState === WebSocket.OPEN) {
           this.ws.send("ping");
         }
@@ -43,6 +66,8 @@ export class LogSocket {
     };
 
     this.ws.onmessage = (event: MessageEvent<string>) => {
+      // Any inbound frame (log_line or pong) proves the connection is alive.
+      this.lastInboundAt = Date.now();
       try {
         const raw = JSON.parse(event.data) as Record<string, unknown>;
         if (raw.type !== "log_line") return;
@@ -80,6 +105,7 @@ export class LogSocket {
 
   disconnect(): void {
     this.clearPingTimer();
+    this.clearConnectTimer();
     if (this.ws) {
       this.ws.onopen = null;
       this.ws.onmessage = null;
@@ -87,6 +113,31 @@ export class LogSocket {
       this.ws.onerror = null;
       this.ws.close(1000);
       this.ws = null;
+    }
+  }
+
+  /** Tear down a socket that stopped answering and surface it as an error, so the
+   *  viewer doesn't sit on a "connected" status that will never produce a line. */
+  private handleDeadConnection(): void {
+    this.clearPingTimer();
+    this.clearConnectTimer();
+    const ws = this.ws;
+    this.ws = null;
+    if (ws) {
+      ws.onopen = null;
+      ws.onmessage = null;
+      ws.onclose = null;
+      ws.onerror = null;
+      ws.close(1000);
+    }
+    this.errorOccurred = false;
+    this.handlers.onError();
+  }
+
+  private clearConnectTimer(): void {
+    if (this.connectTimer) {
+      clearTimeout(this.connectTimer);
+      this.connectTimer = null;
     }
   }
 

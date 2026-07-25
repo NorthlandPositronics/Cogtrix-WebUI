@@ -1,6 +1,6 @@
 import { vi, type Mock } from "vitest";
 import { useAuthStore } from "./auth-store";
-import { clearTokens, getAccessToken, getRefreshToken } from "../api/tokens";
+import { clearTokens, getAccessToken, getRefreshToken, setTokens } from "../api/tokens";
 import { act } from "@testing-library/react";
 
 vi.mock("sonner", () => ({
@@ -197,6 +197,14 @@ describe("auth store", () => {
 
   it("logout clears state even if API call fails", async () => {
     useAuthStore.setState({ isAuthenticated: true, user: { id: "u1" } as never });
+    // logout only calls the API when a refresh token exists (the backend requires
+    // it in the request body), so seed one to exercise the failing-API path.
+    setTokens({
+      access_token: "acc",
+      refresh_token: "ref",
+      token_type: "bearer",
+      expires_in: 3600,
+    });
 
     mockFetch.mockResolvedValueOnce(apiError("INTERNAL_ERROR", "Server error", 500));
 
@@ -210,6 +218,24 @@ describe("auth store", () => {
 
     expect(getStore().isAuthenticated).toBe(false);
     expect(getStore().user).toBeNull();
+  });
+
+  it("logout sends the refresh token so the server can revoke the session", async () => {
+    useAuthStore.setState({ isAuthenticated: true, user: { id: "u1" } as never });
+    setTokens({
+      access_token: "acc",
+      refresh_token: "ref",
+      token_type: "bearer",
+      expires_in: 3600,
+    });
+    mockFetch.mockResolvedValueOnce(apiResponse(null));
+
+    await act(async () => {
+      await getStore().logout();
+    });
+
+    const [, init] = mockFetch.mock.calls[mockFetch.mock.calls.length - 1] as [string, RequestInit];
+    expect(JSON.parse(init.body as string)).toEqual({ refresh_token: "ref" });
   });
 
   it("resets isLoading after login completes", async () => {

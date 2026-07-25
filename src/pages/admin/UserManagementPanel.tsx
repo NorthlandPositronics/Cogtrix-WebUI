@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState, type FormEvent } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -46,7 +47,7 @@ import {
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString();
+  return parseServerDate(dateStr).toLocaleDateString();
 }
 
 interface RoleBadgeProps {
@@ -301,7 +302,7 @@ export function UserManagementPanel() {
     );
   }
 
-  if (isError) {
+  if (isError && !users) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
         <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />

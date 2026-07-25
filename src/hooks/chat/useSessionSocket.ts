@@ -41,6 +41,9 @@ export function useSessionSocket(
   const socketRef = useRef<SessionSocket | null>(null);
   const cancelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Lets confirmTool (defined outside the socket effect) re-arm the hang
+  // watchdog once the user answers a tool-confirmation prompt.
+  const startWatchdogRef = useRef<(() => void) | null>(null);
   const queryClient = useQueryClient();
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -73,6 +76,7 @@ export function useSessionSocket(
         watchdogRef.current = null;
       }
     }
+    startWatchdogRef.current = startWatchdog;
 
     // Imperative health probe passed to SessionSocket's reconnect logic — intentionally
     // outside TanStack Query since it is a fire-and-forget liveness check with no
@@ -93,6 +97,12 @@ export function useSessionSocket(
           getStore().appendToken(text);
         },
 
+        onDiscardPending: () => {
+          // Server regenerated the final answer after verification-recovery —
+          // drop what we've streamed so far; the surviving generation follows.
+          getStore().clearStreamingBuffer();
+        },
+
         onToolStart: (tool, toolCallId, input) => {
           getStore().addToolStart(tool, toolCallId, input);
         },
@@ -102,6 +112,10 @@ export function useSessionSocket(
         },
 
         onToolConfirmRequest: (payload) => {
+          // The agent is now blocked waiting on the user — stop the hang
+          // watchdog so a slow human decision isn't mistaken for a stalled turn.
+          // It re-arms in confirmTool when the user answers.
+          clearWatchdog();
           getStore().setPendingConfirmation(payload);
         },
 
@@ -152,6 +166,14 @@ export function useSessionSocket(
         },
 
         onError: (code, message) => {
+          if (code === "TURN_IN_PROGRESS") {
+            // A second send was rejected while a turn is still running. The live
+            // turn is unaffected — do NOT clear its watchdog or reset streaming
+            // state. Just warn and drop the phantom optimistic user message.
+            toast.warning("Please wait for the response to complete.");
+            void queryClient.invalidateQueries({ queryKey: keys.messages.list(sessionId) });
+            return;
+          }
           clearWatchdog();
           if (cancelTimerRef.current) {
             clearTimeout(cancelTimerRef.current);
@@ -159,8 +181,6 @@ export function useSessionSocket(
           }
           if (code === "CANCELLED") {
             getStore().reset();
-          } else if (code === "TURN_IN_PROGRESS") {
-            toast.warning("Please wait for the response to complete.");
           } else {
             getStore().reset();
             getStore().setAgentState("error");
@@ -232,6 +252,11 @@ export function useSessionSocket(
       }
       socketRef.current = null;
       getStore().reset();
+      // reset() deliberately preserves connectionStatus, so without this the
+      // store still reads "open" after the socket is gone — which leaves the
+      // composer enabled and lets a send silently no-op while still writing an
+      // optimistic user message that never gets answered.
+      getStore().setConnectionStatus("closed");
       getStore().clearStatusLog();
     };
     // queryClient and navigate are stable references — omitting from deps is intentional
@@ -242,6 +267,20 @@ export function useSessionSocket(
     (text: string, mode: "normal" | "think" | "delegate") => {
       socketRef.current?.sendMessage(text, mode);
       getStore().setCurrentMode(mode);
+
+      // A previous turn's invalidation may still be refetching (an infinite query
+      // refetches every loaded page serially, so the window is ~0.5-1 s). Without
+      // cancelling, that response lands after the optimistic write below and
+      // replaces the cache wholesale — the message the user just sent disappears
+      // from the transcript until the next turn completes.
+      void queryClient.cancelQueries({ queryKey: keys.messages.list(sessionId) });
+
+      // A stale cancel-fallback timer from an earlier turn would otherwise fire
+      // mid-way through this one and reset live streaming state (see cancel()).
+      if (cancelTimerRef.current) {
+        clearTimeout(cancelTimerRef.current);
+        cancelTimerRef.current = null;
+      }
 
       // Optimistic: insert the user message into the cache immediately
       const messageKey = keys.messages.list(sessionId);
@@ -277,24 +316,9 @@ export function useSessionSocket(
     [sessionId, queryClient],
   );
 
-  const confirmTool = useCallback(
-    (confirmationId: string, action: ToolConfirmPayload["action"]) => {
-      socketRef.current?.confirmTool(confirmationId, action);
-      getStore().setPendingConfirmation(null);
-    },
-    [],
-  );
-
-  const cancel = useCallback(() => {
-    socketRef.current?.cancel();
-
-    // Cancel also clears the watchdog — we're explicitly stopping the turn
-    if (watchdogRef.current) {
-      clearTimeout(watchdogRef.current);
-      watchdogRef.current = null;
-    }
-
-    // Force-reset after timeout if server never responds to cancel
+  // Force-reset if the server never acts on a cancel (delivery ≠ processing).
+  // Shared by the composer Cancel and the confirmation-modal "cancel" action.
+  const armCancelFallback = useCallback(() => {
     if (cancelTimerRef.current) clearTimeout(cancelTimerRef.current);
     cancelTimerRef.current = setTimeout(() => {
       cancelTimerRef.current = null;
@@ -307,6 +331,44 @@ export function useSessionSocket(
       }
     }, 5_000);
   }, [sessionId, queryClient]);
+
+  const confirmTool = useCallback(
+    (confirmationId: string, action: ToolConfirmPayload["action"]) => {
+      const delivered = socketRef.current?.confirmTool(confirmationId, action) ?? false;
+      if (!delivered) {
+        // The socket was down (the agent is blocked on the user, so the idle
+        // connection can be dropped while the prompt is open). Keep the prompt
+        // open — closing it here would leave the user believing they approved
+        // the tool, and the turn would only fail 5 minutes later via the watchdog.
+        toast.error("Connection lost — reconnect and answer the prompt again.");
+        return;
+      }
+      getStore().setPendingConfirmation(null);
+      if (action === "cancel") {
+        // Cancelling the turn: the watchdog stays off, so arm the same 5 s
+        // fallback the composer Cancel uses — otherwise a cancel the server never
+        // processes leaves the composer disabled in a running state forever.
+        armCancelFallback();
+      } else {
+        // The agent resumes on allow/deny/allow_all/disable/forbid_all — re-arm
+        // the hang watchdog that onToolConfirmRequest cleared.
+        startWatchdogRef.current?.();
+      }
+    },
+    [armCancelFallback],
+  );
+
+  const cancel = useCallback(() => {
+    socketRef.current?.cancel();
+
+    // Cancel also clears the watchdog — we're explicitly stopping the turn
+    if (watchdogRef.current) {
+      clearTimeout(watchdogRef.current);
+      watchdogRef.current = null;
+    }
+
+    armCancelFallback();
+  }, [armCancelFallback]);
 
   return {
     sendMessage,

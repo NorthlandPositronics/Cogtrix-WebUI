@@ -18,7 +18,10 @@ export function useWorkflowsQuery() {
 export function useWorkflowDocumentsQuery(workflowId: string | null) {
   return useQuery<WorkflowDocumentOut[]>({
     queryKey: keys.workflows.documents(workflowId ?? ""),
-    queryFn: () => api.get<WorkflowDocumentOut[]>(`/assistant/workflows/${workflowId!}/documents`),
+    queryFn: () =>
+      api.get<WorkflowDocumentOut[]>(
+        `/assistant/workflows/${encodeURIComponent(workflowId!)}/documents`,
+      ),
     enabled: workflowId !== null,
   });
 }

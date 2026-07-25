@@ -148,6 +148,11 @@ export const MessageBubble = memo(function MessageBubble({ message }: MessageBub
       return <SystemBubble message={message} />;
     case "tool":
       return <ToolBubble message={message} />;
+    default:
+      // `role` is a closed union in TS but nothing validates the wire value, so
+      // a role added server-side would fall through and render nothing — the
+      // message would silently vanish from the transcript. Show it instead.
+      return <SystemBubble message={message} />;
   }
 });
 

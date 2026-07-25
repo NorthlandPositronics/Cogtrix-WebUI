@@ -45,15 +45,75 @@ function extractText(node: ReactNode): string {
   return "";
 }
 
+const SHELL_LANGUAGES = new Set([
+  "bash",
+  "sh",
+  "shell",
+  "zsh",
+  "fish",
+  "console",
+  "terminal",
+  "output",
+  "powershell",
+  "cmd",
+  "batch",
+]);
+
+function ShellBlock({ children, language }: { children: ReactNode; language?: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    const text = extractText(children);
+    // A rejected write (insecure context, denied permission) must not become an
+    // unhandled rejection — leave the button unflipped so it reads as "not copied".
+    void navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => setCopied(false));
+  }
+
+  return (
+    <div className="overflow-hidden rounded-md border border-zinc-700">
+      <div className="flex items-center justify-between bg-zinc-800 px-3 py-1.5">
+        <span className="font-mono text-xs font-medium text-zinc-400">{language ?? "shell"}</span>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-100"
+          onClick={handleCopy}
+          aria-label={copied ? "Copied" : "Copy code"}
+        >
+          {copied ? (
+            <Check className="h-3.5 w-3.5 text-green-400" />
+          ) : (
+            <Clipboard className="h-3.5 w-3.5" />
+          )}
+        </Button>
+      </div>
+      <pre className="overflow-x-auto bg-zinc-900 px-3 py-3 font-mono text-sm leading-relaxed text-zinc-100">
+        {children}
+      </pre>
+    </div>
+  );
+}
+
 function CodeBlock({ children, language }: { children: ReactNode; language?: string }) {
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
     const text = extractText(children);
-    void navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    // A rejected write (insecure context, denied permission) must not become an
+    // unhandled rejection — leave the button unflipped so it reads as "not copied".
+    void navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => setCopied(false));
   }
 
   return (
@@ -174,10 +234,16 @@ export const markdownComponents: Components = {
         : "";
     const language = langClass.startsWith("language-") ? langClass.slice(9) : undefined;
 
+    if (language && SHELL_LANGUAGES.has(language)) {
+      return <ShellBlock language={language}>{children}</ShellBlock>;
+    }
     return <CodeBlock language={language}>{children}</CodeBlock>;
   },
   code({ children, className }) {
-    const isInline = !className;
+    // A fenced block's <code> carries a trailing newline; inline code never does.
+    // Without that check a language-less ``` fence (which also has no className)
+    // was treated as inline and rendered as a pill nested inside the block <pre>.
+    const isInline = !className && !String(children).includes("\n");
     if (isInline) {
       return (
         <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-sm text-zinc-900">

@@ -1,7 +1,19 @@
 import { create } from "zustand";
 import { api } from "../api/client";
-import { setTokens, clearTokens } from "../api/tokens";
+import { setTokens, clearTokens, getRefreshToken } from "../api/tokens";
+import { queryClient } from "../query-client";
+import { useWizardStore } from "./wizard-store";
+import { useLogViewerStore } from "./log-viewer-store";
 import type { TokenPair, UserOut } from "../api/types";
+
+/** Wipe all per-user client state on an identity change. queryClient holds server
+ *  data; the wizard/log-viewer stores are module singletons that would otherwise
+ *  leak one user's config/logs to the next user on the same tab. */
+function clearClientState() {
+  queryClient.clear();
+  useWizardStore.getState().reset();
+  useLogViewerStore.getState().reset();
+}
 
 interface AuthState {
   user: UserOut | null;
@@ -22,6 +34,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (username, password) => {
     set({ isLoading: true });
+    // Also clear here, not just on logout: a session can end without logout()
+    // running (expired refresh token redirecting to /login), and that path would
+    // otherwise leave the previous user's state intact.
+    clearClientState();
     try {
       const tokens = await api.post<TokenPair>("/auth/login", { username, password });
       setTokens(tokens);
@@ -46,10 +62,17 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: async () => {
     try {
-      await api.post("/auth/logout");
+      // Backend requires the refresh token in the body so it can revoke the
+      // server-side session; a bodyless POST 422s and leaves the token valid.
+      const refresh_token = getRefreshToken();
+      if (refresh_token) await api.post("/auth/logout", { refresh_token });
     } finally {
       clearTokens();
       set({ user: null, isAuthenticated: false, isAdmin: false });
+      // Sessions/config/providers/models are cached with a 5-minute staleTime and
+      // gcTime, and the wizard/log-viewer stores hold config/log content — without
+      // this the next user to sign in on this tab sees the previous user's data.
+      clearClientState();
     }
   },
 }));

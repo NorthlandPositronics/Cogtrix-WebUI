@@ -56,7 +56,9 @@ const FLAG_ROWS: FlagRow[] = [
 export function ConfigFlagsForm() {
   const isAdmin = useAuthStore((s) => s.isAdmin);
   const queryClient = useQueryClient();
-  const { data: config, isLoading, isError, refetch } = useConfigQuery();
+  // No isError gate: `config` presence is the real signal — a failed background
+  // refetch must not blank a form that already has data to show.
+  const { data: config, isLoading, refetch } = useConfigQuery();
   const [pendingFlags, setPendingFlags] = useState<Set<ConfigBooleanKey>>(new Set());
 
   const soundEnabled = useUIStore((s) => s.soundEnabled);
@@ -66,16 +68,37 @@ export function ConfigFlagsForm() {
     mutationFn: (patch: ConfigPatchRequest) => api.patch("/config", patch),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: keys.config() });
+      // SystemInfoOut also reports debug/verbose, and SystemInfoCard remounts
+      // from cache on tab switch — so it would show the pre-toggle values.
+      void queryClient.invalidateQueries({ queryKey: keys.systemInfo() });
     },
     onError: () => {
       toast.error("Failed to update configuration");
+    },
+    // Clearing the pending flag must live at the mutation level, not in a
+    // per-call `mutate(vars, { onSettled })`: all five switches share this one
+    // observer, so a second toggle discards the first call's callbacks and the
+    // first switch would stay disabled until the page unmounts.
+    onSettled: (_data, _error, patch) => {
+      setPendingFlags((prev) => {
+        const next = new Set(prev);
+        for (const key of Object.keys(patch)) next.delete(key as ConfigBooleanKey);
+        return next;
+      });
     },
   });
 
   const reloadMutation = useMutation({
     mutationFn: () => api.post("/config/reload"),
     onSuccess: () => {
+      // Re-reading the config file can change providers, models, MCP servers and
+      // the reported system info — all cached for 5 min (60 s for system info),
+      // so invalidating only keys.config() left the other tabs stale.
       void queryClient.invalidateQueries({ queryKey: keys.config() });
+      void queryClient.invalidateQueries({ queryKey: keys.providers() });
+      void queryClient.invalidateQueries({ queryKey: keys.models() });
+      void queryClient.invalidateQueries({ queryKey: keys.mcpServers() });
+      void queryClient.invalidateQueries({ queryKey: keys.systemInfo() });
       toast.success("Configuration reloaded from disk");
     },
     onError: () => {
@@ -85,18 +108,7 @@ export function ConfigFlagsForm() {
 
   function handleToggle(flagKey: ConfigBooleanKey, value: boolean) {
     setPendingFlags((prev) => new Set(prev).add(flagKey));
-    patchMutation.mutate(
-      { [flagKey]: value },
-      {
-        onSettled: () => {
-          setPendingFlags((prev) => {
-            const next = new Set(prev);
-            next.delete(flagKey);
-            return next;
-          });
-        },
-      },
-    );
+    patchMutation.mutate({ [flagKey]: value });
   }
 
   if (isLoading) {
@@ -119,7 +131,7 @@ export function ConfigFlagsForm() {
     );
   }
 
-  if (isError || !config) {
+  if (!config) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
         <p className="text-sm text-red-600">Failed to load configuration.</p>

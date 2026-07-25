@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -51,11 +51,7 @@ interface HealthResult {
   result: ProviderHealthOut | null;
 }
 
-interface ProviderListProps {
-  onRequestWizard?: () => void;
-}
-
-export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderListProps) {
+export function ProviderList() {
   const isAdmin = useAuthStore((s) => s.isAdmin);
   const queryClient = useQueryClient();
   const {
@@ -135,7 +131,7 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
       base_url?: string | null;
       api_key?: string | null;
     }) =>
-      api.patch<ProviderOut>(`/config/providers/${name}`, {
+      api.patch<ProviderOut>(`/config/providers/${encodeURIComponent(name)}`, {
         base_url: base_url || null,
         api_key: api_key || null,
       }),
@@ -150,7 +146,7 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
   });
 
   const deleteProviderMutation = useMutation({
-    mutationFn: (name: string) => api.delete<null>(`/config/providers/${name}`),
+    mutationFn: (name: string) => api.delete<null>(`/config/providers/${encodeURIComponent(name)}`),
     onSuccess: () => {
       invalidateProviderData();
       toast.success("Provider removed");
@@ -194,7 +190,8 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
   });
 
   const healthCheckMutation = useMutation({
-    mutationFn: (name: string) => api.post<ProviderHealthOut>(`/config/providers/${name}/health`),
+    mutationFn: (name: string) =>
+      api.post<ProviderHealthOut>(`/config/providers/${encodeURIComponent(name)}/health`),
     onSuccess: (result, name) => {
       setHealthResults((prev) => new Map(prev).set(name, { providerName: name, result }));
     },
@@ -225,7 +222,7 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
   const slugPattern = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/;
   const addProviderValid = newName.trim().length > 0 && slugPattern.test(newName.trim());
 
-  if (providersError || modelsError) {
+  if ((providersError && !providers) || (modelsError && !models)) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
         <p className="text-sm text-red-600">Failed to load provider data.</p>
@@ -301,8 +298,8 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
                   const isEditing = editingProvider === provider.name;
 
                   return (
-                    <>
-                      <TableRow key={provider.name} className="hover:bg-zinc-50">
+                    <Fragment key={provider.name}>
+                      <TableRow className="hover:bg-zinc-50">
                         <TableCell className="font-medium text-zinc-900">{provider.name}</TableCell>
                         <TableCell className="text-zinc-600">{provider.type}</TableCell>
                         <TableCell className="max-w-44 truncate font-mono text-sm text-zinc-600">
@@ -457,7 +454,12 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
                                       updateProviderMutation.mutate({
                                         name: provider.name,
                                         base_url: editBaseUrl || null,
-                                        api_key: editApiKey || null,
+                                        // Omit rather than send null when blank:
+                                        // the field promises "leave blank to keep
+                                        // current", but null is the backend's
+                                        // "clear the key" signal — so editing only
+                                        // the base URL would wipe the API key.
+                                        ...(editApiKey ? { api_key: editApiKey } : {}),
                                       })
                                     }
                                   >
@@ -473,7 +475,7 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
                           </TableCell>
                         </TableRow>
                       )}
-                    </>
+                    </Fragment>
                   );
                 })}
               </TableBody>
@@ -672,7 +674,11 @@ export function ProviderList({ onRequestWizard: _onRequestWizard }: ProviderList
                 {models.map((m) => {
                   const isSwitching =
                     switchModelMutation.isPending && switchModelMutation.variables === m.alias;
-                  const isClickable = isAdmin && !m.is_active;
+                  // Gate on the shared mutation, not just the clicked row:
+                  // otherwise a second row stays clickable during the first
+                  // switch and two concurrent POST /config/model calls race —
+                  // the one that lands last decides the global active model.
+                  const isClickable = isAdmin && !m.is_active && !switchModelMutation.isPending;
 
                   return (
                     <TableRow

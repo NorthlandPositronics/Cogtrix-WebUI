@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -49,7 +50,7 @@ function statusBadgeClass(status: string): string {
 }
 
 function formatDateTime(isoString: string): string {
-  return new Date(isoString).toLocaleString(undefined, {
+  return parseServerDate(isoString).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -59,16 +60,19 @@ function formatDateTime(isoString: string): string {
 
 /** Convert an ISO datetime string to the value format required by <input type="datetime-local">. */
 function isoToDatetimeLocal(isoString: string): string {
-  const d = new Date(isoString);
+  const d = parseServerDate(isoString);
   if (isNaN(d.getTime())) return "";
   // datetime-local format: YYYY-MM-DDTHH:mm
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-/** Convert a datetime-local input value back to an ISO string in UTC. */
-function datetimeLocalToIso(value: string): string {
-  return new Date(value).toISOString();
+/** Convert a datetime-local input value back to an ISO string in UTC.
+ *  Returns undefined for an unparseable value — `toISOString()` throws a
+ *  RangeError on one, which would surface only as a generic "Failed to update". */
+function datetimeLocalToIso(value: string): string | undefined {
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? undefined : d.toISOString();
 }
 
 export function ScheduledMessageTable() {
@@ -153,7 +157,7 @@ export function ScheduledMessageTable() {
         />
       </div>
 
-      {isError ? (
+      {isError && !scheduled ? (
         <div className="flex flex-col items-center gap-3 py-16 text-center">
           <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
           <p className="text-sm text-red-600">Failed to load scheduled messages.</p>

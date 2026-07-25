@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -21,7 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 function formatDateTime(isoString: string): string {
-  return new Date(isoString).toLocaleString(undefined, {
+  return parseServerDate(isoString).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -146,7 +147,11 @@ export function KnowledgePanel({ isAdmin }: KnowledgePanelProps) {
     searchMutation.reset();
   }
 
-  const displayedFacts = searchMutation.data ?? facts;
+  // On a failed search `data` is undefined, which would silently fall back to the
+  // full list — visually identical to the un-searched state, so the user can't
+  // tell the search failed. Hold the table empty and surface it instead.
+  const searchFailed = searchMutation.isError;
+  const displayedFacts = searchFailed ? [] : (searchMutation.data ?? facts);
 
   return (
     <>
@@ -195,6 +200,12 @@ export function KnowledgePanel({ isAdmin }: KnowledgePanelProps) {
           {searchMutation.data.length} result{searchMutation.data.length !== 1 ? "s" : ""} for
           &ldquo;
           {searchQuery}&rdquo;
+        </p>
+      )}
+
+      {searchFailed && (
+        <p className="mb-3 text-sm text-red-600">
+          Search failed. Clear the search to return to the full knowledge base.
         </p>
       )}
 

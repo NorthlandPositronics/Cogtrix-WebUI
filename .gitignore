@@ -35,3 +35,7 @@ docker-compose.cogtrix.yml
 .env.cogtrix
 .cogtrix.yml
 .claude/
+
+# Claude Code plugin/skill install artifacts (local, not shared)
+.agents/
+skills-lock.json

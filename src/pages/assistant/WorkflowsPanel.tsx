@@ -1,3 +1,4 @@
+import { parseServerDate } from "@/lib/utils";
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -78,7 +79,7 @@ import {
 // ---------------------------------------------------------------------------
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
+  return parseServerDate(iso).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -339,13 +340,12 @@ function WorkflowFormFields({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="wf-confidence">Min confidence</Label>
+            <Label htmlFor="wf-confidence">Min keyword matches</Label>
             <Input
               id="wf-confidence"
               type="number"
-              min="0"
-              max="1"
-              step="0.01"
+              min="1"
+              step="1"
               value={form.min_confidence}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 onChange({ min_confidence: e.target.value })
@@ -403,7 +403,9 @@ function CreateWorkflowDialog({ open, onOpenChange, onSuccess }: CreateWorkflowD
         enabled: form.auto_detect_enabled,
         keywords: splitCsv(form.auto_detect_keywords),
         patterns: splitCsv(form.auto_detect_patterns),
-        min_confidence: parseFloat(form.min_confidence) || 1,
+        min_confidence: Number.isNaN(parseInt(form.min_confidence, 10))
+          ? 1
+          : parseInt(form.min_confidence, 10),
       },
     };
     createMutation.mutate(body);
@@ -499,7 +501,10 @@ function EditWorkflowDialog({ workflow, onOpenChange, onSuccess }: EditWorkflowD
     if (!workflow) return;
     const body: WorkflowUpdateRequest = {
       name: form.name.trim(),
-      description: form.description.trim() || undefined,
+      // null, not undefined — JSON.stringify drops undefined, so on this partial
+      // update clearing a workflow's description was a silent no-op that still
+      // reported success. (The create path may legitimately omit it.)
+      description: form.description.trim() || null,
       system_prompt: form.system_prompt.trim() || null,
       knowledge_base: form.knowledge_base,
       tool_policy: {
@@ -510,7 +515,9 @@ function EditWorkflowDialog({ workflow, onOpenChange, onSuccess }: EditWorkflowD
         enabled: form.auto_detect_enabled,
         keywords: splitCsv(form.auto_detect_keywords),
         patterns: splitCsv(form.auto_detect_patterns),
-        min_confidence: parseFloat(form.min_confidence) || 1,
+        min_confidence: Number.isNaN(parseInt(form.min_confidence, 10))
+          ? 1
+          : parseInt(form.min_confidence, 10),
       },
     };
     updateMutation.mutate({ id: workflow.id, body });
@@ -574,8 +581,12 @@ function DocumentsDialog({ workflowId, onOpenChange }: DocumentsDialogProps) {
       api.delete(
         `/assistant/workflows/${encodeURIComponent(wfId)}/documents/${encodeURIComponent(docId)}`,
       ),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: keys.workflows.documents(workflowId!) });
+    onSuccess: (_data, { wfId }) => {
+      // Use the mutation's own wfId, not the workflowId prop: this dialog was
+      // mounted unconditionally, so closing it mid-request set the prop to null
+      // and the invalidate targeted keys.workflows.documents(null) — the real
+      // list stayed stale and the deleted doc reappeared on reopen.
+      void queryClient.invalidateQueries({ queryKey: keys.workflows.documents(wfId) });
       toast.success("Document deleted");
     },
     onError: (err) => {
@@ -592,8 +603,8 @@ function DocumentsDialog({ workflowId, onOpenChange }: DocumentsDialogProps) {
         `/assistant/workflows/${encodeURIComponent(wfId)}/documents`,
         formData,
       ),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: keys.workflows.documents(workflowId!) });
+    onSuccess: (_data, { wfId }) => {
+      void queryClient.invalidateQueries({ queryKey: keys.workflows.documents(wfId) });
       toast.success("Document uploaded");
     },
     onError: (err) => {
@@ -651,7 +662,7 @@ function DocumentsDialog({ workflowId, onOpenChange }: DocumentsDialogProps) {
               />
             </div>
 
-            {isError ? (
+            {isError && !docs ? (
               <div className="flex flex-col items-center gap-3 py-12 text-center">
                 <AlertTriangle className="h-10 w-10 text-red-600" strokeWidth={1.5} />
                 <p className="text-sm text-red-600">Failed to load documents.</p>
@@ -1023,7 +1034,7 @@ export function WorkflowsPanel() {
           </div>
         )}
 
-        {isError ? (
+        {isError && !page ? (
           <div className="flex flex-col items-center gap-3 py-16 text-center">
             <AlertTriangle className="h-12 w-12 text-red-600" strokeWidth={1.5} />
             <p className="text-sm text-red-600">Failed to load workflows.</p>
@@ -1140,7 +1151,10 @@ export function WorkflowsPanel() {
         />
       )}
 
-      {isAdmin && (
+      {/* Mounted only while open so each open starts from the persisted workflow —
+          an always-mounted dialog keeps its form state, so edits abandoned via
+          Cancel would reappear (and silently re-save) on the next open. */}
+      {isAdmin && editTarget && (
         <EditWorkflowDialog
           workflow={editTarget}
           onOpenChange={(open) => !open && setEditTarget(null)}
@@ -1148,15 +1162,24 @@ export function WorkflowsPanel() {
         />
       )}
 
-      <DocumentsDialog
-        workflowId={docsWorkflowId}
-        onOpenChange={(open) => !open && setDocsWorkflowId(null)}
-      />
+      {/* Mounted only while open, like the sibling dialogs — otherwise its
+          deleteTarget state and the ConfirmDialog it renders survive the parent
+          closing, leaving a confirm dialog pointing at a now-null workflowId. */}
+      {docsWorkflowId && (
+        <DocumentsDialog
+          workflowId={docsWorkflowId}
+          onOpenChange={(open) => !open && setDocsWorkflowId(null)}
+        />
+      )}
 
-      <BindingsDialog
-        workflowId={bindingsWorkflowId}
-        onOpenChange={(open) => !open && setBindingsWorkflowId(null)}
-      />
+      {/* Mounted only while open — its bindings/chats queries would otherwise run
+          as soon as the Workflows tab renders, before any dialog is opened. */}
+      {bindingsWorkflowId && (
+        <BindingsDialog
+          workflowId={bindingsWorkflowId}
+          onOpenChange={(open) => !open && setBindingsWorkflowId(null)}
+        />
+      )}
 
       <ConfirmDialog
         open={deleteTarget !== null}

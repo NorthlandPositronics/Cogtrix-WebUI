@@ -58,8 +58,15 @@ export function AppShell() {
   const usernameInitial = user?.username.charAt(0).toUpperCase() ?? "?";
 
   async function handleSignOut() {
-    await logout();
-    navigate("/login");
+    // logout() clears tokens/state in a finally block but re-throws a failed
+    // /auth/logout. This is wired to an onClick (() => void), so the rejection
+    // would float AND skip the navigate — leaving the user on a protected page
+    // with no session.
+    try {
+      await logout();
+    } finally {
+      navigate("/login");
+    }
   }
 
   return (

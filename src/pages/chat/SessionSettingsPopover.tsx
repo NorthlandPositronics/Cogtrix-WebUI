@@ -63,6 +63,7 @@ function isDirtyCheck(draft: DraftState, config: SessionConfig): boolean {
 export function SessionSettingsPopover({ session, onSave, isSaving }: SessionSettingsPopoverProps) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DraftState>(() => draftFromConfig(session.config));
+  const [maxStepsError, setMaxStepsError] = useState<string | null>(null);
 
   const isMobile = useMediaQuery("(max-width: 1023px)");
   const modelsQuery = useModelsQuery({ staleTime: 5 * 60_000 });
@@ -71,11 +72,20 @@ export function SessionSettingsPopover({ session, onSave, isSaving }: SessionSet
 
   async function handleSave() {
     const systemPrompt = draft.systemPrompt?.trim() || null;
-    const maxStepsRaw = draft.maxSteps !== "" ? parseInt(draft.maxSteps, 10) : null;
-    const maxSteps =
-      maxStepsRaw !== null && !isNaN(maxStepsRaw) && maxStepsRaw >= 1 && maxStepsRaw <= 200
-        ? maxStepsRaw
-        : null;
+    // Number(), not parseInt(): <input type="number"> accepts exponent notation
+    // and parseInt("1e3") silently yields 1. An out-of-range value must block the
+    // save rather than collapse to null — null means "reset to the global
+    // default", so the old code discarded the entry and still toasted success.
+    const maxStepsRaw = draft.maxSteps !== "" ? Number(draft.maxSteps) : null;
+    if (
+      maxStepsRaw !== null &&
+      (!Number.isInteger(maxStepsRaw) || maxStepsRaw < 1 || maxStepsRaw > 200)
+    ) {
+      setMaxStepsError("Enter a whole number between 1 and 200, or leave blank for the default.");
+      return;
+    }
+    setMaxStepsError(null);
+    const maxSteps = maxStepsRaw;
     const contextCompression = draft.contextCompression;
 
     try {
@@ -175,13 +185,18 @@ export function SessionSettingsPopover({ session, onSave, isSaving }: SessionSet
                 min={1}
                 max={200}
                 value={draft.maxSteps}
-                onChange={(e) => setDraft((prev) => ({ ...prev, maxSteps: e.target.value }))}
+                onChange={(e) => {
+                  setDraft((prev) => ({ ...prev, maxSteps: e.target.value }));
+                  setMaxStepsError(null);
+                }}
                 placeholder="100"
                 className="w-24"
                 disabled={isSaving}
+                aria-invalid={maxStepsError !== null}
               />
               <span className="text-sm text-zinc-500">default: 100, max: 200</span>
             </div>
+            {maxStepsError && <p className="mt-1.5 text-sm text-red-600">{maxStepsError}</p>}
           </div>
 
           {/* Context compression */}
