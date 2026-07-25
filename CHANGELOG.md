@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.11](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.10...v0.1.11) (2026-07-25)
+
+
+### Features
+
+* **chat:** dark terminal surface for shell/command code blocks ([70472cc](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/70472cca874241532cdb338b6f21594e6ffd5c3f))
+
+
+### Bug Fixes
+
+* **build:** migrate manualChunks to function form for vite 8 / Rolldown ([538c0a7](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/538c0a731e70a6487e20505992d45a98d4b703bd))
+* **chat:** remove streaming cursor; fix flashing between TypingIndicator and StreamingMessageBubble ([fde28ea](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/fde28ea001be8239fcd6e8455c4b583f085f3861))
+* **infra,deps:** gzip JS bundle, no-store SPA fallback, security dep bumps ([07fb0ad](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/07fb0ad4e041e64cef69403ec39404502e29316a))
+* **infra,deps:** gzip JS, no-store SPA fallback, bump react-router + vite ([873d26e](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/873d26ed69f6ad3a7b75a765dcd913468b36fdb1))
+* **settings:** wizard Cancel on acceptance step sends correct payload ([266f970](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/266f9708a050faf921fb32d2bdd276af514be41f))
+* **webui:** comprehensive correctness sweep — streaming, API contract, races, a11y, perf ([e988197](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/e988197adb8f31d716a28b7ab9c564396a006006))
+* **webui:** comprehensive correctness sweep — streaming, API contract, races, a11y, perf ([2a0dd43](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/2a0dd434b0c4520e4670f68a5ee7e63ad3ec41e1))
+* **webui:** reconnect livelock, cross-user state leak, +28 tests ([691a5e3](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/691a5e35866747fa3115986308f444b76469013a))
+* **webui:** reconnect livelock, cross-user state leak, +28 tests ([1fa36e7](https://github.com/NorthlandPositronics/Cogtrix-WebUI/commit/1fa36e770751bca02fac3d6ca8af4ebc4b461bd0))
+
 ## [0.1.10](https://github.com/NorthlandPositronics/Cogtrix-WebUI/compare/v0.1.9...v0.1.10) (2026-03-27)
 
 
