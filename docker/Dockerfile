@@ -19,7 +19,7 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL \
 RUN pnpm build
 
 # Stage 2 — Serve
-FROM nginx:1.29.7-alpine
+FROM nginx:1.31.2-alpine
 
 # Non-root user for production security
 RUN addgroup -g 1001 -S appgroup && \
