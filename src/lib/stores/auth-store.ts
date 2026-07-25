@@ -2,7 +2,18 @@ import { create } from "zustand";
 import { api } from "../api/client";
 import { setTokens, clearTokens, getRefreshToken } from "../api/tokens";
 import { queryClient } from "../query-client";
+import { useWizardStore } from "./wizard-store";
+import { useLogViewerStore } from "./log-viewer-store";
 import type { TokenPair, UserOut } from "../api/types";
+
+/** Wipe all per-user client state on an identity change. queryClient holds server
+ *  data; the wizard/log-viewer stores are module singletons that would otherwise
+ *  leak one user's config/logs to the next user on the same tab. */
+function clearClientState() {
+  queryClient.clear();
+  useWizardStore.getState().reset();
+  useLogViewerStore.getState().reset();
+}
 
 interface AuthState {
   user: UserOut | null;
@@ -25,8 +36,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
     // Also clear here, not just on logout: a session can end without logout()
     // running (expired refresh token redirecting to /login), and that path would
-    // otherwise leave the previous user's cache intact.
-    queryClient.clear();
+    // otherwise leave the previous user's state intact.
+    clearClientState();
     try {
       const tokens = await api.post<TokenPair>("/auth/login", { username, password });
       setTokens(tokens);
@@ -59,9 +70,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       clearTokens();
       set({ user: null, isAuthenticated: false, isAdmin: false });
       // Sessions/config/providers/models are cached with a 5-minute staleTime and
-      // gcTime, so without this the next user to sign in on this tab is served
-      // the previous user's data immediately and without a refetch.
-      queryClient.clear();
+      // gcTime, and the wizard/log-viewer stores hold config/log content — without
+      // this the next user to sign in on this tab sees the previous user's data.
+      clearClientState();
     }
   },
 }));

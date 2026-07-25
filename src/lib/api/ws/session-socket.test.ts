@@ -656,5 +656,124 @@ describe("SessionSocket", () => {
       expect(handlers.onAgentState).toHaveBeenCalledTimes(2);
       expect(socket.lastSeq).toBe(1);
     });
+
+    it("advances lastSeq for an unrecognised type so the next frame isn't a false gap", () => {
+      const handlers = createHandlers();
+      const socket = new SessionSocket("s1", handlers);
+      socket.connect();
+      const ws = lastCreatedWs!;
+      vi.spyOn(ws, "close");
+      ws.simulateOpen();
+
+      ws.simulateMessage({
+        type: "token",
+        session_id: "s1",
+        payload: { text: "a", final: false },
+        seq: 0,
+        ts: "t",
+      });
+      // Unknown type at seq 1 — not routed, but its seq slot must still advance.
+      ws.simulateMessage({
+        type: "totally_new_type",
+        session_id: "s1",
+        payload: {},
+        seq: 1,
+        ts: "t",
+      });
+      expect(socket.lastSeq).toBe(1);
+
+      // seq 2 is now in-order, NOT a gap.
+      ws.simulateMessage({
+        type: "token",
+        session_id: "s1",
+        payload: { text: "b", final: false },
+        seq: 2,
+        ts: "t",
+      });
+      expect(ws.close).not.toHaveBeenCalled();
+      expect(handlers.onToken).toHaveBeenCalledTimes(2);
+      expect(socket.lastSeq).toBe(2);
+    });
+
+    it("resyncs instead of livelocking when a gap persists after replay (buffer expired)", () => {
+      const handlers = createHandlers();
+      const socket = new SessionSocket("s1", handlers);
+      socket.connect();
+      const ws1 = lastCreatedWs!;
+      vi.spyOn(ws1, "close");
+      ws1.simulateOpen();
+      ws1.simulateMessage({
+        type: "agent_state",
+        session_id: "s1",
+        payload: { state: "idle" },
+        seq: 40,
+        ts: "t",
+      });
+      expect(socket.lastSeq).toBe(40);
+
+      // Forward gap → first response is to close so the server can replay.
+      ws1.simulateMessage({
+        type: "agent_state",
+        session_id: "s1",
+        payload: { state: "thinking" },
+        seq: 47,
+        ts: "t",
+      });
+      expect(ws1.close).toHaveBeenCalledOnce();
+      expect(socket.lastSeq).toBe(40);
+
+      // Drive the reconnect.
+      ws1.simulateClose(1006);
+      vi.advanceTimersByTime(1100);
+      const ws2 = lastCreatedWs!;
+      expect(ws2).not.toBe(ws1);
+      vi.spyOn(ws2, "close");
+      ws2.simulateOpen();
+
+      // Buffer expired: the server sends current state at the SAME gapped seq.
+      // Must resync (accept + route), not close again → no livelock.
+      ws2.simulateMessage({
+        type: "agent_state",
+        session_id: "s1",
+        payload: { state: "thinking" },
+        seq: 47,
+        ts: "t",
+      });
+      expect(ws2.close).not.toHaveBeenCalled();
+      expect(socket.lastSeq).toBe(47);
+      expect(handlers.onAgentState).toHaveBeenCalledTimes(2);
+
+      // Subsequent frames flow in order.
+      ws2.simulateMessage({
+        type: "agent_state",
+        session_id: "s1",
+        payload: { state: "writing" },
+        seq: 48,
+        ts: "t",
+      });
+      expect(socket.lastSeq).toBe(48);
+    });
+  });
+
+  describe("reconnect circuit breaker", () => {
+    it("gives up with onReconnectFailed after MAX_RECONNECT_ATTEMPTS without a successful open", () => {
+      const handlers = createHandlers();
+      const socket = new SessionSocket("s1", handlers);
+      socket.connect();
+
+      // Repeatedly drop before opening (so onopen never resets the counter).
+      lastCreatedWs!.simulateClose(1006); // attempt 1
+      for (let i = 2; i <= 10; i++) {
+        vi.advanceTimersByTime(30_000);
+        lastCreatedWs!.simulateClose(1006); // attempts 2..10
+      }
+      expect(handlers.onReconnecting).toHaveBeenCalledTimes(10);
+      expect(handlers.onReconnectFailed).not.toHaveBeenCalled();
+
+      // 11th drop trips the breaker.
+      vi.advanceTimersByTime(30_000);
+      lastCreatedWs!.simulateClose(1006);
+      expect(handlers.onReconnectFailed).toHaveBeenCalledOnce();
+    });
   });
 });

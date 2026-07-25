@@ -23,15 +23,23 @@ interface WizardStore {
   setStep: (step: WizardStepOut | null) => void;
   setAnswer: (answer: string) => void;
   setErrorMessage: (message: string | null) => void;
+  /** Clear all progress. Called on login/logout so one user's wizard state
+   *  (which holds provider/model config in `step`) can't leak to the next. */
+  reset: () => void;
 }
 
-export const useWizardStore = create<WizardStore>((set) => ({
-  wizardState: "idle",
+const initialWizardState = {
+  wizardState: "idle" as WizardState,
   step: null,
   answer: "",
   errorMessage: null,
+};
+
+export const useWizardStore = create<WizardStore>((set) => ({
+  ...initialWizardState,
   setWizardState: (wizardState) => set({ wizardState }),
   setStep: (step) => set({ step }),
   setAnswer: (answer) => set({ answer }),
   setErrorMessage: (errorMessage) => set({ errorMessage }),
+  reset: () => set({ ...initialWizardState }),
 }));

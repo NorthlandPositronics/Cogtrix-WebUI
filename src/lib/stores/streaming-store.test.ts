@@ -9,6 +9,9 @@ describe("streaming store", () => {
   beforeEach(() => {
     act(() => {
       getStore().reset();
+      // reset() intentionally preserves statusLog; clear it so statusLog
+      // assertions don't see cross-test accumulation.
+      getStore().clearStatusLog();
       getStore().setConnectionStatus("closed");
     });
   });
@@ -134,5 +137,73 @@ describe("streaming store", () => {
     expect(state.pendingConfirmation).toBeNull();
     expect(state.toolActivities.size).toBe(0);
     expect(state.connectionStatus).toBe("open");
+  });
+
+  it("reset() settles a still-running statusLog entry as aborted", () => {
+    act(() => {
+      getStore().addToolStart("search", "tc-1", {});
+    });
+    expect(getStore().statusLog.slice(-1)[0]).toMatchObject({ done: false, error: null });
+
+    act(() => {
+      getStore().reset();
+    });
+    // The tool never got a tool_end (turn cancelled/timed out) — must not stay a
+    // perpetual spinner.
+    expect(getStore().statusLog.slice(-1)[0]).toMatchObject({ done: true, error: "aborted" });
+  });
+
+  it("addToolStart cancels a pending RAF flush so pre-tool tokens don't leak", () => {
+    act(() => {
+      getStore().appendToken("reasoning "); // schedules a RAF, not yet flushed
+      getStore().addToolStart("search", "tc-1", {}); // must cancel it + clear buffer
+    });
+    act(() => {
+      // Force any surviving RAF to run; the buffer must remain empty.
+      flushPendingTokens();
+    });
+    expect(getStore().streamingBuffer).toBe("");
+  });
+
+  it("gives a repeated tool_call_id distinct statusLog ids", () => {
+    act(() => {
+      getStore().addToolStart("search", "dup", {});
+      getStore().addToolStart("search", "dup", {});
+    });
+    const entries = getStore().statusLog.filter((e) => e.toolCallId === "dup");
+    expect(entries).toHaveLength(2);
+    expect(entries[0]!.id).not.toBe(entries[1]!.id);
+  });
+
+  it("updateToolEnd settles only the most recent un-done entry for a repeated id", () => {
+    act(() => {
+      getStore().addToolStart("search", "dup", {});
+      getStore().addToolStart("search", "dup", {});
+      getStore().updateToolEnd("dup", 123, null);
+    });
+    const entries = getStore().statusLog.filter((e) => e.toolCallId === "dup");
+    // First invocation still running; only the latest settled.
+    expect(entries[0]!.done).toBe(false);
+    expect(entries[1]).toMatchObject({ done: true, durationMs: 123 });
+  });
+
+  it("clearStreamingBuffer empties the buffer without touching agent state", () => {
+    act(() => {
+      getStore().setAgentState("writing");
+      getStore().appendToken("partial");
+      getStore().clearStreamingBuffer();
+      flushPendingTokens();
+    });
+    expect(getStore().streamingBuffer).toBe("");
+    expect(getStore().agentState).toBe("writing");
+  });
+
+  it("caps statusLog at 100 entries", () => {
+    act(() => {
+      for (let i = 0; i < 130; i++) getStore().addToolStart("t", `tc-${i}`, {});
+    });
+    expect(getStore().statusLog.length).toBe(100);
+    // Ring buffer keeps the most recent.
+    expect(getStore().statusLog.slice(-1)[0]!.toolCallId).toBe("tc-129");
   });
 });

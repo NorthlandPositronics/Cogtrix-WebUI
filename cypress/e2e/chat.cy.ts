@@ -31,7 +31,10 @@ describe("Chat page", () => {
 
     it("shows session name and agent state badge", () => {
       cy.contains(`Chat ${TEST_ID}`).should("be.visible");
-      cy.get("[role='status']").should("exist");
+      // Target the header agent-state badge specifically — `[role='status']`
+      // also matches the message bubbles, typing indicator, and connection dot,
+      // so it would pass even if the badge were missing.
+      cy.get("[aria-label^='Agent state']", { timeout: 10000 }).should("exist");
     });
 
     it("has back button linking to sessions", () => {
@@ -137,11 +140,18 @@ describe("Chat page", () => {
     });
 
     it("agent state badge updates after sending a message", () => {
+      // Baseline: idle badge reads "Ready".
+      cy.get("[aria-label='Agent state: Ready']", { timeout: 10000 }).should("exist");
+
       cy.get("[data-cy='message-input']").type("Trigger agent");
       cy.get("[data-cy='send-message']").click();
 
-      // Agent state badge should show some active state (not necessarily "Ready")
-      cy.get("[role='status']").should("be.visible");
+      // The badge must actually MOVE off "Ready" to an active state — asserting a
+      // bare `[role='status']` is visible would pass even if it never changed.
+      cy.get("[aria-label^='Agent state']", { timeout: 10000 })
+        .should("exist")
+        .invoke("attr", "aria-label")
+        .should("not.equal", "Agent state: Ready");
     });
   });
 
