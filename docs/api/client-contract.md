@@ -4,6 +4,11 @@ Audience: React frontend developers (`web_coder` agent)
 API version: v1
 Last updated: 2026-03-27
 
+Related documents:
+- `docs/API/OVERVIEW.md` — API orientation, quick start, environment variables, session lifecycle
+- `docs/API/WEBSOCKET_PROTOCOL.md` — full WebSocket message catalogue and reconnection strategy
+- `docs/API/WEBUI_DEVELOPMENT_GUIDE.md` — page-by-page React integration guide
+
 ---
 
 ## 1. Configuration
@@ -33,11 +38,18 @@ headers: {
 }
 ```
 
-For WebSocket connections the browser API does not allow custom headers.
-Pass the token as a query parameter:
+For WebSocket connections the browser API does not allow custom headers, so
+attach the token via the `Sec-WebSocket-Protocol` subprotocol instead — the
+session WebSocket no longer accepts `?token=` (removed in #1128 to prevent
+token exposure in access logs). The log stream WebSocket (`/ws/v1/logs`)
+still accepts `?token=` for admin auth. See
+[`WEBSOCKET_PROTOCOL.md` §2](WEBSOCKET_PROTOCOL.md#2-authentication) for
+the full authentication contract.
 
 ```typescript
-new WebSocket(`${WS_V1}/sessions/${sessionId}?token=${accessToken}`);
+// Browsers cannot set custom headers on a WebSocket upgrade; the `protocols`
+// argument is the only portable way to attach the bearer token.
+new WebSocket(`${WS_V1}/sessions/${sessionId}`, ["bearer", accessToken]);
 ```
 
 ### 2.2 Token storage
@@ -63,8 +75,8 @@ export function clearTokens(): void { accessToken = null; refreshToken = null; }
 - **First registered user**: The first `POST /api/v1/auth/register` call receives `role: admin`. All subsequent registrations receive `role: user`.
 - **Login username field**: The `username` field in `POST /api/v1/auth/login` accepts either a username or an email address.
 - **Refresh token rotation**: `POST /api/v1/auth/refresh` invalidates the submitted refresh token before issuing a new pair. If the response is lost (e.g. network timeout), the old token cannot be reused — the client must re-login.
-- **Logout scope**: `POST /api/v1/auth/logout` revokes **all** refresh tokens for the user, not just the current session. A user logged in on multiple devices will be signed out everywhere.
-- **API keys**: API key management endpoints (`GET/POST/DELETE /api/v1/auth/api-keys`) are implemented, but API key authentication is not yet wired into request validation. Use JWT bearer tokens for all requests.
+- **Logout scope**: `POST /api/v1/auth/logout` revokes **only the single refresh token** supplied in the request body (`{"refresh_token": "..."}`). To sign a user out across all devices, call `POST /api/v1/auth/logout-all` instead — that endpoint requires the user's current password and invalidates every refresh token issued to the account.
+- **API keys**: API keys work as an alternative to JWT bearer tokens. Create one via `POST /api/v1/auth/api-keys`, then send it as `Authorization: Bearer cgx_live_...`. `get_current_user` detects the `cgx_live_` prefix and dispatches to `validate_api_key()` (`cogtrix_core/api/auth.py`).
 
 ### 2.4 Handling 401 / TOKEN_EXPIRED
 
@@ -200,6 +212,7 @@ export interface SessionConfig {
   parallel_tool_execution?: boolean | null;
   context_compression?: boolean | null;
   max_steps?: number | null;         // 1–200
+  agent_name?: string | null;        // named-agent config to apply at session start
 }
 
 export interface SessionOut {
@@ -218,6 +231,8 @@ export interface SessionOut {
 export interface SessionCreateRequest {
   name?: string;           // max 256 chars; defaults to "Session YYYY-MM-DD HH:MM"
   config?: SessionConfig;
+  initial_tools?: string[];      // tool names to pin into active set immediately
+  auto_approve_tools?: string[]; // tool names to auto-approve (no confirmation prompt)
 }
 
 export interface SessionPatchRequest {
@@ -363,6 +378,23 @@ export interface ModelOut {
   is_active: boolean;
 }
 
+/** POST /api/v1/config/providers request body (admin only) */
+export interface ProviderCreateRequest {
+  /** Unique alias (1–64 chars, pattern: ^[a-zA-Z0-9][a-zA-Z0-9_-]*$) */
+  name: string;
+  type: 'openai' | 'ollama' | 'anthropic' | 'google';
+  base_url?: string | null;
+  api_key?: string | null;
+}
+
+/** PATCH /api/v1/config/providers/{name} request body (admin only) */
+export interface ProviderPatchRequest {
+  /** null clears the override and reverts to the provider-type default */
+  base_url?: string | null;
+  /** null leaves the key unchanged; empty string removes the key */
+  api_key?: string | null;
+}
+
 /** POST /api/v1/config/model request body */
 export interface ModelSwitchRequest {
   model: string;   // model alias or 'provider/model_name' shorthand
@@ -379,6 +411,7 @@ export interface ConfigOut {
   prompt_optimizer: boolean;
   parallel_tool_execution: boolean;
   context_compression: boolean;
+  delegate_enabled: boolean;         // /delegate command surface — when false, hide it in the UI
   debug: boolean;
   verbose: boolean;
   config_file_path: string | null;
@@ -557,56 +590,85 @@ export interface OutboundResponse {
   message_id: string | null;
 }
 
-export interface ChatSessionOut {
-  session_key: string;           // "channel::chat_id"
+export type SimulateDirection = 'inbound' | 'outbound';
+
+/** Used with POST /api/v1/assistant/simulate — schema name: SimulateRequest */
+export interface SimulateRequest {
+  channel: string;              // logical channel name, e.g. 'whatsapp' or 'telegram'
+  chat_id: string;              // 1–512 chars, e.g. '+1234567890@c.us'
+  message: string;              // 1–8192 chars — user message (inbound) or context (outbound)
+  direction?: SimulateDirection; // default 'inbound'
+  instructions?: string | null; // 1–8192 chars — operator instructions (outbound only)
+  sender_name?: string;         // default 'Simulator', max 256 chars
+  sender_id?: string;           // default 'simulator', max 256 chars
+  persist?: boolean;            // default false — save turn to session memory if true
+}
+
+/** Returned by POST /api/v1/assistant/simulate */
+export interface SimulateOut {
   channel: string;
   chat_id: string;
-  display_name: string | null;
-  message_count: number;
-  last_activity: string | null;  // ISO 8601 UTC; null if no messages yet
-  memory_mode: string;
-  is_locked: boolean;
+  session_key: string;          // "channel::chat_id"
+  direction: SimulateDirection;
+  response: string;             // agent response text; empty string when suppressed
+  suppressed: boolean;          // true when agent called suppress_reply
+  deferred: boolean;            // true when agent called defer_processing
+  blocked_by_guardrails: boolean; // true when input was blocked before reaching the agent
+  guardrail_reason: string | null; // reason string when blocked_by_guardrails is true
+  duration_ms: number;          // wall-clock time for the full pipeline (LLM included)
+  memory_persisted: boolean;    // true when persist=true and memory was saved successfully
+}
+
+export interface ChatSessionOut {
+  session_key: string;       // "channel::chat_id"
+  channel: string;
+  chat_id: string;
+  display_name: string | null;     // resolved from phonebook; null if not in phonebook
+  message_count: number;           // total messages in this chat session's memory
+  last_activity: string | null;    // ISO 8601 UTC timestamp of last processed message
+  memory_mode: string;             // active memory mode ("conversation" | "code" | "reasoning")
+  is_locked: boolean;              // true when a message is currently being processed
 }
 
 export interface ContactOut {
   name: string;
-  identifiers: string[];         // one or more contact identifiers
-  channels?: string[];           // channels this contact is active on
-  prompt: string | null;
+  identifiers: string[];           // list of channel identifiers for this contact
+  channels: string[];              // channels this contact appears in (e.g. ["whatsapp", "telegram"])
+  prompt: string | null;           // per-contact system prompt override; null uses global prompt
   filter_mode: FilterMode | null;
 }
 
 export interface ViolationRecordOut {
   chat_id: string;
   channel: string;
-  violation_type: string;        // "input" | "encoding" | "tool_call" | "rate_limit" | "llm_judge"
-  detail: string | null;         // human-readable description
-  timestamp: string;             // ISO 8601 UTC
+  violation_type: string;    // "input" | "encoding" | "tool_call" | "rate_limit" | "llm_judge"
+  detail: string;            // human-readable violation description
+  timestamp: string;         // ISO 8601 UTC
 }
 
 export interface GuardrailStatusOut {
-  blacklisted_chats: string[];
-  total_violations: number;
-  recent_violations?: ViolationRecordOut[];
+  blacklisted_chats: string[];     // chat IDs currently on the auto-blacklist
+  total_violations: number;        // total recorded violations across all chats
+  recent_violations: ViolationRecordOut[];  // most recent 50 violation records
 }
 
 export interface DeferredRecordOut {
-  session_key: string;           // "channel::chat_id"
-  fire_at: string;               // ISO 8601 UTC
-  pending_messages: string[];    // message texts queued for re-processing
-  depth: number;
-  max_depth: number;
-  status: "pending" | "firing";
-  created_at: string;            // ISO 8601 UTC
+  session_key: string;              // "channel::chat_id"
+  fire_at: string;                  // ISO 8601 UTC — when re-processing will fire
+  pending_messages: string[];       // message texts queued for the re-processing batch
+  depth: number;                    // current deferral depth
+  max_depth: number;                // maximum allowed deferral depth
+  status: 'pending' | 'firing';
+  created_at: string;               // ISO 8601 UTC
 }
 
 export interface KnowledgeFactOut {
-  id: string;
-  text: string;
-  source_chat: string | null;
-  source_channel: string | null;
-  created_at: string;
-  relevance_score: number | null;  // populated for search results, null for list
+  id: string;                       // fact hash identifier (not a UUID)
+  text: string;                     // "entity: fact" format
+  source_chat: string | null;       // session key that produced this fact
+  source_channel: string | null;    // channel name that produced this fact
+  created_at: string;               // ISO 8601 UTC
+  relevance_score: number | null;   // cosine similarity from last retrieval; null when listed directly
 }
 
 export interface KnowledgeSearchRequest {
@@ -683,34 +745,6 @@ export interface ScheduledMessageEditRequest {
   text?: string | null;          // max 4096 chars
   send_at?: string | null;       // ISO 8601 UTC
 }
-
-export type SimulateDirection = 'inbound' | 'outbound';
-
-/** POST /api/v1/assistant/simulate — admin only */
-export interface SimulateRequest {
-  channel: string;               // e.g. 'whatsapp', 'telegram'
-  chat_id: string;               // target chat identifier
-  message: string;               // message text to inject into the pipeline
-  direction?: SimulateDirection; // default: 'inbound'
-  instructions?: string | null;  // operator instructions (outbound simulation)
-  sender_name?: string;          // display name of the simulated sender
-  sender_id?: string;            // identifier of the simulated sender
-  persist?: boolean;             // whether to persist memory after the run; default false
-}
-
-export interface SimulateOut {
-  channel: string;
-  chat_id: string;
-  session_key: string;
-  direction: SimulateDirection;
-  response: string;              // generated agent response text
-  suppressed: boolean;           // true if the guardrail suppressed the response
-  deferred: boolean;             // true if the pipeline deferred processing
-  blocked_by_guardrails: boolean;
-  guardrail_reason: string | null;
-  duration_ms: number;
-  memory_persisted: boolean;
-}
 ```
 
 ### 3.10 User management types
@@ -765,8 +799,8 @@ export interface TokenPayload {
    */
   final: boolean;
 }
-export interface ToolStartPayload   { tool: string; tool_call_id: string; input: Record<string, unknown> }
-export interface ToolEndPayload     { tool: string; tool_call_id: string; duration_ms: number; error: string | null }
+export interface ToolStartPayload   { tool_name: string; tool_call_id: string; input: Record<string, unknown> }
+export interface ToolEndPayload     { tool_name: string; tool_call_id: string; duration_ms: number; error: string | null }
 export interface ToolConfirmRequestPayload {
   confirmation_id: string;
   tool: string;
@@ -783,6 +817,7 @@ export interface DonePayload {
   output_tokens: number;
   duration_ms: number;
   tool_calls: number;
+  text?: string;           // full assembled agent response text for this turn
 }
 
 /**
@@ -862,6 +897,7 @@ export interface SystemInfoOut {
   python_version: string;
   debug: boolean;
   verbose: boolean;
+  verbosity: number;       // 0=normal, 1=debug, 2=verbose, 3=trace
   uptime_s: number;
   started_at: string;  // ISO 8601 UTC
 }
@@ -869,6 +905,7 @@ export interface SystemInfoOut {
 export interface DebugToggleRequest {
   debug?: boolean | null;    // null = toggle current state
   verbose?: boolean | null;  // null = leave unchanged
+  verbosity?: number | null; // 0–3; supersedes debug/verbose when provided
 }
 
 export interface HealthOut {
@@ -963,9 +1000,10 @@ export class SessionSocket {
   ) {}
 
   connect(): void {
-    const token = this.getToken();
-    const url = `${WS_V1}/sessions/${this.sessionId}?token=${encodeURIComponent(token)}&last_seq=${this.lastSeq}`;
-    this.ws = new WebSocket(url);
+    // Attach the bearer token via Sec-WebSocket-Protocol (see §2.1) — browsers
+    // cannot set custom headers, and ?token= is no longer supported (#1128).
+    const url = `${WS_V1}/sessions/${this.sessionId}?last_seq=${this.lastSeq}`;
+    this.ws = new WebSocket(url, ["bearer", this.getToken()]);
 
     this.ws.onopen = () => {
       // Start keepalive ping every 30s
@@ -984,13 +1022,13 @@ export class SessionSocket {
         }
         case 'tool_start':
           this.handlers.onToolStart(
-            (msg.payload as any).tool,
+            (msg.payload as any).tool_name,
             (msg.payload as any).input
           );
           break;
         case 'tool_end':
           this.handlers.onToolEnd(
-            (msg.payload as any).tool,
+            (msg.payload as any).tool_name,
             (msg.payload as any).duration_ms,
             (msg.payload as any).error
           );
@@ -1102,7 +1140,7 @@ export function useInfiniteList<T>(
 | Status | Error Code                  | UI action |
 |--------|-----------------------------|-----------|
 | 400    | `BAD_REQUEST`               | Show inline error (e.g. self-demote/self-delete on user management) |
-| 400    | `INVALID_CURSOR`            | Restart pagination from the beginning |
+| 400/422 | `INVALID_CURSOR`           | Restart pagination from the beginning. Note: session list and RAG endpoints return 400; assistant, scheduled, knowledge, and deferred list endpoints return 422. |
 | 400    | `INVALID_DOCUMENT_ID`       | Show "Invalid document ID" inline error |
 | 400    | `CONTACT_NOT_FOUND`         | Show "Contact not found in phonebook" inline error |
 | 400    | `CHANNEL_NOT_AVAILABLE`     | Show "Channel not available for this contact" inline error |
@@ -1116,6 +1154,7 @@ export function useInfiniteList<T>(
 | 409    | `ASSISTANT_ALREADY_RUNNING` | Show "Assistant is already running" toast |
 | 409    | `ASSISTANT_NOT_RUNNING`     | Show "Assistant is not running" toast |
 | 409    | `CONFLICT`                  | Show "Already exists" inline error (e.g. duplicate username on user creation, duplicate workflow) |
+| 409    | `PROVIDER_IN_USE`           | Show "Provider is referenced by one or more models and cannot be deleted" inline error |
 | 409    | `CAMPAIGNS_NOT_AVAILABLE`   | Show "Campaign manager not available" toast |
 | 409    | `CAMPAIGN_NOT_LAUNCHABLE`   | Show "Campaign cannot be launched (must be in draft or paused state)" toast |
 | 410    | `GONE`                      | Endpoint removed — update client code (e.g. POST /config/provider) |
@@ -1248,7 +1287,8 @@ function handleApiError(error: APIError): void {
 | POST | /api/v1/auth/register | none | 201 | Register new account |
 | POST | /api/v1/auth/login | none | 200 | Login, receive token pair; `username` field accepts username or email |
 | POST | /api/v1/auth/refresh | none | 200 | Refresh access token |
-| POST | /api/v1/auth/logout | bearer | 200 | Revoke **all** refresh tokens for the user |
+| POST | /api/v1/auth/logout | bearer | 200 | Revoke the **single** refresh token in the request body |
+| POST | /api/v1/auth/logout-all | bearer | 200 | Revoke **all** refresh tokens for the user (requires password confirmation) |
 | GET  | /api/v1/auth/me | bearer | 200 | Get current user profile |
 | GET  | /api/v1/auth/api-keys | bearer | 200 | List API keys (`?cursor=`, `?limit=` 1–100, default 20) |
 | POST | /api/v1/auth/api-keys | bearer | 201 | Create API key |
@@ -1264,11 +1304,14 @@ function handleApiError(error: APIError): void {
 | GET | /api/v1/sessions | bearer | 200 | List sessions (`?cursor=`, `?limit=` 1–100 default 20, `?include_archived=true`) |
 | GET | /api/v1/sessions/{id} | bearer | 200 | Get session details |
 | PATCH | /api/v1/sessions/{id} | bearer | 200 | Update session name/config |
-| DELETE | /api/v1/sessions/{id} | bearer | 200 | Archive session |
+| DELETE | /api/v1/sessions/{id} | bearer | 200 | Archive session (soft delete); add `?permanent=true` to hard-delete the row and all messages (non-recoverable) |
+| POST | /api/v1/sessions/{id}/restore | bearer | 200 | Restore an archived session (clears `archived_at`) |
+| POST | /api/v1/sessions/{id}/restore | bearer | 200 | Restore an archived session (clears `archived_at`) |
 
 **Error codes:**
 - `SESSION_NOT_FOUND` (404), `FORBIDDEN` (403), `SESSION_NAME_DUPLICATE` (409)
 - `PATCH`: `TURN_IN_PROGRESS` (409) when an agent turn is in progress; `MODEL_NOT_FOUND` (422) when `config.model` refers to an unknown model alias.
+- `DELETE ?permanent=true`: also returns 404 `SESSION_NOT_FOUND` after disconnect if the session was already hard-deleted.
 
 ### Messages
 
@@ -1277,7 +1320,7 @@ function handleApiError(error: APIError): void {
 | POST | /api/v1/sessions/{id}/messages | bearer | 202 | Send message, queue agent turn (`mode`: `normal`, `think`, `delegate`) |
 | GET | /api/v1/sessions/{id}/messages | bearer | 200 | List history (`?cursor=<uuid>`, `?limit=` 1–200 default 50) |
 | DELETE | /api/v1/sessions/{id}/messages | bearer | 200 | Clear history (optional body: `ClearHistoryRequest`) |
-| WS | /ws/v1/sessions/{id} | token= | — | Stream agent output |
+| WS | /ws/v1/sessions/{id} | bearer (header or `bearer` subprotocol) | — | Stream agent output |
 
 **Message history cursor note:** the `cursor` for `GET .../messages` is a raw message UUID, not a base64-encoded cursor. Pass the `id` of the oldest message on the current page to fetch the page before it.
 
@@ -1285,7 +1328,8 @@ function handleApiError(error: APIError): void {
 - `SESSION_NOT_FOUND` (404), `FORBIDDEN` (403), `TURN_IN_PROGRESS` (409)
 
 **WebSocket (`/ws/v1/sessions/{id}`):**
-- Query params: `token=<jwt>`, `last_seq=<n>` (for reconnect/replay)
+- Auth: `Authorization: Bearer <jwt>` header, or `Sec-WebSocket-Protocol: ["bearer", "<jwt>"]` for browsers. `?token=<jwt>` is **not** supported for the session socket (removed in #1128 to keep tokens out of access logs).
+- Query params: `last_seq=<n>` (for reconnect/replay)
 - Messages with `seq > last_seq` are replayed on reconnect (30-second replay buffer)
 - Idle timeout: 90 seconds (server closes with 1001 on silence)
 - Send `ping` every 30 seconds; server responds with `pong`
@@ -1321,7 +1365,10 @@ function handleApiError(error: APIError): void {
 | POST | /api/v1/config/reload | admin | 200 | Reload config from disk |
 | GET | /api/v1/config/providers | bearer | 200 | List providers |
 | GET | /api/v1/config/providers/{name} | bearer | 200 | Get provider |
-| POST | /api/v1/config/provider | admin | 410 | **Removed** — always returns 410 `GONE`; use `POST /config/model` instead |
+| POST | /api/v1/config/providers | admin | 201 | Add a new provider at runtime; body: `ProviderCreateRequest` |
+| PATCH | /api/v1/config/providers/{name} | admin | 200 | Update provider `base_url` or `api_key`; body: `ProviderPatchRequest` |
+| DELETE | /api/v1/config/providers/{name} | admin | 200 | Remove a provider (409 if any model references it) |
+| POST | /api/v1/config/provider | admin | 410 | **Removed** — always returns 410 `GONE`; use `POST /config/providers` instead |
 | POST | /api/v1/config/providers/{name}/health | bearer | 200 | Provider health check |
 | GET | /api/v1/config/models | bearer | 200 | List models (`?provider=name` to filter) |
 | POST | /api/v1/config/model | admin | 200 | Switch active model; body: `ModelSwitchRequest` |
@@ -1331,7 +1378,9 @@ function handleApiError(error: APIError): void {
 
 **Error codes:**
 - `NOT_FOUND` (404) for missing provider/wizard session
-- `CONFIG_INVALID` (422) for `reload` if YAML is invalid
+- `CONFLICT` (409) for `POST /config/providers` when the provider name already exists
+- `PROVIDER_IN_USE` (409) for `DELETE /config/providers/{name}` when a model references the provider
+- `CONFIG_INVALID` (422) for `reload` if YAML is invalid, or for `POST /config/providers` with an unknown provider type
 - `PROVIDER_UNREACHABLE` (422) for wizard step 0 connection failure or step 1 LLM failure
 - `WIZARD_STEP_ERROR` (422) for other wizard step failures
 - `GONE` (410) for deprecated `POST /config/provider`
@@ -1375,12 +1424,12 @@ function handleApiError(error: APIError): void {
 | PATCH | /api/v1/assistant/campaigns/{id} | admin | 200 | Update campaign |
 | DELETE | /api/v1/assistant/campaigns/{id} | admin | 200 | Delete campaign |
 | POST | /api/v1/assistant/campaigns/{id}/launch | admin | 200 | Launch campaign |
-| POST | /api/v1/assistant/simulate | admin | 200 | Run full pipeline simulation without channel delivery |
+| POST | /api/v1/assistant/simulate | admin | 200 | Simulate a message turn without delivery |
 
 **Error codes for assistant endpoints:**
 - `ASSISTANT_ALREADY_RUNNING` (409) — `POST /start` when already running and `force_restart=false`
 - `ASSISTANT_NOT_RUNNING` (409) — `POST /stop` and all endpoints requiring a running service
-- `SERVICE_UNAVAILABLE` (503) — `POST /start` when app config or tool registry is missing; `POST /outbound` when handler is not initialised
+- `SERVICE_UNAVAILABLE` (503) — `POST /start` when app config or tool registry is missing; `POST /outbound` and `POST /simulate` when handler is not initialised
 - `ASSISTANT_START_FAILED` (503) — `POST /start` when service initialisation throws
 - `CONTACT_NOT_FOUND` (400) — `POST /outbound` when contact not in phonebook
 - `CHANNEL_NOT_AVAILABLE` (400) — `POST /outbound` when resolved channel is not active
@@ -1482,17 +1531,17 @@ function handleApiError(error: APIError): void {
 
 ### CLI flags
 
-The API server supports these command-line flags via `python -m src.api`:
+The API server supports these command-line flags via `python -m cogtrix_core.api`:
 
 ```bash
-python -m src.api                              # defaults
-python -m src.api --debug                      # debug logging to cogtrix-api.log
-python -m src.api --log                        # info logging to cogtrix-api.log
-python -m src.api --log-file /tmp/api.log      # custom log file
-python -m src.api --config-file prod.yaml      # explicit config
-python -m src.api --host 0.0.0.0 --port 9000   # custom bind address
-python -m src.api --workers 4                  # multiple workers
-python -m src.api --reload                     # auto-reload (development)
+python -m cogtrix_core.api                              # defaults
+python -m cogtrix_core.api --debug                      # debug logging to cogtrix-api.log
+python -m cogtrix_core.api --log                        # info logging to cogtrix-api.log
+python -m cogtrix_core.api --log-file /tmp/api.log      # custom log file
+python -m cogtrix_core.api --config-file prod.yaml      # explicit config
+python -m cogtrix_core.api --host 0.0.0.0 --port 9000   # custom bind address
+python -m cogtrix_core.api --workers 4                  # multiple workers
+python -m cogtrix_core.api --reload                     # auto-reload (development)
 ```
 
 ### Interactive API explorer
