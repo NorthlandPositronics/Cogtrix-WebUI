@@ -44,7 +44,7 @@ jobs:
 
       - name: Set up Node.js
         if: github.event_name != 'pull_request_target'
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -108,7 +108,7 @@ jobs:
 
       - name: Set up Node.js
         if: github.event_name != 'pull_request_target'
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -144,7 +144,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'pnpm'

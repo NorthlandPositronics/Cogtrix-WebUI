@@ -61,7 +61,7 @@ jobs:
 
       - name: Set up Node.js
         if: steps.find-pr.outputs.skip != 'true'
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'pnpm'
