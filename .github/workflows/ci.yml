@@ -40,7 +40,7 @@ jobs:
 
       - name: Set up pnpm
         if: github.event_name != 'pull_request_target'
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.0.9
 
       - name: Set up Node.js
         if: github.event_name != 'pull_request_target'
@@ -104,7 +104,7 @@ jobs:
 
       - name: Set up pnpm
         if: github.event_name != 'pull_request_target'
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.0.9
 
       - name: Set up Node.js
         if: github.event_name != 'pull_request_target'
@@ -141,7 +141,7 @@ jobs:
 
       # ── pnpm audit ──
       - name: Set up pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.0.9
 
       - name: Set up Node.js
         uses: actions/setup-node@v6

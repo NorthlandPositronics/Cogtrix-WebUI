@@ -57,7 +57,7 @@ jobs:
 
       - name: Set up pnpm
         if: steps.find-pr.outputs.skip != 'true'
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.0.9
 
       - name: Set up Node.js
         if: steps.find-pr.outputs.skip != 'true'
